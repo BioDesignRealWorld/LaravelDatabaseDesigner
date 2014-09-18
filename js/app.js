@@ -10,9 +10,11 @@ var ColumnModel = Backbone.Model.extend({
 
 
 var ColumnModelView = Backbone.View.extend({
-	initialize: function(){
-		this.model.on('change', function(){this.render();}, this);
-	},
+    initialize: function() {
+        this.model.on('change', function() {
+            this.render();
+        }, this);
+    },
     model: ColumnModel,
     template: _.template($('#columnview-template').html()),
     tagName: 'li',
@@ -31,7 +33,7 @@ var ColumnModelView = Backbone.View.extend({
             okClicked: function(modal) {
 
                 var newColumn = {
-                   name: this.$('#columnName').val(),
+                    name: this.$('#columnName').val(),
                     type: this.$('#columnType').val(),
                     length: this.$('#columnLength').val(),
                     defaultvalue: this.$('#columnDef').val(),
@@ -49,14 +51,14 @@ var ColumnModelView = Backbone.View.extend({
 
 
         });
-		
-		this.modal = new Backbone.BootstrapModal({
+
+        this.modal = new Backbone.BootstrapModal({
             showFooter: false
         });
 
         var view = new MyView();
-        this.modal.options.content = view; 
-//        console.log(this.modal.options);
+        this.modal.options.content = view;
+        //        console.log(this.modal.options);
         this.modal.open();
 
 
@@ -136,10 +138,79 @@ var RelationModel = Backbone.Model.extend({
     }
 });
 
+
 var RelationCollection = Backbone.Collection.extend({
     model: RelationModel
 });
 
+var RelationView = Backbone.View.extend({
+    model: RelationModel
+});
+
+var RelationCreateView = Backbone.View.extend({
+    initialize: function(param) {
+    	this.target = param.target;
+    	this.parent = param.parent;
+        this.bind("ok", this.addOne);
+    },
+    model: RelationModel,
+    template: _.template($('#relationcreate-template').html()),
+    addOne: function() {
+
+        this.model.get('relation').add({
+            name: this.$("#functionName").val(),
+            relationtype: this.$("#tableRelation").val(),
+            usenamespace: this.$("#tableNamespace").val(),
+            relatedmodel: this.$("#tableRelatedModel").val(),
+            foreignkeys: this.$("#tableFK").val(),
+            extramethods: this.$("#tableExtraMethod").val()
+        });
+
+	//console.log(this.model);
+
+
+
+        jsPlumb.connect({
+        	source:this.model.get('name'), 
+        	target:this.$("#tableRelatedModel").val(),
+       		overlays:[
+       		[ "Arrow", { location:1 } ],
+       		[ "Label", { cssClass:"label", label: this.model.get('name') + ' ' + this.$("#tableRelation").val() + ' ' + this.$("#tableRelatedModel").val(), location:0.3, id:"label" } ]
+       		]
+        });
+
+
+    },
+    render: function() {
+        
+
+
+        this.$el.html(this.template({
+            relationship: this.model.get('relation').toJSON(),
+            relatedmodel: this.parent.toJSON()
+        }));
+
+        if (this.target) { 
+        	this.$('.classoption').hide();
+       		this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected','selected');
+        }
+
+       this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove();
+
+        return this.el;
+    }
+});
+
+var RelationCollectionView = Backbone.View.extend({
+    collection: RelationCollection,
+    template: _.template($('#relationview-template').html()),
+    render: function() {
+        this.$el.html(this.template({
+            relationship: this.collection.toJSON()
+        }));
+        return this.el;
+    }
+});
 
 //name,class name, namespace, color
 var Node = Backbone.Model.extend({
@@ -160,16 +231,53 @@ var Node = Backbone.Model.extend({
 });
 
 var NodeView = Backbone.View.extend({
-	initialize: function()
-	{
-
-	},
+    initialize: function(param) {
+        this.parent = param.parent;
+    },
     model: Node,
     tagName: 'div',
     template: _.template($('#nodeview-template').html()),
     className: 'node-view item',
     events: {
-        'click .add': 'addNew'
+        'click .add': 'addNew',
+        'click .dump': 'dumpJSON',
+        'click .relation': 'viewRelation',
+        'click .parent': 'testParent',
+        'click .relationadd': 'relationAdd'
+
+    },
+    relationAdd: function() {
+
+        var relationAddView = new RelationCreateView({
+            model: this.model,
+            parent: this.parent,
+        });
+
+        var modal = new Backbone.BootstrapModal({
+            showFooter: false,
+            content: relationAddView
+        });
+
+        modal.open();
+    },
+    testParent: function() {
+        console.log(this.parent);
+    },
+    viewRelation: function() {
+        var relationView = new RelationCollectionView({
+            collection: this.model.get('relation')
+        });
+
+        var modal = new Backbone.BootstrapModal({
+            showFooter: true,
+            content: relationView
+        });
+
+        modal.open();
+
+    },
+    dumpJSON: function() {
+        console.log(this.model.toJSON());
     },
     addNew: function() {
 
@@ -199,22 +307,63 @@ var NodeView = Backbone.View.extend({
 
 
         });
-		
-		this.modal = new Backbone.BootstrapModal({
+
+        modal = new Backbone.BootstrapModal({
             showFooter: false
         });
 
         var view = new MyView();
-        this.modal.options.content = view; 
-//        console.log(this.modal.options);
-        this.modal.open();
+        modal.options.content = view;
+        modal.open();
 
 
     },
     render: function() {
+    	var that = this;
         this.$el.append(this.template({
             name: this.model.get('name')
         }));
+
+        this.$(".conn").draggable({
+        revert : true});
+        this.$(".conn").droppable({
+      drop: function( event, ui ) {
+      	     $(this).data("uiDraggable").originalPosition = {
+                top : 0,
+                left : 0
+            };
+
+            var source = ui.draggable.attr('id');
+            var dest = 	that.model.get('name');
+
+
+        var relationAddView = new RelationCreateView({
+            model: that.parent.where({name: source})[0],
+            parent: that.parent,
+            target: dest,
+        });
+
+        var modal = new Backbone.BootstrapModal({
+            showFooter: false,
+            content: relationAddView
+        });
+
+
+        modal.open();
+
+
+
+            //console.log(that.parent.where({name: source})[0]);
+      /* jsPlumb.connect({
+        	source:source, 
+        	target:dest,
+       		overlays:[
+       		[ "Arrow", { location:1 } ]
+       		]
+        });*/
+
+      }});
+
         var colview = new ColumnCollectionView({
             collection: this.model.get('column')
         });
@@ -238,8 +387,8 @@ var NodeCollection = Backbone.Collection.extend({
         nod.get('relation').add(param.relation);
     },
     //connectNode('nodeName1', 'nodeName2')
-    connectNode: function(param) {
-
+    connectNode: function(source, target) {
+		jsPlumb.connect({source:"element1", target:"element2"});
     },
     //addColumnToNode('nodeName', new Column({var...,..}))
     addColumnToNode: function() {
@@ -255,7 +404,9 @@ var NodeCollectionView = Backbone.View.extend({
     },
     addOne: function(node) {
         var nodeView = new NodeView({
-            model: node
+        	id: node.get('name'),
+            model: node,
+            parent: this.collection
         });
         var nodeRendered = nodeView.render();
 
@@ -263,11 +414,13 @@ var NodeCollectionView = Backbone.View.extend({
 
         var connect = nodeRendered.find('.connect');
 
+ 
         jsPlumb.makeTarget(nodeRendered, {
             allowLoopback: false,
-            maxConnections: 1,
             anchor: 'Continuous'
         });
+
+
         jsPlumb.makeSource(connect, {
             parent: nodeRendered,
             anchor: 'Continuous',
@@ -296,22 +449,22 @@ $('body').append(nodeCollectionView.render());
 
 var userNode = [{
     name: 'id',
-    type: 'bigincrements',
+    type: 'increments',
     length: 30,
     order: 1
 }, {
     name: 'username',
-    type: 'varchar',
+    type: 'string',
     length: 30,
     order: 0
 }, {
     name: 'email',
-    type: 'varchar',
+    type: 'string',
     length: 200,
     order: 2
 }, {
     name: 'password',
-    type: 'varchar',
+    type: 'string',
     length: 100,
     order: 3
 }];
@@ -319,24 +472,45 @@ var userNode = [{
 
 var roleNode = [{
     name: 'id',
-    type: 'bigincrements',
+    type: 'increments',
     length: 30,
     order: 0
 }, {
     name: 'username',
-    type: 'varchar',
+    type: 'string',
     length: 30,
     order: 1
 }, {
     name: 'email',
-    type: 'varchar',
+    type: 'string',
     length: 200,
     order: 2
 }, {
     name: 'password',
-    type: 'varchar',
+    type: 'string',
     length: 100,
     order: 3
+}];
+
+
+var relationTest = [{
+    name: 'machines',
+    relationtype: 'hasMany',
+    usenamespace: '',
+    relatedmodel: 'Machine',
+    foreignkeys: 'user_id',
+}, {
+    name: 'machines',
+    relationtype: 'hasMany',
+    usenamespace: '',
+    relatedmodel: 'Machine',
+    foreignkeys: 'user_id',
+}, {
+    name: 'machines',
+    relationtype: 'hasMany',
+    usenamespace: '',
+    relatedmodel: 'Machine',
+    foreignkeys: 'user_id',
 }];
 
 
@@ -350,11 +524,24 @@ nodeCollection.createNode({
     column: roleNode
 });
 
+
+
 nodeCollection.createNode({
     name: 'Map',
-    column: roleNode
+    column: roleNode,
 });
 
+
+nodeCollection.createNode({
+    name: 'Test',
+    column: roleNode,
+});
+
+
+nodeCollection.createNode({
+    name: 'Inventori',
+    column: roleNode,
+});
 
 //nodeCollection.where({name: 'Users'})[0].addColumn(userNode);
 //console.log(nodeCollection.where({name: 'Users'})[0].get('column').toJSON());
@@ -391,6 +578,9 @@ enum value
 
 */
 
+jsPlumb.Defaults.Connector = [ "Flowchart", { stub:[40, 60], gap:10, cornerRadius:5, alwaysRespectStubs:true } ];
+jsPlumb.Defaults.HoverPaintStyle = { strokeStyle:"#637b94", lineWidth: 6 };
+jsPlumb.Defaults.EndpointHoverStyle = { fillStyle:"#637b94" };
 
 jsPlumb.ready(function() {
     var instance = jsPlumb.importDefaults({
@@ -414,7 +604,6 @@ jsPlumb.ready(function() {
         }
 
     });
-
 
 
 });
