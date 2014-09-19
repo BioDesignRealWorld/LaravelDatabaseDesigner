@@ -144,20 +144,97 @@ var RelationCollection = Backbone.Collection.extend({
 });
 
 var RelationView = Backbone.View.extend({
-    model: RelationModel
+    initialize: function(param) {
+        this.parent = param.parent;
+        //this.model.on('destroy', this.render, this);
+        this.model.on('change', this.render, this);
+    },
+    model: RelationModel,
+    tagName: 'tr',
+    template: _.template($("#relationitem-template").html()),
+    events: {
+        'click .delete': 'deleteRelation',
+        'click .edit': 'editRelation'
+    },
+    deleteRelation: function() {
+        this.model.destroy();
+    },
+    editRelation: function() {
+        //console.log(this.parent);
+        var relationEditView = new RelationEditView({
+            model: this.model,
+            parent: this.parent,
+            title: 'Edit Relation in Table '
+        });
+
+        var modal = new Backbone.BootstrapModal({
+            showFooter: false,
+            content: relationEditView
+        });
+
+        modal.open();
+    },
+    render: function() { //	console.log('destroy render');
+
+        this.$el.html(this.template(this.model.toJSON()));
+        return this.el;
+    }
 });
+
+var RelationEditView = Backbone.View.extend({
+    model: RelationModel,
+    template: _.template($('#relationcreate-template').html()),
+    initialize: function(param) {
+        //console.log(param.parent);
+        this.parent = param.parent;
+        this.title = param.title;
+        this.bind("ok", this.addOne);
+    },
+    addOne: function() {
+        this.model.set({
+            name: this.$("#functionName").val(),
+            relationtype: this.$("#tableRelation").val(),
+            usenamespace: this.$("#tableNamespace").val(),
+            relatedmodel: this.$("#tableRelatedModel").val(),
+            foreignkeys: this.$("#tableFK").val(),
+            extramethods: this.$("#tableExtraMethod").val()
+        });
+    },
+    render: function() {
+        //console.log(this.parent);
+        var templatevar = {
+            title: 'Edit Relation ' + this.parent.get('name'),
+            relationship: this.model.toJSON(),
+            relatedmodel: this.parent.get('parent').toJSON()
+        };
+
+        this.$el.html(this.template(templatevar));
+        // console.log(this.parent);
+        this.$('#tableRelatedModel').find('option[value=' + this.model.get('relatedmodel') + ']').attr('selected', 'selected'); //make destination selected by default
+        this.$('#tableRelation').find('option[value=' + this.model.get('relationtype') + ']').attr('selected', 'selected'); //make destination selected by default
+        this.$('#tableRelatedModel').find('option[value=' + this.parent.get('name') + ']').remove(); //remove self (model) from option list
+
+
+        //this.$('#tableRelatedModel').find('option[value=' + this.model.get + ']').attr('selected','selected'); //make destination selected by default
+
+    }
+});
+
 
 var RelationCreateView = Backbone.View.extend({
     initialize: function(param) {
-    	this.target = param.target;
-    	this.parent = param.parent;
+        this.target = param.target;
+        this.parent = param.parent;
         this.bind("ok", this.addOne);
     },
-    model: RelationModel,
+    model: Node,
     template: _.template($('#relationcreate-template').html()),
     addOne: function() {
 
-        this.model.get('relation').add({
+        var that = this;
+
+        var newrelation = new RelationModel({
+            sourcenode: this.model.get('name'),
             name: this.$("#functionName").val(),
             relationtype: this.$("#tableRelation").val(),
             usenamespace: this.$("#tableNamespace").val(),
@@ -166,48 +243,142 @@ var RelationCreateView = Backbone.View.extend({
             extramethods: this.$("#tableExtraMethod").val()
         });
 
-	//console.log(this.model);
+        var relationModal = function(that) {
+            console.log(that);
+            var relationEditView = new RelationEditView({
+                model: newrelation,
+                parent: that.model,
+                title: 'Edit Relation in Table '
+            });
+
+            var modal = new Backbone.BootstrapModal({
+                showFooter: false,
+                content: relationEditView
+            });
+
+            modal.open();
+        };
+
+        newrelation.on('add', function() {
+            var conn = jsPlumb.connect({
+                source: newrelation.get('sourcenode'),
+                target: newrelation.get('relatedmodel'),
+                overlays: [
+                    ["Arrow", {
+                        location: 1
+                    }],
+                    ["Label", {
+                        cssClass: "label",
+                        label: newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'),
+                        location: 0.3,
+                        id: "label"
+                    }]
+                ]
+            });
+
+            conn.bind("click", function() {
+                relationModal(that);
+            });
 
 
+            var targetModel = this.parent.where({
+                name: this.target
+            })[0];
 
-        jsPlumb.connect({
-        	source:this.model.get('name'), 
-        	target:this.$("#tableRelatedModel").val(),
-       		overlays:[
-       		[ "Arrow", { location:1 } ],
-       		[ "Label", { cssClass:"label", label: this.model.get('name') + ' ' + this.$("#tableRelation").val() + ' ' + this.$("#tableRelatedModel").val(), location:0.3, id:"label" } ]
-       		]
+            targetModel.on('destroy', function() {
+                newrelation.destroy();
+            }, this);
+
+            newrelation.set('conn', conn);
+        }, this);
+
+
+        newrelation.on('change:relatedmodel', function() {
+
+            jsPlumb.detach(newrelation.get('conn'));
+            var conn = jsPlumb.connect({
+                source: newrelation.get('sourcenode'),
+                target: newrelation.get('relatedmodel'),
+                overlays: [
+                    ["Arrow", {
+                        location: 1
+                    }],
+                    ["Label", {
+                        cssClass: "label",
+                        label: newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'),
+                        location: 0.3,
+                        id: "label"
+                    }]
+                ]
+            });
+            newrelation.set('conn', conn);
         });
 
+       /* newrelation.on('destroy', function() {
+        	if (newrelation.get('conn'))
+  			{
+  				//jsPlumb.detach(newrelation.get('conn'));
+  			}
+        }, this);*/
 
+        this.model.get('relation').add(newrelation);
+
+
+        //console.log(test);
     },
     render: function() {
-        
 
-
-        this.$el.html(this.template({
+        var templatevar = {
             relationship: this.model.get('relation').toJSON(),
-            relatedmodel: this.parent.toJSON()
-        }));
+            relatedmodel: this.parent.toJSON(),
+            title: "in table " + this.model.get('name')
+        };
 
-        if (this.target) { 
-        	this.$('.classoption').hide();
-       		this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected','selected');
+
+        if (this.target) {
+            templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
         }
 
-       this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove();
+
+        this.$el.html(this.template(templatevar));
+
+        if (this.target) {
+            this.$('.classoption').hide(); //hide option box
+            this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+        }
+        this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
 
         return this.el;
     }
 });
 
 var RelationCollectionView = Backbone.View.extend({
-    collection: RelationCollection,
+    model: Node,
     template: _.template($('#relationview-template').html()),
+    initialize: function() {
+        //console.log(this.model);
+        this.model.get('relation').on('add', this.addOne, this);
+        this.model.get('relation').on('destroy', this.render, this);
+    },
+    addOne: function(item) {
+        //console.log(item);
+        //console.log(item);
+        var relationitem = new RelationView({
+            model: item,
+            parent: this.model
+        });
+        this.$('tbody').append(relationitem.render());
+        //console.log(relationitem.render());
+    },
     render: function() {
+        //console.log('wew');
         this.$el.html(this.template({
-            relationship: this.collection.toJSON()
+            node: this.model.toJSON()
         }));
+        this.model.get('relation').each(function(item) {
+            this.addOne(item);
+        }, this);
+
         return this.el;
     }
 });
@@ -218,6 +389,7 @@ var Node = Backbone.Model.extend({
         this.set('name', param.name);
         this.set('column', new ColumnCollection());
         this.set('relation', new RelationCollection());
+        this.set('parent', param.parent);
     },
     toJSON: function() {
         return {
@@ -243,8 +415,15 @@ var NodeView = Backbone.View.extend({
         'click .dump': 'dumpJSON',
         'click .relation': 'viewRelation',
         'click .parent': 'testParent',
-        'click .relationadd': 'relationAdd'
-
+        'click .relationadd': 'relationAdd',
+        'click .delete': 'deleteNode'
+    },
+    deleteNode: function() {
+        jsPlumb.detachAllConnections(this.$el);
+        jsPlumb.removeAllEndpoints(this.$el);
+        $(this.$el).remove();
+        //console.log('destroy');
+        this.model.destroy();
     },
     relationAdd: function() {
 
@@ -264,8 +443,9 @@ var NodeView = Backbone.View.extend({
         console.log(this.parent);
     },
     viewRelation: function() {
+        //console.log(this.model);
         var relationView = new RelationCollectionView({
-            collection: this.model.get('relation')
+            model: this.model
         });
 
         var modal = new Backbone.BootstrapModal({
@@ -319,42 +499,45 @@ var NodeView = Backbone.View.extend({
 
     },
     render: function() {
-    	var that = this;
+        var that = this;
         this.$el.append(this.template({
             name: this.model.get('name')
         }));
 
         this.$(".conn").draggable({
-        revert : true});
+            revert: true
+        });
         this.$(".conn").droppable({
-      drop: function( event, ui ) {
-      	     $(this).data("uiDraggable").originalPosition = {
-                top : 0,
-                left : 0
-            };
+            drop: function(event, ui) {
+                $(this).data("uiDraggable").originalPosition = {
+                    top: 0,
+                    left: 0
+                };
 
-            var source = ui.draggable.attr('id');
-            var dest = 	that.model.get('name');
-
-
-        var relationAddView = new RelationCreateView({
-            model: that.parent.where({name: source})[0],
-            parent: that.parent,
-            target: dest,
-        });
-
-        var modal = new Backbone.BootstrapModal({
-            showFooter: false,
-            content: relationAddView
-        });
+                var source = ui.draggable.attr('id');
+                var dest = that.model.get('name');
 
 
-        modal.open();
+                var relationAddView = new RelationCreateView({
+                    model: that.parent.where({
+                        name: source
+                    })[0], //drag source model
+                    parent: that.parent, //parent node collection 
+                    target: dest, // drop destination model
+                });
+
+                var modal = new Backbone.BootstrapModal({
+                    showFooter: false,
+                    content: relationAddView
+                });
+
+
+                modal.open();
 
 
 
-            //console.log(that.parent.where({name: source})[0]);
-      /* jsPlumb.connect({
+                //console.log(that.parent.where({name: source})[0]);
+                /* jsPlumb.connect({
         	source:source, 
         	target:dest,
        		overlays:[
@@ -362,7 +545,8 @@ var NodeView = Backbone.View.extend({
        		]
         });*/
 
-      }});
+            }
+        });
 
         var colview = new ColumnCollectionView({
             collection: this.model.get('column')
@@ -376,7 +560,8 @@ var NodeCollection = Backbone.Collection.extend({
     model: Node,
     createNode: function(param) {
         var nod = this.add({
-            name: param.name
+            name: param.name,
+            parent: this
         });
         nod.get('column').add(param.column, {
             silent: true
@@ -388,7 +573,10 @@ var NodeCollection = Backbone.Collection.extend({
     },
     //connectNode('nodeName1', 'nodeName2')
     connectNode: function(source, target) {
-		jsPlumb.connect({source:"element1", target:"element2"});
+        jsPlumb.connect({
+            source: "element1",
+            target: "element2"
+        });
     },
     //addColumnToNode('nodeName', new Column({var...,..}))
     addColumnToNode: function() {
@@ -404,7 +592,7 @@ var NodeCollectionView = Backbone.View.extend({
     },
     addOne: function(node) {
         var nodeView = new NodeView({
-        	id: node.get('name'),
+            id: node.get('name'),
             model: node,
             parent: this.collection
         });
@@ -414,7 +602,7 @@ var NodeCollectionView = Backbone.View.extend({
 
         var connect = nodeRendered.find('.connect');
 
- 
+
         jsPlumb.makeTarget(nodeRendered, {
             allowLoopback: false,
             anchor: 'Continuous'
@@ -578,9 +766,19 @@ enum value
 
 */
 
-jsPlumb.Defaults.Connector = [ "Flowchart", { stub:[40, 60], gap:10, cornerRadius:5, alwaysRespectStubs:true } ];
-jsPlumb.Defaults.HoverPaintStyle = { strokeStyle:"#637b94", lineWidth: 6 };
-jsPlumb.Defaults.EndpointHoverStyle = { fillStyle:"#637b94" };
+jsPlumb.Defaults.Connector = ["Flowchart", {
+    stub: [40, 60],
+    gap: 10,
+    cornerRadius: 5,
+    alwaysRespectStubs: true
+}];
+jsPlumb.Defaults.HoverPaintStyle = {
+    strokeStyle: "#637b94",
+    lineWidth: 6
+};
+jsPlumb.Defaults.EndpointHoverStyle = {
+    fillStyle: "#637b94"
+};
 
 jsPlumb.ready(function() {
     var instance = jsPlumb.importDefaults({
