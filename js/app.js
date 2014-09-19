@@ -286,6 +286,7 @@ var RelationCreateView = Backbone.View.extend({
             })[0];
 
             targetModel.on('destroy', function() {
+                //console.log('foreign node destroyed');
                 newrelation.destroy();
             }, this);
 
@@ -315,12 +316,11 @@ var RelationCreateView = Backbone.View.extend({
         });
 
         newrelation.on('destroy', function() {
-  				jsPlumb.detach(newrelation.get('conn'));
+            if (newrelation.get('conn').connector !== null) {
+                jsPlumb.detach(newrelation.get('conn'));
+            }
         }, this);
-
         this.model.get('relation').add(newrelation);
-
-
         //console.log(test);
     },
     render: function() {
@@ -416,12 +416,21 @@ var NodeView = Backbone.View.extend({
         'click .delete': 'deleteNode'
     },
     deleteNode: function() {
-//        jsPlumb.detachAllConnections(this.$el);
-  //      jsPlumb.removeAllEndpoints(this.$el);
+        //        jsPlumb.detachAllConnections(this.$el);
+        //      jsPlumb.removeAllEndpoints(this.$el);
 
-        this.model.get('relation').each(function(item){
-        	jsPlumb.detach(item.get('conn'));
-        },this);
+        this.model.get('relation').each(function(item) {
+            jsPlumb.detach(item.get('conn'));
+            item.set('conn', '');
+        }, this);
+
+        this.model.get('relation').each(function(item) {
+            item.destroy();
+        }, this);
+
+        jsPlumb.detachAllConnections(this.$el);
+        jsPlumb.removeAllEndpoints(this.$el);
+
 
         $(this.$el).remove();
         //console.log('destroy');
