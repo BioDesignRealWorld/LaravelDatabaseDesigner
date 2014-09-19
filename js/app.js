@@ -64,7 +64,7 @@ var ColumnModelView = Backbone.View.extend({
 
 
 
-        console.log(this.model);
+        //console.log(this.model);
     },
     render: function() {
         this.$el.html(this.template(this.model.toJSON()));
@@ -244,7 +244,7 @@ var RelationCreateView = Backbone.View.extend({
         });
 
         var relationModal = function(that) {
-            console.log(that);
+            //console.log(that);
             var relationEditView = new RelationEditView({
                 model: newrelation,
                 parent: that.model,
@@ -286,7 +286,6 @@ var RelationCreateView = Backbone.View.extend({
             })[0];
 
             targetModel.on('destroy', function() {
-                //console.log('foreign node destroyed');
                 newrelation.destroy();
             }, this);
 
@@ -312,8 +311,21 @@ var RelationCreateView = Backbone.View.extend({
                     }]
                 ]
             });
+
+            var targetModel = this.parent.where({
+                name: newrelation.get('relatedmodel')
+            })[0];
+
+            targetModel.on('destroy', function() {
+                newrelation.destroy();
+            }, this);
+
+            conn.bind("click", function() {
+                relationModal(that);
+            });
+
             newrelation.set('conn', conn);
-        });
+        }, this);
 
         newrelation.on('destroy', function() {
             if (newrelation.get('conn').connector !== null) {
@@ -520,6 +532,7 @@ var NodeView = Backbone.View.extend({
         });
         this.$(".conn").droppable({
             drop: function(event, ui) {
+                
                 $(this).data("uiDraggable").originalPosition = {
                     top: 0,
                     left: 0
