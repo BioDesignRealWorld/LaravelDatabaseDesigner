@@ -665,7 +665,7 @@ var NodeCollectionView = Backbone.View.extend({
     },
     addNode: function()
     {
-    	var nodeCollection = this.collection;
+    	var coll = this.collection;
 
 		var CreateNodeView = Backbone.View.extend({
 			template: _.template($('#createnode-template').html()),
@@ -674,7 +674,7 @@ var NodeCollectionView = Backbone.View.extend({
 			},
 			addNode : function(){
 
-			var newnode = nodeCollection.createNode({
+			var newnode = coll.createNode({
 				name:  this.$('#tableName').val(),
 				modelclass:  this.$('#tableModelName').val(),
 				namespace:  this.$('#tableNamespace').val(),
@@ -909,11 +909,6 @@ jsPlumb.ready(function() {
             strokeStyle: '#666',
             lineWidth: 2,
             joinstyle: "round",
-        },
-        EndpointStyle: {
-            width: 20,
-            height: 16,
-            strokeStyle: '#666'
         },
         Anchors: ["TopCenter", "TopCenter"],
         endpointStyle: {
