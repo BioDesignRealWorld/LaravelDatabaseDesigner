@@ -314,12 +314,9 @@ var RelationCreateView = Backbone.View.extend({
             newrelation.set('conn', conn);
         });
 
-       /* newrelation.on('destroy', function() {
-        	if (newrelation.get('conn'))
-  			{
-  				//jsPlumb.detach(newrelation.get('conn'));
-  			}
-        }, this);*/
+        newrelation.on('destroy', function() {
+  				jsPlumb.detach(newrelation.get('conn'));
+        }, this);
 
         this.model.get('relation').add(newrelation);
 
@@ -419,8 +416,13 @@ var NodeView = Backbone.View.extend({
         'click .delete': 'deleteNode'
     },
     deleteNode: function() {
-        jsPlumb.detachAllConnections(this.$el);
-        jsPlumb.removeAllEndpoints(this.$el);
+//        jsPlumb.detachAllConnections(this.$el);
+  //      jsPlumb.removeAllEndpoints(this.$el);
+
+        this.model.get('relation').each(function(item){
+        	jsPlumb.detach(item.get('conn'));
+        },this);
+
         $(this.$el).remove();
         //console.log('destroy');
         this.model.destroy();
