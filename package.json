@@ -1,0 +1,10 @@
+{
+  "name": "nwbuild",
+  "version": "0.0.4",
+  "description": "Builds and packages node-webkit applications for linux, windows and osx.",
+    "main": "index.html",
+      "window": {
+    "title": "node-webkit demo",
+    "icon": "link.png",
+    "toolbar": false}
+}

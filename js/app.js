@@ -280,20 +280,33 @@ var RelationCreateView = Backbone.View.extend({
                 relationModal(that);
             });
 
-
             var targetModel = this.parent.where({
-                name: this.target
+                name: newrelation.get('relatedmodel')
             })[0];
+           // console.log(this.target);
 
-            targetModel.on('destroy', function() {
+           var targetCallback = function() {
                 newrelation.destroy();
-            }, this);
+            };
 
+            var targetListen = targetModel.on('destroy', targetCallback , this);
+
+            var detachListen = function(){
+            	targetModel.off('destroy', targetCallback);
+            };
+
+            newrelation.set('detachListen', detachListen);
             newrelation.set('conn', conn);
         }, this);
 
+        newrelation.on('change:relationtype', function() {
+        	$(this.get('conn').getOverlay('label').canvas).html(newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'));
+      
+        });
 
         newrelation.on('change:relatedmodel', function() {
+
+        	newrelation.get('detachListen')();
 
             jsPlumb.detach(newrelation.get('conn'));
             var conn = jsPlumb.connect({
@@ -311,19 +324,26 @@ var RelationCreateView = Backbone.View.extend({
                     }]
                 ]
             });
+            
+            conn.bind("click", function() {
+                relationModal(that);
+            });
 
             var targetModel = this.parent.where({
                 name: newrelation.get('relatedmodel')
             })[0];
 
-            targetModel.on('destroy', function() {
+           var targetCallback = function() {
                 newrelation.destroy();
-            }, this);
+            };
 
-            conn.bind("click", function() {
-                relationModal(that);
-            });
+            var targetListen = targetModel.on('destroy', targetCallback , this);
 
+            var detachListen = function(){
+            	targetModel.off('destroy', targetCallback);
+            };
+
+            newrelation.set('detachListen', detachListen);
             newrelation.set('conn', conn);
         }, this);
 
@@ -340,7 +360,7 @@ var RelationCreateView = Backbone.View.extend({
         var templatevar = {
             relationship: this.model.get('relation').toJSON(),
             relatedmodel: this.parent.toJSON(),
-            title: "in table " + this.model.get('name')
+            title: "Create Relation in Table " + this.model.get('name')
         };
 
 
@@ -396,20 +416,30 @@ var RelationCollectionView = Backbone.View.extend({
 var Node = Backbone.Model.extend({
     initialize: function(param) {
         this.set('name', param.name);
+        this.set('modelclass',param.modelclass);
+        this.set('namespace',param.namespace);
+        this.set('color',param.color);
+        this.set('position',param.position);
+		
+		this.set('parent', param.parent);
         this.set('column', new ColumnCollection());
         this.set('relation', new RelationCollection());
-        this.set('parent', param.parent);
     },
     toJSON: function() {
         return {
             name: this.get('name'),
-            classname: this.get('classname'),
+            modelclass: this.get('modelclass'),
             namespace: this.get('namespace'),
+            color: this.get('color'),
+            position: this.get('position'),
             column: this.get('column').toJSON(),
             relation: this.get('relation').toJSON()
         };
     }
 });
+
+
+
 
 var NodeView = Backbone.View.extend({
     initialize: function(param) {
@@ -523,6 +553,13 @@ var NodeView = Backbone.View.extend({
     },
     render: function() {
         var that = this;
+
+        var position = this.model.get('position');
+        //console.log(position);
+
+        this.$el.css("left",position.x);
+        this.$el.css("top", position.y);
+
         this.$el.append(this.template({
             name: this.model.get('name')
         }));
@@ -583,17 +620,25 @@ var NodeView = Backbone.View.extend({
 var NodeCollection = Backbone.Collection.extend({
     model: Node,
     createNode: function(param) {
+        
         var nod = this.add({
+			modelclass : param.modelclass,
+			namespace : param.namespace,
+			color: param.color,
+			position: param.position,
             name: param.name,
             parent: this
         });
+
         nod.get('column').add(param.column, {
             silent: true
         });
+
         nod.get('column').sort();
         nod.get('column').trigger('createnode');
-
         nod.get('relation').add(param.relation);
+
+        return nod;
     },
     //connectNode('nodeName1', 'nodeName2')
     connectNode: function(source, target) {
@@ -608,9 +653,54 @@ var NodeCollection = Backbone.Collection.extend({
     }
 });
 
+
+
+
 var NodeCollectionView = Backbone.View.extend({
     id: 'container',
     collection: NodeCollection,
+    template: _.template($("#nodecontainer-template").html()),
+    events: {
+    	'click .addnode' : 'addNode'
+    },
+    addNode: function()
+    {
+    	var nodeCollection = this.collection;
+
+		var CreateNodeView = Backbone.View.extend({
+			template: _.template($('#createnode-template').html()),
+			events: {
+				'click .addnode' : 'addNode'
+			},
+			addNode : function(){
+
+			var newnode = nodeCollection.createNode({
+				name:  this.$('#tableName').val(),
+				modelclass:  this.$('#tableModelName').val(),
+				namespace:  this.$('#tableNamespace').val(),
+				color:  this.$('#tableColor').val(),
+				position: {x:0,y:0}
+			});
+			
+			//console.log(newnode);
+			},
+			render: function()
+			{
+				this.$el.html(this.template());
+				return this.el;
+			}
+		});
+
+
+
+    	var modal = new Backbone.BootstrapModal({
+            showFooter: false,
+            content: new CreateNodeView()
+        });
+
+        modal.open();
+    	//alert('yadda');
+    },
     initialize: function() {
         this.collection.on("add", this.addOne, this);
     },
@@ -646,6 +736,7 @@ var NodeCollectionView = Backbone.View.extend({
         //console.log('addone');
     },
     render: function() {
+    	this.$el.html(this.template());
         return this.el;
     }
 });
@@ -728,22 +819,26 @@ var relationTest = [{
 
 nodeCollection.createNode({
     name: 'Users',
-    column: userNode
+    column: userNode,
+    position: {x: 300, y:400},
 });
 
 nodeCollection.createNode({
     name: 'Roles',
-    column: roleNode
+    column: roleNode,
+    position: {x: 600, y:200},
 });
+
 
 
 
 nodeCollection.createNode({
     name: 'Map',
     column: roleNode,
+    position: {x: 100, y:100},
 });
 
-
+/*
 nodeCollection.createNode({
     name: 'Test',
     column: roleNode,
@@ -754,7 +849,7 @@ nodeCollection.createNode({
     name: 'Inventori',
     column: roleNode,
 });
-
+*/
 //nodeCollection.where({name: 'Users'})[0].addColumn(userNode);
 //console.log(nodeCollection.where({name: 'Users'})[0].get('column').toJSON());
 
