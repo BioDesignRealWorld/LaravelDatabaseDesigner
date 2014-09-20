@@ -337,6 +337,7 @@ var Node = Backbone.Model.extend({
 var NodeView = Backbone.View.extend({
     initialize: function(param) {
         this.parent = param.parent;
+        this.model.once('destroy', this.removeFromDom, this);
     },
     model: Node,
     tagName: 'div',
@@ -350,7 +351,7 @@ var NodeView = Backbone.View.extend({
         'click .relationadd': 'relationAdd',
         'click .delete': 'deleteNode'
     },
-    deleteNode: function() {
+    removeFromDom: function() {
         //        jsPlumb.detachAllConnections(this.$el);
         //      jsPlumb.removeAllEndpoints(this.$el);
 
@@ -369,6 +370,9 @@ var NodeView = Backbone.View.extend({
 
         $(this.$el).remove();
         //console.log('destroy');
+    },
+    deleteNode: function() {
+        this.removeFromDom();
         this.model.destroy();
     },
     relationAdd: function() {
@@ -533,23 +537,87 @@ var NodeCollection = Backbone.Collection.extend({
 
         return nod;
     },
-    loadJSON: function() {
-        return this.toJSON();
+    loadNodes: function(nodes) {
+        this.clearNode();
+
+        //Node Loop
+        _.each(nodes, function(node) {
+            //console.log("<> create node: " + node.name);
+            this.createNode(node);
+        }, this);
+
+
+        this.each(function(node) {
+            //console.log(node);
+            var nodeRelation = node.get('relation');
+            nodeRelation.each(function(relationModel) {
+                createConnection(relationModel, node);
+                relationModel.trigger('add');
+            }, this);
+        }, this);
     },
     //connectNode('nodeName1', 'nodeName2')
     connectNode: function(source, target) {
-        jsPlumb.connect({
-            source: "element1",
-            target: "element2"
-        });
+
+    },
+    clearNode: function() {
+        var model;
+        while (model = this.first()) {
+            model.destroy();
+        }
+
+        jsPlumb.detachEveryConnection();
+        jsPlumb.deleteEveryEndpoint();
+
     },
     //addColumnToNode('nodeName', new Column({var...,..}))
     addColumnToNode: function() {
 
+    },
+    saveNodes: function() {
+
+        var nodes = [];
+
+        this.each(function(node) {
+
+            var nodetmp = {
+                name: node.get('name'),
+                column: [],
+                relation: []
+            };
+
+            node.get('column').each(function(item) {
+                var col = item.toJSON();
+                var tmp = {
+                    name: col.name,
+                    type: col.type,
+                    length: col.length,
+                    order: col.order,
+                    defaultvalue: col.defaultvalue,
+                    enumvalue: col.enumvalue
+                };
+                nodetmp.column.push(tmp);
+            });
+
+            node.get('relation').each(function(item) {
+                var rel = item.toJSON();
+                var tmp = {
+                    extramethods: rel.extramethods,
+                    foreignkeys: rel.foreignkeys,
+                    name: rel.name,
+                    relatedmodel: rel.relatedmodel,
+                    relationtype: rel.relationtype,
+                    usenamespace: rel.usenamespace
+                };
+                nodetmp.relation.push(tmp);
+            });
+
+            nodes.push(nodetmp);
+        });
+        console.log(JSON.stringify(nodes));
+        return nodes;
     }
 });
-
-
 
 
 var NodeCollectionView = Backbone.View.extend({
@@ -558,39 +626,149 @@ var NodeCollectionView = Backbone.View.extend({
     template: _.template($("#nodecontainer-template").html()),
     events: {
         'click .addnode': 'addNode',
-        'click .dump': 'dumpNodes'
-
+        'click .dump': 'dumpNodes',
+        'click .save': 'saveNodes'
+    },
+    saveNodes: function() {
+        //this.collection.toJSON()
     },
     dumpNodes: function() {
         var that = this;
 
-        var nodes = [{"name":"Users","position":{"x":300,"y":400},"column":[{"name":"username","type":"string","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"id","type":"increments","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Roles","foreignkeys":"user_id","extramethods":""},{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Map","foreignkeys":"user_id","extramethods":""},{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Roles","foreignkeys":"user_id","extramethods":""}]},{"name":"Roles","position":{"x":600,"y":200},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]},{"name":"Map","position":{"x":100,"y":100},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]}];
+        var nodes = [{
+            "name": "Users",
+            "position": {
+                "x": 300,
+                "y": 400
+            },
+            "column": [{
+                "name": "username",
+                "type": "string",
+                "length": 30,
+                "order": 0,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "id",
+                "type": "increments",
+                "length": 30,
+                "order": 1,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "email",
+                "type": "string",
+                "length": 200,
+                "order": 2,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "password",
+                "type": "string",
+                "length": 100,
+                "order": 3,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }],
+            "relation": [{
+                "name": "machines",
+                "relationtype": "hasMany",
+                "usenamespace": "",
+                "relatedmodel": "Roles",
+                "foreignkeys": "user_id",
+                "extramethods": ""
+            }, {
+                "name": "machines",
+                "relationtype": "hasMany",
+                "usenamespace": "",
+                "relatedmodel": "Map",
+                "foreignkeys": "user_id",
+                "extramethods": ""
+            }, {
+                "name": "machines",
+                "relationtype": "hasMany",
+                "usenamespace": "",
+                "relatedmodel": "Roles",
+                "foreignkeys": "user_id",
+                "extramethods": ""
+            }]
+        }, {
+            "name": "Roles",
+            "position": {
+                "x": 600,
+                "y": 200
+            },
+            "column": [{
+                "name": "id",
+                "type": "increments",
+                "length": 30,
+                "order": 0,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "username",
+                "type": "string",
+                "length": 30,
+                "order": 1,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "email",
+                "type": "string",
+                "length": 200,
+                "order": 2,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "password",
+                "type": "string",
+                "length": 100,
+                "order": 3,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }],
+            "relation": []
+        }, {
+            "name": "Map",
+            "position": {
+                "x": 100,
+                "y": 100
+            },
+            "column": [{
+                "name": "id",
+                "type": "increments",
+                "length": 30,
+                "order": 0,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "username",
+                "type": "string",
+                "length": 30,
+                "order": 1,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "email",
+                "type": "string",
+                "length": 200,
+                "order": 2,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }, {
+                "name": "password",
+                "type": "string",
+                "length": 100,
+                "order": 3,
+                "defaultvalue": "",
+                "enumvalue": ""
+            }],
+            "relation": []
+        }];
 
-        //var nodes = this.collection.toJSON();
-
-
-
-        //Node Loop
-        _.each(nodes, function(node) {
-            console.log("<> create node: " + node.name);
-            this.collection.createNode(node);
-        }, this);
-
-     
-        this.collection.each(function(node){
-            console.log(node);
-            var nodeRelation = node.get('relation');
-            nodeRelation.each(function(relationModel){
-                //console.log(node.get('name'));
-                createConnection(relationModel, node);
-                relationModel.trigger('add');
-            }, this);
-        },this);
-
-
-
+        this.collection.loadNodes(nodes);
         //console.log(this.collection.toJSON());
-        console.log((this.collection.toJSON()));
+        //console.log((this.collection.toJSON()));
 
     },
     addNode: function() {

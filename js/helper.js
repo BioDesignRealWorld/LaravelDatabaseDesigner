@@ -7,6 +7,7 @@
 function createConnection(relationModel, sourceNode) {
 
 
+
     var relationModal = function(sourceNode, relationModel) {
 
         var relationEditView = new RelationEditView({
@@ -25,7 +26,7 @@ function createConnection(relationModel, sourceNode) {
 
     relationModel.on('add', function() {
 
-        console.log(relationModel.get('sourcenode'));
+        //console.log(relationModel.get('sourcenode'));
 
         var conn = jsPlumb.connect({
             source: sourceNode.get('name'),
@@ -36,7 +37,7 @@ function createConnection(relationModel, sourceNode) {
                 }],
                 ["Label", {
                     cssClass: "label",
-                    label: relationModel.get('sourcenode') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
+                    label: sourceNode.get('name') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
                     location: 0.3,
                     id: "label"
                 }]
@@ -66,7 +67,7 @@ function createConnection(relationModel, sourceNode) {
     });
 
     relationModel.on('change:relationtype', function() {
-        $(relationModel.get('conn').getOverlay('label').canvas).html(relationModel.get('sourcenode') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'));
+        $(relationModel.get('conn').getOverlay('label').canvas).html(sourceNode.get('name') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'));
 
     });
 
@@ -84,7 +85,7 @@ function createConnection(relationModel, sourceNode) {
                 }],
                 ["Label", {
                     cssClass: "label",
-                    label: relationModel.get('sourcenode') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
+                    label: sourceNode.get('name') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
                     location: 0.3,
                     id: "label"
                 }]
