@@ -243,115 +243,8 @@ var RelationCreateView = Backbone.View.extend({
             extramethods: this.$("#tableExtraMethod").val()
         });
 
-        var relationModal = function(that) {
-            //console.log(that);
-            var relationEditView = new RelationEditView({
-                model: newrelation,
-                parent: that.model,
-                title: 'Edit Relation in Table '
-            });
+        createConnection(newrelation, this.model);
 
-            var modal = new Backbone.BootstrapModal({
-                showFooter: false,
-                content: relationEditView
-            });
-
-            modal.open();
-        };
-
-        newrelation.on('add', function() {
-            var conn = jsPlumb.connect({
-                source: newrelation.get('sourcenode'),
-                target: newrelation.get('relatedmodel'),
-                overlays: [
-                    ["Arrow", {
-                        location: 1
-                    }],
-                    ["Label", {
-                        cssClass: "label",
-                        label: newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'),
-                        location: 0.3,
-                        id: "label"
-                    }]
-                ]
-            });
-
-            conn.bind("click", function() {
-                relationModal(that);
-            });
-
-            var targetModel = this.parent.where({
-                name: newrelation.get('relatedmodel')
-            })[0];
-           // console.log(this.target);
-
-           var targetCallback = function() {
-                newrelation.destroy();
-            };
-
-            var targetListen = targetModel.on('destroy', targetCallback , this);
-
-            var detachListen = function(){
-            	targetModel.off('destroy', targetCallback);
-            };
-
-            newrelation.set('detachListen', detachListen);
-            newrelation.set('conn', conn);
-        }, this);
-
-        newrelation.on('change:relationtype', function() {
-        	$(this.get('conn').getOverlay('label').canvas).html(newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'));
-      
-        });
-
-        newrelation.on('change:relatedmodel', function() {
-
-        	newrelation.get('detachListen')();
-
-            jsPlumb.detach(newrelation.get('conn'));
-            var conn = jsPlumb.connect({
-                source: newrelation.get('sourcenode'),
-                target: newrelation.get('relatedmodel'),
-                overlays: [
-                    ["Arrow", {
-                        location: 1
-                    }],
-                    ["Label", {
-                        cssClass: "label",
-                        label: newrelation.get('sourcenode') + ' ' + newrelation.get('relationtype') + ' ' + newrelation.get('relatedmodel'),
-                        location: 0.3,
-                        id: "label"
-                    }]
-                ]
-            });
-            
-            conn.bind("click", function() {
-                relationModal(that);
-            });
-
-            var targetModel = this.parent.where({
-                name: newrelation.get('relatedmodel')
-            })[0];
-
-           var targetCallback = function() {
-                newrelation.destroy();
-            };
-
-            var targetListen = targetModel.on('destroy', targetCallback , this);
-
-            var detachListen = function(){
-            	targetModel.off('destroy', targetCallback);
-            };
-
-            newrelation.set('detachListen', detachListen);
-            newrelation.set('conn', conn);
-        }, this);
-
-        newrelation.on('destroy', function() {
-            if (newrelation.get('conn').connector !== null) {
-                jsPlumb.detach(newrelation.get('conn'));
-            }
-        }, this);
         this.model.get('relation').add(newrelation);
         //console.log(test);
     },
@@ -416,12 +309,12 @@ var RelationCollectionView = Backbone.View.extend({
 var Node = Backbone.Model.extend({
     initialize: function(param) {
         this.set('name', param.name);
-        this.set('modelclass',param.modelclass);
-        this.set('namespace',param.namespace);
-        this.set('color',param.color);
-        this.set('position',param.position);
-		
-		this.set('parent', param.parent);
+        this.set('modelclass', param.modelclass);
+        this.set('namespace', param.namespace);
+        this.set('color', param.color);
+        this.set('position', param.position);
+
+        this.set('parent', param.parent);
         this.set('column', new ColumnCollection());
         this.set('relation', new RelationCollection());
     },
@@ -557,7 +450,7 @@ var NodeView = Backbone.View.extend({
         var position = this.model.get('position');
         //console.log(position);
 
-        this.$el.css("left",position.x);
+        this.$el.css("left", position.x);
         this.$el.css("top", position.y);
 
         this.$el.append(this.template({
@@ -569,7 +462,7 @@ var NodeView = Backbone.View.extend({
         });
         this.$(".conn").droppable({
             drop: function(event, ui) {
-                
+
                 $(this).data("uiDraggable").originalPosition = {
                     top: 0,
                     left: 0
@@ -620,12 +513,12 @@ var NodeView = Backbone.View.extend({
 var NodeCollection = Backbone.Collection.extend({
     model: Node,
     createNode: function(param) {
-        
+
         var nod = this.add({
-			modelclass : param.modelclass,
-			namespace : param.namespace,
-			color: param.color,
-			position: param.position,
+            modelclass: param.modelclass,
+            namespace: param.namespace,
+            color: param.color,
+            position: param.position,
             name: param.name,
             parent: this
         });
@@ -633,12 +526,15 @@ var NodeCollection = Backbone.Collection.extend({
         nod.get('column').add(param.column, {
             silent: true
         });
-
         nod.get('column').sort();
         nod.get('column').trigger('createnode');
+
         nod.get('relation').add(param.relation);
 
         return nod;
+    },
+    loadJSON: function() {
+        return this.toJSON();
     },
     //connectNode('nodeName1', 'nodeName2')
     connectNode: function(source, target) {
@@ -661,45 +557,80 @@ var NodeCollectionView = Backbone.View.extend({
     collection: NodeCollection,
     template: _.template($("#nodecontainer-template").html()),
     events: {
-    	'click .addnode' : 'addNode'
+        'click .addnode': 'addNode',
+        'click .dump': 'dumpNodes'
+
     },
-    addNode: function()
-    {
-    	var coll = this.collection;
+    dumpNodes: function() {
+        var that = this;
 
-		var CreateNodeView = Backbone.View.extend({
-			template: _.template($('#createnode-template').html()),
-			events: {
-				'click .addnode' : 'addNode'
-			},
-			addNode : function(){
+        var nodes = [{"name":"Users","position":{"x":300,"y":400},"column":[{"name":"username","type":"string","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"id","type":"increments","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Roles","foreignkeys":"user_id","extramethods":""},{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Map","foreignkeys":"user_id","extramethods":""},{"name":"machines","relationtype":"hasMany","usenamespace":"","relatedmodel":"Roles","foreignkeys":"user_id","extramethods":""}]},{"name":"Roles","position":{"x":600,"y":200},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]},{"name":"Map","position":{"x":100,"y":100},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]}];
 
-			var newnode = coll.createNode({
-				name:  this.$('#tableName').val(),
-				modelclass:  this.$('#tableModelName').val(),
-				namespace:  this.$('#tableNamespace').val(),
-				color:  this.$('#tableColor').val(),
-				position: {x:0,y:0}
-			});
-			
-			//console.log(newnode);
-			},
-			render: function()
-			{
-				this.$el.html(this.template());
-				return this.el;
-			}
-		});
+        //var nodes = this.collection.toJSON();
 
 
 
-    	var modal = new Backbone.BootstrapModal({
+        //Node Loop
+        _.each(nodes, function(node) {
+            console.log("<> create node: " + node.name);
+            this.collection.createNode(node);
+        }, this);
+
+     
+        this.collection.each(function(node){
+            console.log(node);
+            var nodeRelation = node.get('relation');
+            nodeRelation.each(function(relationModel){
+                //console.log(node.get('name'));
+                createConnection(relationModel, node);
+                relationModel.trigger('add');
+            }, this);
+        },this);
+
+
+
+        //console.log(this.collection.toJSON());
+        console.log((this.collection.toJSON()));
+
+    },
+    addNode: function() {
+        var coll = this.collection;
+
+        var CreateNodeView = Backbone.View.extend({
+            template: _.template($('#createnode-template').html()),
+            events: {
+                'click .addnode': 'addNode'
+            },
+            addNode: function() {
+
+                var newnode = coll.createNode({
+                    name: this.$('#tableName').val(),
+                    modelclass: this.$('#tableModelName').val(),
+                    namespace: this.$('#tableNamespace').val(),
+                    color: this.$('#tableColor').val(),
+                    position: {
+                        x: 20,
+                        y: 20
+                    }
+                });
+
+                //console.log(newnode);
+            },
+            render: function() {
+                this.$el.html(this.template());
+                return this.el;
+            }
+        });
+
+
+
+        var modal = new Backbone.BootstrapModal({
             showFooter: false,
             content: new CreateNodeView()
         });
 
         modal.open();
-    	//alert('yadda');
+        //alert('yadda');
     },
     initialize: function() {
         this.collection.on("add", this.addOne, this);
@@ -736,7 +667,7 @@ var NodeCollectionView = Backbone.View.extend({
         //console.log('addone');
     },
     render: function() {
-    	this.$el.html(this.template());
+        this.$el.html(this.template());
         return this.el;
     }
 });
@@ -800,43 +731,76 @@ var relationTest = [{
     name: 'machines',
     relationtype: 'hasMany',
     usenamespace: '',
-    relatedmodel: 'Machine',
+    relatedmodel: 'Roles',
     foreignkeys: 'user_id',
 }, {
     name: 'machines',
     relationtype: 'hasMany',
     usenamespace: '',
-    relatedmodel: 'Machine',
+    relatedmodel: 'Map',
     foreignkeys: 'user_id',
 }, {
     name: 'machines',
     relationtype: 'hasMany',
     usenamespace: '',
-    relatedmodel: 'Machine',
+    relatedmodel: 'Roles',
     foreignkeys: 'user_id',
 }];
 
 
+var savedNodes = [{
+    name: 'Users',
+    column: userNode,
+    relation: relationTest,
+    position: {
+        x: 300,
+        y: 400
+    }
+}, {
+    name: 'Roles',
+    column: roleNode,
+    position: {
+        x: 600,
+        y: 200
+    }
+}, {
+    name: 'Map',
+    column: roleNode,
+    position: {
+        x: 100,
+        y: 100
+    }
+}];
+
+/*
 nodeCollection.createNode({
     name: 'Users',
     column: userNode,
-    position: {x: 300, y:400},
+    relation: relationTest,
+    position: {
+        x: 300,
+        y: 400
+    },
 });
 
 nodeCollection.createNode({
     name: 'Roles',
     column: roleNode,
-    position: {x: 600, y:200},
+    position: {
+        x: 600,
+        y: 200
+    },
 });
-
-
-
 
 nodeCollection.createNode({
     name: 'Map',
     column: roleNode,
-    position: {x: 100, y:100},
+    position: {
+        x: 100,
+        y: 100
+    },
 });
+*/
 
 /*
 nodeCollection.createNode({
