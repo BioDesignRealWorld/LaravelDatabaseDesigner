@@ -1,3 +1,4 @@
+
 var ColumnModel = Backbone.Model.extend({
     defaults: {
         name: '',
@@ -582,8 +583,11 @@ var NodeCollection = Backbone.Collection.extend({
 
             var nodetmp = {
                 name: node.get('name'),
+                color: node.get('color'),
+                position: node.get('position'),
+                modelclass: node.get('modelclass'),
                 column: [],
-                relation: []
+                relation: [],
             };
 
             node.get('column').each(function(item) {
@@ -627,146 +631,27 @@ var NodeCollectionView = Backbone.View.extend({
     events: {
         'click .addnode': 'addNode',
         'click .dump': 'dumpNodes',
-        'click .save': 'saveNodes'
+        'click .save': 'saveNodes',
+        'click .open': 'loadNodes'
+
     },
     saveNodes: function() {
-        //this.collection.toJSON()
+        //console.log("wew");
+                $("#fileSaveDialog").trigger("click");
+
+    },
+    loadNodes: function()
+    {
+                $("#fileOpenDialog").trigger("click");
+
     },
     dumpNodes: function() {
         var that = this;
 
-        var nodes = [{
-            "name": "Users",
-            "position": {
-                "x": 300,
-                "y": 400
-            },
-            "column": [{
-                "name": "username",
-                "type": "string",
-                "length": 30,
-                "order": 0,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "id",
-                "type": "increments",
-                "length": 30,
-                "order": 1,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "email",
-                "type": "string",
-                "length": 200,
-                "order": 2,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "password",
-                "type": "string",
-                "length": 100,
-                "order": 3,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }],
-            "relation": [{
-                "name": "machines",
-                "relationtype": "hasMany",
-                "usenamespace": "",
-                "relatedmodel": "Roles",
-                "foreignkeys": "user_id",
-                "extramethods": ""
-            }, {
-                "name": "machines",
-                "relationtype": "hasMany",
-                "usenamespace": "",
-                "relatedmodel": "Map",
-                "foreignkeys": "user_id",
-                "extramethods": ""
-            }, {
-                "name": "machines",
-                "relationtype": "hasMany",
-                "usenamespace": "",
-                "relatedmodel": "Roles",
-                "foreignkeys": "user_id",
-                "extramethods": ""
-            }]
-        }, {
-            "name": "Roles",
-            "position": {
-                "x": 600,
-                "y": 200
-            },
-            "column": [{
-                "name": "id",
-                "type": "increments",
-                "length": 30,
-                "order": 0,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "username",
-                "type": "string",
-                "length": 30,
-                "order": 1,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "email",
-                "type": "string",
-                "length": 200,
-                "order": 2,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "password",
-                "type": "string",
-                "length": 100,
-                "order": 3,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }],
-            "relation": []
-        }, {
-            "name": "Map",
-            "position": {
-                "x": 100,
-                "y": 100
-            },
-            "column": [{
-                "name": "id",
-                "type": "increments",
-                "length": 30,
-                "order": 0,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "username",
-                "type": "string",
-                "length": 30,
-                "order": 1,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "email",
-                "type": "string",
-                "length": 200,
-                "order": 2,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }, {
-                "name": "password",
-                "type": "string",
-                "length": 100,
-                "order": 3,
-                "defaultvalue": "",
-                "enumvalue": ""
-            }],
-            "relation": []
-        }];
+        var nodes = 
+[{"name":"Users","color":"","position":{"x":87,"y":60},"column":[{"name":"username","type":"string","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"id","type":"increments","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[{"extramethods":"","foreignkeys":"user_id","name":"machines","relatedmodel":"Roles","relationtype":"hasMany","usenamespace":""},{"extramethods":"","foreignkeys":"user_id","name":"machines","relatedmodel":"Map","relationtype":"hasMany","usenamespace":""},{"extramethods":"","foreignkeys":"user_id","name":"machines","relatedmodel":"Roles","relationtype":"hasMany","usenamespace":""}]},{"name":"Roles","color":"","position":{"x":106,"y":469},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]},{"name":"Map","color":"","position":{"x":602,"y":161},"column":[{"name":"id","type":"increments","length":30,"order":0,"defaultvalue":"","enumvalue":""},{"name":"username","type":"string","length":30,"order":1,"defaultvalue":"","enumvalue":""},{"name":"email","type":"string","length":200,"order":2,"defaultvalue":"","enumvalue":""},{"name":"password","type":"string","length":100,"order":3,"defaultvalue":"","enumvalue":""}],"relation":[]}] ;       
 
-        this.collection.loadNodes(nodes);
+ this.collection.loadNodes(nodes);
         //console.log(this.collection.toJSON());
         //console.log((this.collection.toJSON()));
 
@@ -840,6 +725,17 @@ var NodeCollectionView = Backbone.View.extend({
 
         jsPlumb.draggable(nodeRendered, {
             containment: 'parent'
+        });
+
+
+        $(nodeView.$el).on("dragstop", function(event, ui){
+            //console.log(ui.position);
+            node.set("position",
+            {
+                x: ui.position.left,
+                y: ui.position.top,
+            }
+            );
         });
 
         //console.log('addone');

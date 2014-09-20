@@ -19,6 +19,10 @@
         <![endif]-->
     </head>
     <body>
+
+<input style="display:none;" id="fileSaveDialog" type="file" nwsaveas />
+<input style="display:none;" id="fileOpenDialog" type="file" />
+
         <!-- Main jumbotron for a primary marketing message or call to action -->
         <!-- /container -->
         <script type="text/template" id="table-modal-template">
@@ -356,6 +360,7 @@
             
             <a class="addnode" href="#">[a]</a>
             <a class="save" href="#">[s]</a>
+            <a class="open" href="#">[o]</a>
             <a class="dump" href="#">[d]</a>
 
             </script>
@@ -367,5 +372,7 @@
             <script src="bootstrap/js/bootstrap.min.js"></script>
             <script src="js/helper.js"></script>
             <script src="js/app.js"></script>
+            <script src="js/node.js"></script>
+
         </body>
     </html>
