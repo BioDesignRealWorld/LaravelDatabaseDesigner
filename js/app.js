@@ -472,8 +472,7 @@ var NodeView = Backbone.View.extend({
                     top: 0,
                     left: 0
                 };
-
-                var source = ui.draggable.attr('id');
+                var source = ui.draggable.attr('tag');
                 var dest = that.model.get('name');
 
 
@@ -723,19 +722,23 @@ var NodeCollectionView = Backbone.View.extend({
             allowLoopback: false,
         });
 
-        jsPlumb.draggable(nodeRendered, {
+        var test = jsPlumb.draggable(nodeRendered, {
             containment: 'parent'
         });
 
+        //console.log(test);
+
 
         $(nodeView.$el).on("dragstop", function(event, ui){
-            //console.log(ui.position);
-            node.set("position",
-            {
-                x: ui.position.left,
-                y: ui.position.top,
+
+            if (typeof ui.helper.attr('tag') == 'undefined'){
+                //console.log('ok');
+                node.set("position", {
+                    x: ui.position.left,
+                    y: ui.position.top,
+                });
             }
-            );
+
         });
 
         //console.log('addone');

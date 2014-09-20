@@ -52,17 +52,9 @@ function createConnection(relationModel, sourceNode) {
             name: relationModel.get('relatedmodel')
         })[0];
 
-        var targetCallback = function() {
-            relationModel.destroy();
-        };
 
-        var targetListen = targetModel.on('destroy', targetCallback);
+        relationModel.listenTo(targetModel, 'destroy', relationModel.destroy);
 
-        var detachListen = function() {
-            targetModel.off('destroy', targetCallback);
-        };
-
-        relationModel.set('detachListen', detachListen);
         relationModel.set('conn', conn);
     });
 
@@ -100,21 +92,17 @@ function createConnection(relationModel, sourceNode) {
             name: relationModel.get('relatedmodel')
         })[0];
 
-        var targetCallback = function() {
-            relationModel.destroy();
-        };
 
-        var targetListen = targetModel.on('destroy', targetCallback);
+        relationModel.listenTo(targetModel, 'destroy', relationModel.destroy);
 
-        var detachListen = function() {
-            targetModel.off('destroy', targetCallback);
-        };
 
         relationModel.set('detachListen', detachListen);
         relationModel.set('conn', conn);
     });
 
     relationModel.on('destroy', function() {
+        relationModel.stopListening();
+        //console.log("destroyed");
         if (relationModel.get('conn').connector !== null) {
             jsPlumb.detach(relationModel.get('conn'));
         }
