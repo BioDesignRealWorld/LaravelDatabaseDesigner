@@ -337,6 +337,17 @@ var NodeView = Backbone.View.extend({
     initialize: function(param) {
         this.parent = param.parent;
         this.listenToOnce(this.model, 'destroy', this.removeFromDom);
+
+
+        this.$el.on("dragstop", function(event, ui){
+            if (typeof ui.helper.attr('tag') == 'undefined'){
+                param.model.set("position", {
+                    x: ui.position.left,
+                    y: ui.position.top,
+                });
+            }
+        });
+
     },
     model: Node,
     tagName: 'div',
@@ -368,6 +379,7 @@ var NodeView = Backbone.View.extend({
 
 
         $(this.$el).remove();
+        this.remove();
         //console.log('destroy');
     },
     deleteNode: function() {
@@ -727,16 +739,7 @@ var NodeCollectionView = Backbone.View.extend({
         //console.log(test);
 
 
-        $(nodeView.$el).on("dragstop", function(event, ui){
-            if (typeof ui.helper.attr('tag') == 'undefined'){
-                //console.log('ok');
-                node.set("position", {
-                    x: ui.position.left,
-                    y: ui.position.top,
-                });
-            }
 
-        });
 
         //console.log('addone');
     },
@@ -939,6 +942,7 @@ jsPlumb.Defaults.EndpointHoverStyle = {
 
 jsPlumb.ready(function() {
     var instance = jsPlumb.importDefaults({
+        ConnectionsDetachable:false,
         DragOptions: {
             cursor: 'pointer',
             zIndex: 2000
