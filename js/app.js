@@ -12,9 +12,7 @@ var ColumnModel = Backbone.Model.extend({
 
 var ColumnModelView = Backbone.View.extend({
     initialize: function() {
-        this.model.on('change', function() {
-            this.render();
-        }, this);
+        this.listenTo(this.model, 'change', this.render );
     },
     model: ColumnModel,
     template: _.template($('#columnview-template').html()),
@@ -85,8 +83,8 @@ var ColumnCollectionView = Backbone.View.extend({
     tagName: 'ul',
     className: 'ui-sortable',
     initialize: function() {
-        this.collection.on('add', this.addOne, this);
-        this.collection.on('createnode', this.render, this);
+        this.listenTo(this.collection, 'add', this.addOne);
+        this.listenTo(this.collection, 'createnode', this.render);
 
         var that = this;
         this.$el.sortable({
@@ -147,8 +145,7 @@ var RelationCollection = Backbone.Collection.extend({
 var RelationView = Backbone.View.extend({
     initialize: function(param) {
         this.parent = param.parent;
-        //this.model.on('destroy', this.render, this);
-        this.model.on('change', this.render, this);
+        this.listenTo(this.model, 'change', this.render);
     },
     model: RelationModel,
     tagName: 'tr',
@@ -280,8 +277,9 @@ var RelationCollectionView = Backbone.View.extend({
     template: _.template($('#relationview-template').html()),
     initialize: function() {
         //console.log(this.model);
-        this.model.get('relation').on('add', this.addOne, this);
-        this.model.get('relation').on('destroy', this.render, this);
+        var modelRelation = this.model.get('relation');        
+        this.listenTo(modelRelation, 'add', this.addOne);
+        this.listenTo(modelRelation, 'destroy', this.render);
     },
     addOne: function(item) {
         //console.log(item);
@@ -338,7 +336,7 @@ var Node = Backbone.Model.extend({
 var NodeView = Backbone.View.extend({
     initialize: function(param) {
         this.parent = param.parent;
-        this.model.once('destroy', this.removeFromDom, this);
+        this.listenToOnce(this.model, 'destroy', this.removeFromDom);
     },
     model: Node,
     tagName: 'div',
@@ -695,7 +693,7 @@ var NodeCollectionView = Backbone.View.extend({
         //alert('yadda');
     },
     initialize: function() {
-        this.collection.on("add", this.addOne, this);
+        this.listenTo(this.collection, 'add', this.addOne);
     },
     addOne: function(node) {
         var nodeView = new NodeView({
@@ -730,7 +728,6 @@ var NodeCollectionView = Backbone.View.extend({
 
 
         $(nodeView.$el).on("dragstop", function(event, ui){
-
             if (typeof ui.helper.attr('tag') == 'undefined'){
                 //console.log('ok');
                 node.set("position", {
