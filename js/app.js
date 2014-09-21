@@ -942,7 +942,7 @@ jsPlumb.Defaults.EndpointHoverStyle = {
 
 jsPlumb.ready(function() {
     var instance = jsPlumb.importDefaults({
-        ConnectionsDetachable:false,
+        ConnectionsDetachable:true,
         DragOptions: {
             cursor: 'pointer',
             zIndex: 2000
