@@ -1,25 +1,23 @@
 {
-  name: 'Laravel Schema Editor',
-  version: '0.0.1',
-  authors: [
-    'Budi Prakosa a.k.a Iyok <iyok@deadmediafm.org>'
+  "name": "Laravel Schema Editor",
+  "version": "0.0.1",
+  "authors": [
+    "Budi Prakosa a.k.a Iyok <iyok@deadmediafm.org>"
   ],
-  description: 'create and edit database diagram',
-  license: 'MIT',
-  private: true,
-  ignore: [
-    '**/.*',
-    'node_modules',
-    'bower_components',
-    'test',
-    'tests'
+  "description": "create and edit database diagram",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
   ],
-  dependencies: {
-    'backbone.bootstrap-modal': 'git@github.com:badgeek/backbone.bootstrap-modal.git',
-    backbone: '~1.1.2',
-    bootstrap: '~3.2.0',
-    jquery-ui: '~1.11.1',
-    jsplumb: '~1.6.4'
+  "dependencies": {
+    "backbone.bootstrap-modal": "git@github.com:badgeek/backbone.bootstrap-modal.git#~0.9.0",
+    "backbone": "~1.1.2",
+    "jqueryui": "~1.11.1",
+    "jsplumb": "~1.6.4"
   }
 }
-
