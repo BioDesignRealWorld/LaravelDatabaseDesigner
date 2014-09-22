@@ -15,6 +15,7 @@
     "tests"
   ],
   "dependencies": {
+    "bootstrap": "~3.2.0",
     "backbone.bootstrap-modal": "git@github.com:badgeek/backbone.bootstrap-modal.git#~0.9.0",
     "backbone": "~1.1.2",
     "jqueryui": "~1.11.1",
