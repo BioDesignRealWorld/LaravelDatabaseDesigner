@@ -65,6 +65,7 @@ function createConnection(relationModel, sourceNode) {
 
     relationModel.on('change:relatedmodel', function() {
 
+        relationModel.stopListening();
 
         jsPlumb.detach(relationModel.get('conn'));
         var conn = jsPlumb.connect({
