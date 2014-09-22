@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Laravel Schema Designer 0.1</title>
+        <title>Laravel Database Designer 0.1</title>
         <!-- Bootstrap core CSS -->
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <!-- Custom styles for this template -->
@@ -176,11 +176,21 @@
         </script>
         
         <script type="text/template" id="nodeview-template">
-        <p> <b>Table <%=name%> </b> <a class="add" href="#">[ + ]</a>  <a class="relation" href="#">[ r ]</a>  <a class="relationadd" href="#">[ ra ]</a>  <a class="dump" href="#">[ j ]</a> <a href="#" class="delete">[ del ]</a> </p>
-        <div tag="<%=name%>" class="conn">conn</div>
+        <p> <b>Table <%=name%> </b> 
+
+<a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add col</a>
+        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add rel</a>
+<a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> see rel</a>
+<a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
+        
+        <div style="display: none;" tag="<%=name%>" class="conn">conn</div>
         </script>
         <script type="text/template" id="columnview-template">
-        <b><%=name%></b> <i><%=type%></i> (<%=length%>) <a class="edit" href="#">[e]</a> <a class="delete-col" href="#">[d]</a>
+        <b><%=name%></b> <i><%=type%></i> (<%=length%>) 
+
+        <a href="#" class="btn edit btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span></a>
+        <a href="#" class="btn delete-col btn-xs btn-default"><span class="glyphicon glyphicon-remove"></span></a>
+
         </script>
         <script type="text/template" id="relationitem-template">
         <td><%=name %></td>
@@ -189,8 +199,8 @@
         <td><%=foreignkeys %></td>
         <td colspan="2" style="text-align: right;">
             <div class="btn-group">
-                <a class="btn edit btn-mini" title="Edit relationship" href="#"><i class="icon-pencil">Edit</i></a>
-                <a class="btn delete btn-mini" title="Delete relationship" href="#"><i class="icon-trash">Delete</i></a>
+            <a href="#" class="btn edit btn-xs btn-warning"><span class=""></span>Edit</a>
+            <a href="#" class="btn delete btn-xs btn-danger"><span class=""></span>Delete</a>
             </div>
         </td>
         </script>
@@ -213,7 +223,7 @@
               <div class="modal-footer">
                       <a href="#" class="btn ok btn-primary">Add New Relation</a>
 
-            <a href="#" class="btn btn-danger cancel">Cancel</a>
+            <a href="#" class="btn btn-primary cancel">Cancel</a>
       </div>
         </script>
         <script type="text/template" id="relationcreate-template">
@@ -234,7 +244,7 @@
                 </div>
                 <!-- Select Basic -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="tableRelation">Relation</label>
+                    <label class="col-md-4 control-label" for="tableRelation">Relation Type</label>
                     <div class="col-md-4">
                         <select id="tableRelation" name="tableRelation" class="form-control">
                             <option value="hasOne">hasOne</option><option value="belongsTo">belongsTo</option><option value="hasMany">hasMany</option><option value="belongsToMany">belongsToMany</option><option value="hasManyThrough">hasManyThrough</option><option value="morphOne">morphOne</option><option value="morphTo">morphTo</option><option value="morphMany">morphMany</option><option value="morphedByMany">morphedByMany</option><option value="morphToMany">morphToMany</option>                        </select>
@@ -282,7 +292,7 @@
                             <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
                                                         <button id="button2id" name="button2id" class="cancel btn btn-danger">Delete</button>
 
-                            <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
+                            <button id="button2id" name="button2id" class="cancel btn btn-primary">Cancel</button>
 
                         </div>
                     </div>
@@ -366,7 +376,7 @@
             </script>
             <script type="text/template" id="nodecontainer-template">
 
-<div class="btn-group" style="position: fixed; z-index: 100;">
+    <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
         <button type="button" class="btn btn-default btn-xs addnode"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
         <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
         <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
@@ -375,6 +385,11 @@
 
 
             </script>
+
+            <div id="biodesign-logo">
+                <img src="asset/img/biodesign-logo-web.png" alt="">
+            </div>
+
             <!-- Bootstrap core JavaScript
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->

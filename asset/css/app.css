@@ -1,18 +1,14 @@
 body{margin:0}
 
 
-.btn-group {
-    padding: 10px;
-}
-
 #container {
-        width: 100%;
-        height: 900px;
+        width: 2440px;
+        height: 2440px;
                 border: 1px solid gray;
 
     }
 div#container {
-    background-color: #BEBEBE;
+    background-color: #fff;
 }
 .node-column {
 	background-color: #f0f9ff;
@@ -43,7 +39,7 @@ div#container {
 
  .item {
       position: absolute;
-        
+       background-color: #C2C2C2;
       border: 1px solid rgb(204, 204, 204);
          width: 100px;
 		 	border-radius: 4px;
@@ -54,6 +50,10 @@ div#container {
 	min-width: 260px;
       }
 
+.toolbox button{
+	padding: 5px;
+
+}
 
       #state1 {
   position: absolute;
@@ -78,4 +78,16 @@ div#container {
 	background-color: #637b94;
 	font-size: 11px;
 	z-index: 11;
+}
+
+
+#biodesign-logo {
+	left: 0px;
+	bottom: 0px;
+	position: fixed;
+	z-index: 1;
+}
+
+
+#biodesign-logo img {
 }

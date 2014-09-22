@@ -201,7 +201,7 @@ var RelationEditView = Backbone.View.extend({
     render: function() {
         //console.log(this.parent);
         var templatevar = {
-            title: 'Edit Relation ' + this.parent.get('name'),
+            title: 'Edit Relation in Table ' + this.parent.get('name'),
             relationship: this.model.toJSON(),
             relatedmodel: this.parent.get('parent').toJSON()
         };
