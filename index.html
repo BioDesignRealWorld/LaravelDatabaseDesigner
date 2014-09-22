@@ -280,7 +280,10 @@
                     <div class="form-group">
                         <div class="col-md-8" style="float: right">
                             <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
+                                                        <button id="button2id" name="button2id" class="cancel btn btn-danger">Delete</button>
+
                             <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
+
                         </div>
                     </div>
                 </fieldset>
@@ -362,11 +365,14 @@
             </form>
             </script>
             <script type="text/template" id="nodecontainer-template">
-            
-            <a class="addnode" href="#">[a]</a>
-            <a class="save" href="#">[s]</a>
-            <a class="open" href="#">[o]</a>
-            <a class="dump" href="#">[d]</a>
+
+<div class="btn-group" style="position: fixed;">
+        <button type="button" class="btn btn-default btn-xs addnode"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
+        <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
+        <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
+        <button type="button" class="btn btn-default btn-xs dump"><span style="margin-right: 2px" class="glyphicon glyphicon-briefcase "></span>dump</button>
+      </div>
+
 
             </script>
             <!-- Bootstrap core JavaScript

@@ -1,5 +1,10 @@
 body{margin:0}
 
+
+.btn-group {
+    padding: 10px;
+}
+
 #container {
         width: 100%;
         height: 900px;
