@@ -478,10 +478,6 @@ var NodeView = Backbone.View.extend({
         this.$(".conn").droppable({
             drop: function(event, ui) {
 
-                $(this).data("uiDraggable").originalPosition = {
-                    top: 0,
-                    left: 0
-                };
                 var source = ui.draggable.attr('tag');
                 var dest = that.model.get('name');
 
