@@ -65,7 +65,6 @@ function createConnection(relationModel, sourceNode) {
 
     relationModel.on('change:relatedmodel', function() {
 
-        relationModel.get('detachListen')();
 
         jsPlumb.detach(relationModel.get('conn'));
         var conn = jsPlumb.connect({
@@ -96,7 +95,6 @@ function createConnection(relationModel, sourceNode) {
         relationModel.listenTo(targetModel, 'destroy', relationModel.destroy);
 
 
-        relationModel.set('detachListen', detachListen);
         relationModel.set('conn', conn);
     });
 
