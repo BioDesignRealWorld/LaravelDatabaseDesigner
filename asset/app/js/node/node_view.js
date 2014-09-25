@@ -2,6 +2,27 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     // Private
     // -------------------------
 
+    Views.CreateConnection = function(srcNodeContainer, dstNodeContainer) {
+
+        var conn = jsPlumb.connect({
+            source: sourceNode.get('name'),
+            target: relationModel.get('relatedmodel'),
+            overlays: [
+                ["Arrow", {
+                    location: 1
+                }],
+                ["Label", {
+                    cssClass: "label",
+                    label: sourceNode.get('name') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
+                    location: 0.3,
+                    id: "label"
+                }]
+            ]
+        });
+
+
+    };
+
     Views.NodeItem = Backbone.Marionette.ItemView.extend({
         tagName: "li",
         className: 'node-column',
@@ -50,16 +71,47 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .relationadd': 'relationAdd',
             'click .delete': 'deleteNode'
         },
-        initialize: function()
-        {
-        	this.collection = this.model.get("column");
-        	//console.log(this.model.get("column"));
+        initialize: function() {
+            this.collection = this.model.get("column");
+            this.$el.attr("id", this.model.cid);
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
             child.model.set('order', child.$el.index());
         },
+        onShow: function() {
+            //this.$el.fadeOut();
+            var this_dom = $("#" + this.model.get('name'));
+            var this_conn = $(this.model.get('name')).find(".conn");
+
+            //console.log($("body"));
+
+            // console.log(jsPlumb.addEndpoint(this.el));
+
+
+
+        },
+        onDomRefresh: function(dom) {
+
+            jsPlumb.makeTarget(this.el, {
+                allowLoopback: false,
+                anchor: 'Continuous'
+            }, this);
+
+
+            jsPlumb.makeSource(this.$el.find(".conn"), {
+                parent: this.el,
+                anchor: 'Continuous',
+                allowLoopback: false,
+            }, {view:this});
+
+            jsPlumb.draggable(this.el, {
+                containment: 'parent'
+            }, {view:this});
+
+        },
         onRender: function(dom) {
+            //console.log($("body"));
 
             var self = this;
 
@@ -73,32 +125,15 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             this.$el.css("left", pos.x);
             this.$el.css("top", pos.y);
 
-            var this_dom = $(this.id);
-            var this_conn = $(this.id).find(".conn");
-
-            jsPlumb.makeTarget(this_dom, {
-                allowLoopback: false,
-                anchor: 'Continuous'
-            });
-
-            jsPlumb.makeSource(this_dom, {
-                parent: this_conn,
-                anchor: 'Continuous',
-                allowLoopback: false,
-            });
-
-            jsPlumb.draggable(dom.el, {
-                containment: 'parent'
-            });
 
             this.$el.on("dragstop", function(event, ui) {
-            	console.log(ui);
+                console.log(ui);
                 if (typeof ui.helper.attr('tag') == 'undefined') {
                     self.model.set("position", {
                         x: ui.position.left,
                         y: ui.position.top,
                     });
-                } 
+                }
             });
         },
         onBeforeDestroy: function() {
@@ -131,13 +166,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
 
     Views.NodeCanvas = Backbone.Marionette.CompositeView.extend({
-    	id: "container",
-    	template: "#nodecanvas-template",
-    	childView: Views.NodeContainer,
-    	onRender: function()
-    	{
+        id: "container",
+        template: "#nodecanvas-template",
+        childView: Views.NodeContainer,
 
-    	}
     });
     // Public
     // -------------------------

@@ -29,6 +29,13 @@
         </div>
         <!-- Template
         ================================================== -->
+        <script type="text/template" id="layout-template">
+        <div id="content">
+        test
+        </div>
+        </script>  
+        <!-- Template
+        ================================================== -->
         <script type="text/template" id="nodecanvas-template">
         <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
         <button type="button" class="btn btn-default btn-xs addnode"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
@@ -53,7 +60,7 @@
         <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> see rel</a>
         <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
         
-        <div style="" tag="<%=name%>" class="conn">conn</div>
+        <div id="conn-<%=name%>" style="" tag="<%=name%>" class="conn">conn</div>
         <ul class="nodecollection-container">
         </ul>
         </script>
