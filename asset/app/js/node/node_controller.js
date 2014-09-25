@@ -5,7 +5,6 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
     
     // Public
     // -------------------------
-    console.log("Wew");
 
     // Initializers
     // -------------------------

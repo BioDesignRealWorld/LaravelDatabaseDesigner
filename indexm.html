@@ -22,12 +22,21 @@
         <input style="display:none;" id="fileSaveDialog" type="file" nwsaveas />
         <input style="display:none;" id="fileOpenDialog" type="file" />
         <!-- /container -->
-        <div id="container">
-            
+        <div id="apps">
+            <div id="biodesign-logo">
+                <img src="asset/img/biodesign-logo-web.png" alt="">
+            </div>
         </div>
-        <div id="biodesign-logo">
-            <img src="asset/img/biodesign-logo-web.png" alt="">
+        <!-- Template
+        ================================================== -->
+        <script type="text/template" id="nodecanvas-template">
+        <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
+        <button type="button" class="btn btn-default btn-xs addnode"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
+        <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
+        <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
+        <button type="button" class="btn btn-default btn-xs dump"><span style="margin-right: 2px" class="glyphicon glyphicon-briefcase "></span>dump</button>
         </div>
+        </script>        
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodeitem-template">
@@ -38,15 +47,15 @@
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodecollection-template">
-            <p> <b>Table <%=name%> </b>
-            <a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add col</a>
-            <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add rel</a>
-            <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> see rel</a>
-            <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
-            
-            <div style="" tag="<%=name%>" class="conn">conn</div>
-            <ul class="nodecollection-container">
-            </ul>
+        <p> <b>Table <%=name%> </b>
+        <a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add col</a>
+        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add rel</a>
+        <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> see rel</a>
+        <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
+        
+        <div style="" tag="<%=name%>" class="conn">conn</div>
+        <ul class="nodecollection-container">
+        </ul>
         </script>
         <!-- Template
         ================================================== -->

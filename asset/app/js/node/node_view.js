@@ -36,7 +36,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
     */
     //ColumnCollectionView + NodeView
-    Views.NodeCollection = Backbone.Marionette.CompositeView.extend({
+    Views.NodeContainer = Backbone.Marionette.CompositeView.extend({
         template: "#nodecollection-template",
         className: "node-view item",
         childView: Views.NodeItem,
@@ -49,6 +49,11 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .parent': 'testParent',
             'click .relationadd': 'relationAdd',
             'click .delete': 'deleteNode'
+        },
+        initialize: function()
+        {
+        	this.collection = this.model.get("column");
+        	//console.log(this.model.get("column"));
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
@@ -64,8 +69,9 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 }
             });
 
-            //this.$el.css("left", position.x);
-            //this.$el.css("top", position.y);
+            var pos = this.model.get("position");
+            this.$el.css("left", pos.x);
+            this.$el.css("top", pos.y);
 
             var this_dom = $(this.id);
             var this_conn = $(this.id).find(".conn");
@@ -87,12 +93,12 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
             this.$el.on("dragstop", function(event, ui) {
             	console.log(ui);
-               /* if (typeof ui.helper.attr('tag') == 'undefined') {
-                    param.model.set("position", {
+                if (typeof ui.helper.attr('tag') == 'undefined') {
+                    self.model.set("position", {
                         x: ui.position.left,
                         y: ui.position.top,
                     });
-                } */
+                } 
             });
         },
         onBeforeDestroy: function() {
@@ -121,6 +127,17 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     Views.RelationCollection = Backbone.Marionette.CollectionView.extend({
         template: "#relationview-template",
         childView: Views.RelationItem,
+    });
+
+
+    Views.NodeCanvas = Backbone.Marionette.CompositeView.extend({
+    	id: "container",
+    	template: "#nodecanvas-template",
+    	childView: Views.NodeContainer,
+    	onRender: function()
+    	{
+
+    	}
     });
     // Public
     // -------------------------
