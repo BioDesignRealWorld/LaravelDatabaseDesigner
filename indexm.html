@@ -12,7 +12,6 @@
         <!-- Custom styles for this template -->
         <link href="asset/css/jumbotron.css" rel="stylesheet">
         <link href="asset/css/app.css" rel="stylesheet">
-
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -22,30 +21,10 @@
     <body>
         <input style="display:none;" id="fileSaveDialog" type="file" nwsaveas />
         <input style="display:none;" id="fileOpenDialog" type="file" />
-
-
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
         <!-- Dialog Region
         ================================================== -->
-        <div class="modals-container"></div>      
-        <!-- Container Region  
+        <div class="modals-container"></div>
+        <!-- Container Region
         ================================================== -->
         <div id="apps">
             <div id="biodesign-logo">
@@ -55,55 +34,164 @@
         <!-- Template
         ================================================== -->
         <script type="text/template" id="modal-template">
-  <div class="modal-dialog">
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-          <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
-        </div>
-        <div class="modal-body">
-          <h4>Text in a modal</h4>
-          <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
-
-          <h4>Popover in a modal</h4>
-          <p>This <a href="#" role="button" class="btn btn-default popover-test" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">button</a> should trigger a popover on click.</p>
-
-          <h4>Tooltips in a modal</h4>
-          <p><a href="#" class="tooltip-test" title="" data-original-title="Tooltip">This link</a> and <a href="#" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> should have tooltips on hover.</p>
-
-          <hr>
-
-          <h4>Overflowing text to show scroll behavior</h4>
-          <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-          <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-          <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-          <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-          <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-          <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-
-        </script>  
+        <a href="#" class="wedew">wedew</a>
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend>Create a Column</legend>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnName">Column Name</label>
+                    <div class="col-md-4">
+                        <input id="columnName" name="columnName" type="text" placeholder="Column Name" class="form-control input-md" value="<%=name%>">
+                        
+                    </div>
+                </div>
+                <!-- Select Basic -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnType">Type</label>
+                    <div class="col-md-4">
+                        <select id="columnType" name="columnType" class="form-control">
+                            <optgroup label="LARAVEL TYPES">
+                                <option value="increments">INCREMENTS</option>
+                                <option value="bigIncrements">BIG INCREMENTS</option>
+                                <option value="timestamps">TIME STAMPS</option>
+                                <option value="softDeletes">SOFT DELETES</option>
+                                <option disabled="disabled">-</option>
+                                <option value="string">STRING (VARCHAR)</option>
+                                <option value="text">TEXT</option>
+                                <option disabled="disabled">-</option>
+                                <option value="tinyInteger">TINY INTEGER</option>
+                                <option value="smallInteger">SMALL INTEGER</option>
+                                <option value="mediumInteger">MEDIUM INTEGER</option>
+                                <option value="integer">INTEGER</option>
+                                <option value="bigInteger">BIG INTEGER</option>
+                                <option disabled="disabled">-</option>
+                                <option value="float">FLOAT</option>
+                                <option value="decimal">DECIMAL</option>
+                                <option value="boolean">BOOLEAN</option>
+                                <option disabled="disabled">-</option>
+                                <option value="enum">ENUM</option>
+                                <option disabled="disabled">-</option>
+                                <option value="date">DATE</option>
+                                <option value="datetime">DATETIME</option>
+                                <option value="time">TIME</option>
+                                <option value="timestamp">TIMESTAMP</option>
+                                <option disabled="disabled">-</option>
+                                <option value="binary">BINARY</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnLength">Length</label>
+                    <div class="col-md-4">
+                        <input id="columnLength" name="columnLength" type="text" placeholder="Length" class="form-control input-md" value="<%=length%>">
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnDef">Default Value</label>
+                    <div class="col-md-4">
+                        <input id="columnDef" name="columnDef" type="text" placeholder="Default Value" class="form-control input-md" value="<%=defaultvalue%>">
+                        
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnEnum">Enum Value</label>
+                    <div class="col-md-4">
+                        <input id="columnEnum" name="columnEnum" type="text" placeholder="Enum Value" class="form-control input-md" value="<%=enumvalue%>">
+                        
+                    </div>
+                </div>
+                <!-- Multiple Checkboxes -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnOption">Option</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label for="columnOption-0">
+                                <input type="checkbox" name="columnOption" id="columnOption-0" value="Auto Incremental">
+                                Auto Incremental
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-1">
+                                <input type="checkbox" name="columnOption" id="columnOption-1" value="Primary Key">
+                                Primary Key
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-2">
+                                <input type="checkbox" name="columnOption" id="columnOption-2" value="Nullable">
+                                Nullable
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-3">
+                                <input type="checkbox" name="columnOption" id="columnOption-3" value="Unsigned Integer">
+                                Unsigned Integer
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-4">
+                                <input type="checkbox" name="columnOption" id="columnOption-4" value="Index">
+                                Index
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-5">
+                                <input type="checkbox" name="columnOption" id="columnOption-5" value="Unique Index">
+                                Unique Index
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-6">
+                                <input type="checkbox" name="columnOption" id="columnOption-6" value="Fillable">
+                                Fillable
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-7">
+                                <input type="checkbox" name="columnOption" id="columnOption-7" value="Visible">
+                                Visible
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-8">
+                                <input type="checkbox" name="columnOption" id="columnOption-8" value="Guarded">
+                                Guarded
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-9">
+                                <input type="checkbox" name="columnOption" id="columnOption-9" value="Hidden">
+                                Hidden
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="button1id"></label>
+                    <div class="col-md-8">
+                        <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
+                        <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>        </script>
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodecanvas-template">
         <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
-        <button type="button" class="btn btn-default btn-xs addnode"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
-        <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
-        <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
-        <button type="button" class="btn btn-default btn-xs dump"><span style="margin-right: 2px" class="glyphicon glyphicon-briefcase "></span>dump</button>
+            <button type="button" class="btn btn-default btn-xs addcontainer"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
+            <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
+            <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
+            <button type="button" class="btn btn-default btn-xs dump"><span style="margin-right: 2px" class="glyphicon glyphicon-briefcase "></span>dump</button>
         </div>
-        </script>        
+        </script>
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodeitem-template">
@@ -126,55 +214,208 @@
         </script>
         <!-- Template
         ================================================== -->
-        <script type="text/template" id="relationitem-template">
-        <td><%=name %></td>
-        <td><%=relationtype %></td>
-        <td><%=relatedmodel %></td>
-        <td><%=foreignkeys %></td>
-        <td colspan="2" style="text-align: right;">
-            <div class="btn-group">
-                <a href="#" class="btn edit btn-xs btn-warning"><span class=""></span>Edit</a>
-                <a href="#" class="btn delete btn-xs btn-danger"><span class=""></span>Delete</a>
-            </div>
-        </td>
+        <script type="text/template" id="createnode-template">
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend>Create Table</legend>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableName">Table Name</label>
+                    <div class="col-md-4">
+                        <input id="tableName" name="tableName" type="text" placeholder="Table1" class="form-control input-md">
+                        
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableModelName">Model Class Name</label>
+                    <div class="col-md-4">
+                        <input id="tableModelName" name="tableModelName" type="text" placeholder="Model Class Name" class="form-control input-md">
+                        
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableNamespace">Namespace</label>
+                    <div class="col-md-4">
+                        <input id="tableNamespace" name="tableNamespace" type="text" placeholder="Namespace" class="form-control input-md">
+                        
+                    </div>
+                </div>
+                <!-- Select Basic -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableColor">Color</label>
+                    <div class="col-md-4">
+                        <select id="tableColor" name="tableColor" class="form-control">
+                            <option value="Red">Red</option>
+                            <option value="Green">Green</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Grey">Grey</option>
+                            <option value="Yellow">Yellow</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Multiple Checkboxes -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableOptions">Options</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label for="tableOptions-0">
+                                <input type="checkbox" name="tableOptions" id="tableOptions-0" value="1">
+                                Add Laravel ID increments column.
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="tableOptions-1">
+                                <input type="checkbox" name="tableOptions" id="tableOptions-1" value="2">
+                                Add Laravel timestamps.
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="tableOptions-2">
+                                <input type="checkbox" name="tableOptions" id="tableOptions-2" value="3">
+                                Add Laravel soft delete.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-8" style="float: right">
+                        <button id="button1id" name="button1id" class="ok addnode btn btn-success">Save</button>
+                        <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
         </script>
         <!-- Template
         ================================================== -->
-        <script type="text/template" id="relationcollection-template">
-        <legend>Relation List : <%=node.name%> </legend>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Function</th>
-                    <th>Relation</th>
-                    <th>Model</th>
-                    <th>Foreign key</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
-        <div class="modal-footer">
-            <a href="#" class="btn ok btn-primary">Add New Relation</a>
-            <a href="#" class="btn btn-primary cancel">Cancel</a>
-        </div>
-        </script>
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="bower_components/jquery/jquery.js"></script>
-        <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="bower_components/jsplumb/dist/js/jquery.jsPlumb-1.6.4.js"></script>
-        <script src="bower_components/underscore/underscore.js"></script>
-        <script src="bower_components/backbone/backbone.js"></script>
-        <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
-        <script src="bower_components/backbone.modal/backbone.marionette.modals.js"></script>
-        <script src="asset/app/js/node_app.js"></script>
-        <script src="asset/app/js/entities/nodes.js"></script>
-        <script src="asset/app/js/node/node_controller.js"></script>
-        <script src="asset/app/js/node/node_view.js"></script>
-        <script src="asset/app/js/main.js"></script>
-    </body>
-</html>
+        <script type="text/template" id="relationcreate-template">
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend><%=title%></legend>
+                <!-- Select Basic -->
+                <div class="form-group classoption">
+                    <label class="col-md-4 control-label" for="tableRelatedModel">Related Model</label>
+                    <div class="col-md-4">
+                        <select id="tableRelatedModel" name="tableRelatedModel" class="form-control">
+                            <% _.each(relatedmodel, function(related) { %>
+                            <option value="<%=related.name%>" > <%=related.name%></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+                <!-- Select Basic -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="tableRelation">Relation Type</label>
+                    <div class="col-md-4">
+                        <select id="tableRelation" name="tableRelation" class="form-control">
+                            <option value="hasOne">hasOne</option><option value="belongsTo">belongsTo</option><option value="hasMany">hasMany</option><option value="belongsToMany">belongsToMany</option><option value="hasManyThrough">hasManyThrough</option><option value="morphOne">morphOne</option><option value="morphTo">morphTo</option><option value="morphMany">morphMany</option><option value="morphedByMany">morphedByMany</option><option value="morphToMany">morphToMany</option>                        </select>
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="functionName">Function Name</label>
+                        <div class="col-md-4">
+                            <input id="functionName" name="functionName" type="text" placeholder="Function Name" value="<%=relationship.name%>" class="form-control input-md">
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Prepended checkbox -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="tableNamespace">Use Namespace</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                <input type="checkbox">
+                                </span>
+                                <input id="tableNamespace" name="tableNamespace" class="form-control" type="text" placeholder="Enable">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="tableFK">Foreign Key</label>
+                        <div class="col-md-4">
+                            <input id="tableFK" name="tableFK" type="text" value="<%=relationship.foreignkeys%>" placeholder="Use Comma if multiple" class="form-control input-md">
+                            
+                        </div>
+                    </div>
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" for="tableExtraMethod">Extra Method</label>
+                        <div class="col-md-4">
+                            <input id="tableExtraMethod" name="tableExtraMethod" value="<%=relationship.extramethods%>"  type="text" placeholder="ex.. ->withPivot('foo')" class="form-control input-md">
+                            
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8" style="float: right">
+                            <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
+                            <button id="button2id" name="button2id" class="cancel btn btn-danger">Delete</button>
+                            <button id="button2id" name="button2id" class="cancel btn btn-primary">Cancel</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            </script>
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="relationitem-template">
+            <td><%=name %></td>
+            <td><%=relationtype %></td>
+            <td><%=relatedmodel %></td>
+            <td><%=foreignkeys %></td>
+            <td colspan="2" style="text-align: right;">
+                <div class="btn-group">
+                    <a href="#" class="btn edit btn-xs btn-warning"><span class=""></span>Edit</a>
+                    <a href="#" class="btn delete btn-xs btn-danger"><span class=""></span>Delete</a>
+                </div>
+            </td>
+            </script>
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="relationcollection-template">
+            <legend>Relation List : <%=name%> </legend>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Relation</th>
+                        <th>Model</th>
+                        <th>Foreign key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            <div class="modal-footer">
+                <a href="#" class="btn ok btn-primary">Add New Relation</a>
+                <a href="#" class="btn btn-primary cancel">Cancel</a>
+            </div>
+            </script>
+            <!-- Bootstrap core JavaScript
+            ================================================== -->
+            <!-- Placed at the end of the document so the pages load faster -->
+            <script src="bower_components/jquery/jquery.js"></script>
+            <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+            <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+            <script src="bower_components/jsplumb/dist/js/jquery.jsPlumb-1.6.4.js"></script>
+            <script src="bower_components/underscore/underscore.js"></script>
+            <script src="bower_components/backbone/backbone.js"></script>
+            <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
+            <script src="bower_components/backbone.modal/backbone.marionette.modals.js"></script>
+            <script src="bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal.js"></script>
+            <script src="asset/app/js/node_app.js"></script>
+            <script src="asset/app/js/entities/nodes.js"></script>
+            <script src="asset/app/js/node/node_controller.js"></script>
+            <script src="asset/app/js/node/node_view.js"></script>
+            <script src="asset/app/js/node/node_modal.js"></script>
+            <script src="asset/app/js/main.js"></script>
+        </body>
+    </html>

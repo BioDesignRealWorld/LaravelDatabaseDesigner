@@ -165,20 +165,17 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         id: "container",
         template: "#nodecanvas-template",
         childView: Views.NodeContainer,
+        events:{
+            "click .addcontainer" : "createContainer"
+        },
+        createContainer: function()
+        {
+            DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeContainer());
+        },
         initialize: function()
         {
-        	this.on("render:collection", function(){
-        		console.log("wew");
-        	});
-        },
-        onRenderCollection: function()
-        {
-        	      console.log("ok");
 
-        	//console.log("onRenderTemplate")
-        	//        	DesignerApp.execute("draw:relation:model");
         }
-
     });
 
     Views.Test = Backbone.Marionette.ItemView.extend({
