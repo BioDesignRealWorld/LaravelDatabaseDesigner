@@ -71,26 +71,21 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .relationadd': 'relationAdd',
             'click .delete': 'deleteNode'
         },
+        addNew: function()
+        {
+            this.trigger("add");
+        },
         initialize: function() {
             this.collection = this.model.get("column");
             this.$el.attr("id", this.model.get("name"));
-            //console.log(this.model.get("name"));
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
             child.model.set('order', child.$el.index());
         },
         onShow: function() {
-            //this.$el.fadeOut();
-            var this_dom = $("#" + this.model.get('name'));
-            var this_conn = $(this.model.get('name')).find(".conn");
-
-            //console.log($("body"));
-
-            // console.log(jsPlumb.addEndpoint(this.el));
-
-
-
+            //var this_dom = $("#" + this.model.get('name'));
+            //var this_conn = $(this.model.get('name')).find(".conn");
         },
         onDomRefresh: function(dom) {
 
@@ -185,6 +180,12 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         }
 
     });
+
+    Views.Modal = Backbone.Modal.extend({
+        template: _.template($('#modal-template').html()),
+        cancelEl: '.bbm-button'
+    });
+
     // Public
     // -------------------------
 

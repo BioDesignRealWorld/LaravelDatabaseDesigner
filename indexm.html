@@ -12,6 +12,11 @@
         <!-- Custom styles for this template -->
         <link href="asset/css/jumbotron.css" rel="stylesheet">
         <link href="asset/css/app.css" rel="stylesheet">
+
+        <link href="bower_components/backbone.modal/backbone.modal.css" rel="stylesheet">
+        <link href="bower_components/backbone.modal/backbone.modal.theme.css" rel="stylesheet">
+
+        
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -21,18 +26,33 @@
     <body>
         <input style="display:none;" id="fileSaveDialog" type="file" nwsaveas />
         <input style="display:none;" id="fileOpenDialog" type="file" />
-        <!-- /container -->
+        <!-- Dialog Region
+        ================================================== -->
+        <div class="modals-container"></div>      
+        <!-- Container Region  
+        ================================================== -->
         <div id="apps">
             <div id="biodesign-logo">
                 <img src="asset/img/biodesign-logo-web.png" alt="">
             </div>
         </div>
+        <!-- Modal
+        ================================================== -->
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        
+        </div>
+  
         <!-- Template
         ================================================== -->
-        <script type="text/template" id="layout-template">
-        <div id="content">
-        test
-        </div>
+        <script type="text/template" id="modal-template">
+    <div class="bbm-modal__topbar">
+      <h3 class="bbm-modal__title">The stacked modal</h3>
+    </div>
+    <div class="bbm-modal__section">
+      <p>By using Backbone.Marionette, your code stays simple and clean. So now we can create stacked modals, without doing any complex work.</p>
+    </div>
+    <div class="bbm-modal__bottombar">
+      <a href="#" class="bbm-button">Done</a>
         </script>  
         <!-- Template
         ================================================== -->
@@ -109,8 +129,8 @@
         <script src="bower_components/jsplumb/dist/js/jquery.jsPlumb-1.6.4.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/backbone/backbone.js"></script>
-        <script src="bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal.js"></script>
-        <script type='text/javascript' src="bower_components/marionette/lib/backbone.marionette.js"></script>
+        <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
+        <script src="bower_components/backbone.modal/backbone.modal-bundled-min.js"></script>
         <script src="asset/app/js/node_app.js"></script>
         <script src="asset/app/js/entities/nodes.js"></script>
         <script src="asset/app/js/node/node_controller.js"></script>

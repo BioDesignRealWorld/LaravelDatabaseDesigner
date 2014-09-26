@@ -203,14 +203,34 @@ var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
     collection: DesignerApp.NodeEntities.getNodeCanvas()
 });
 
+testview.on("childview:add", function(childview){
+    //console.log(childview.model);
+    var view = new DesignerApp.NodeModule.Views.Modal();
+    DesignerApp.modals.show(view);
+});
 
 DesignerApp.commands.setHandler("draw:relation:model", function() {
     DesignerApp.NodeEntities.AddNodeCanvas(node_data);
 });
 
 
-
 DesignerApp.mainContent.show(testview);
+
+
+
+//      
+//      
+//      
+//      jsPlumb
+//      jsPlumb
+//      jsPlumb
+//      jsPlumb
+//      
+//      
+//      
+//      
+//      
+
 
 
 jsPlumb.ready(function() {
