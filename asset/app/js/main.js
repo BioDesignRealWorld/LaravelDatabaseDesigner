@@ -1,71 +1,3 @@
-var NodeItem = Backbone.Model.extend({});
-
-/*
-      1.NodeCanvas (col)
-          *NodeContainer (model) -> composite view
-            1.NodeCollection (col) -> NodeModel
-            2.RelationCollection (col) -> RelationModel
-            .....
-*/
-
-/*
-{
-  "name" : "id",
-  "type" : "increments",
-  "length" : 30,
-  "order" : 0,
-  "defaultvalue" : "",
-  "enumvalue" : ""
-}
-*/
-var NodeModel = Backbone.Model.extend({
-
-});
-
-var NodeCollection = Backbone.Collection.extend({
-    model: NodeModel,
-    comparator: "order"
-});
-
-/*
-{
-  "extramethods" : "",
-  "foreignkeys" : "user_id",
-  "name" : "machines",
-  "relatedmodel" : "Roles",
-  "relationtype" : "hasMany",
-  "usenamespace" : ""
-}
-*/
-var RelationModel = Backbone.Model.extend({
-    defaults: {
-        name: '',
-        relationtype: '',
-        usenamespace: '',
-        relatedmodel: '',
-        foreignkeys: '',
-        extramethods: ''
-    }
-});
-
-var RelationCollection = Backbone.Collection.extend({
-    model: RelationModel
-});
-
-
-//
-//  Name
-//  Color
-//  position
-//  NodeCollection
-//  RelationCollection
-//
-var NodeContainer = Backbone.Model.extend({});
-
-var NodeCanvas = Backbone.Collection.extend({
-    model: NodeContainer
-});
-
 var node_data = [{
     "name": "Bears",
     "color": "Blue",
@@ -265,66 +197,17 @@ var node_data = [{
     "relation": []
 }];
 
-var nodeCanvas = new NodeCanvas();
+//var nodeCanvas = new NodeCanvas();
 
-var getNodeContainerFromNodeCid = function(modelcid) {
-    return nodeCanvas.get(modelcid);
-};
-
-var getNodeContainerFromNodeName = function(modelname) {
-    return nodeCanvas.where({
-        name: modelname
-    })[0];
-};
-
-var AddNewNode = function(param) {
-    var nodeContainer = new NodeContainer(param);
-    var col = nodeContainer.get("column"); //NodeCollection
-    var rel = nodeContainer.get("relation"); //RelationCollection
-    nodeContainer.set("column", new NodeCollection(col));
-    nodeContainer.set("relation", new NodeCollection(rel));
-    nodeCanvas.add(nodeContainer);
-};
-
-var AddNewRelation = function(nodeCanvasParam) {
-    nodeCanvas.each(function(node) {
-        var relations = node.get("relation");
-        relations.each(function(relation) {
-            //console.log(relation);
-            var srcName = node.get("name");
-            var dstName = relation.get("relatedmodel");
-            var conn = jsPlumb.connect({
-                source: srcName,
-                target: dstName,
-                overlays: [
-                    ["Arrow", {
-                        location: 1
-                    }],
-
-                ]
-            });
-
-        });
-    });
-};
-
-var AddNodeCanvas = function(nodeCanvasParam) {
-    for (var node in nodeCanvasParam) {
-        AddNewNode(nodeCanvasParam[node]);
-    }
-    AddNewRelation();
-};
+var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
+    collection: DesignerApp.NodeEntities.getNodeCanvas()
+});
 
 
 DesignerApp.commands.setHandler("draw:relation:model", function() {
-    AddNodeCanvas(node_data);
+    DesignerApp.NodeEntities.AddNodeCanvas(node_data);
 });
 
-//console.log("wew");
-//var testview = new DesignerApp.NodeModule.Views.NodeContainer({model : nodeContainer});
-var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
-    collection: nodeCanvas
-});
 
 
 DesignerApp.mainContent.show(testview);
@@ -377,8 +260,8 @@ jsPlumb.ready(function() {
 
         instance.bind("beforeDrop", function(connection) {
             console.log(connection);
-            console.log(getNodeContainerFromNodeCid(connection.sourceId));
-            console.log(getNodeContainerFromNodeCid(connection.targetId));
+            //console.log(getNodeContainerFromNodeCid(connection.sourceId));
+            //console.log(getNodeContainerFromNodeCid(connection.targetId));
 
             return false;
             if (connection.sourceId == connection.targetid)
