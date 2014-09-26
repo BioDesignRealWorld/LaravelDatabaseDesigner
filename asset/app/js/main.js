@@ -204,9 +204,18 @@ var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
 });
 
 testview.on("childview:add", function(childview){
-    //console.log(childview.model);
-    var view = new DesignerApp.NodeModule.Views.Modal();
-    DesignerApp.modals.show(view);
+    console.log(childview.model);
+
+    var testview = new DesignerApp.NodeModule.Views.Test(
+        {el: "#myModal"}
+    );
+
+    testview.on("show", function(){
+        this.$el.modal('show');
+    });
+
+    //console.log(view);
+    DesignerApp.modals.show(testview);
 });
 
 DesignerApp.commands.setHandler("draw:relation:model", function() {

@@ -181,9 +181,12 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
     });
 
-    Views.Modal = Backbone.Modal.extend({
-        template: _.template($('#modal-template').html()),
-        cancelEl: '.bbm-button'
+    Views.Test = Backbone.Marionette.ItemView.extend({
+        template: false
+    });
+
+
+    Views.Modal = Backbone.Marionette.Modals.extend({
     });
 
     // Public
