@@ -58,7 +58,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     */
     //ColumnCollectionView + NodeView
     Views.NodeContainer = Backbone.Marionette.CompositeView.extend({
-        template: "#nodecollection-template",
+        template: "#nodecontainer-template",
         className: "node-view item",
         childView: Views.NodeItem,
         childViewContainer: ".nodecollection-container",
@@ -73,7 +73,8 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         },
         initialize: function() {
             this.collection = this.model.get("column");
-            this.$el.attr("id", this.model.cid);
+            this.$el.attr("id", this.model.get("name"));
+            //console.log(this.model.get("name"));
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
@@ -169,6 +170,19 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         id: "container",
         template: "#nodecanvas-template",
         childView: Views.NodeContainer,
+        initialize: function()
+        {
+        	this.on("render:collection", function(){
+        		console.log("wew");
+        	});
+        },
+        onRenderCollection: function()
+        {
+        	      console.log("ok");
+
+        	//console.log("onRenderTemplate")
+        	//        	DesignerApp.execute("draw:relation:model");
+        }
 
     });
     // Public

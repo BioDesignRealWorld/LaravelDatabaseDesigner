@@ -62,11 +62,220 @@ var RelationCollection = Backbone.Collection.extend({
 //
 var NodeContainer = Backbone.Model.extend({});
 
-
 var NodeCanvas = Backbone.Collection.extend({
     model: NodeContainer
 });
 
+var node_data = [{
+    "name": "Bears",
+    "color": "Blue",
+    "position": {
+        "x": 130,
+        "y": 162
+    },
+    "modelclass": "Bear",
+    "column": [{
+        "name": "id",
+        "type": "increments",
+        "length": "0",
+        "order": 0,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "name",
+        "type": "string",
+        "length": "200",
+        "order": 1,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "danger_level",
+        "type": "string",
+        "length": "200",
+        "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }],
+    "relation": [{
+        "extramethods": "",
+        "foreignkeys": "",
+        "name": "fish",
+        "relatedmodel": "Fish",
+        "relationtype": "hasOne",
+        "usenamespace": ""
+    }, {
+        "extramethods": "",
+        "foreignkeys": "",
+        "name": "trees",
+        "relatedmodel": "Trees",
+        "relationtype": "hasMany",
+        "usenamespace": ""
+    }, {
+        "extramethods": "",
+        "foreignkeys": "bear_id, picnic_id",
+        "name": "picnics",
+        "relatedmodel": "Picnics",
+        "relationtype": "belongsToMany",
+        "usenamespace": ""
+    }]
+}, {
+    "name": "Fish",
+    "color": "Grey",
+    "position": {
+        "x": 1053,
+        "y": 28
+    },
+    "modelclass": "Fish",
+    "column": [{
+        "name": "id",
+        "type": "increments",
+        "length": "0",
+        "order": 0,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "bear_id",
+        "type": "integer",
+        "length": "0",
+        "order": 1,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "weight",
+        "type": "integer",
+        "length": "0",
+        "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }],
+    "relation": [{
+        "extramethods": "",
+        "foreignkeys": "",
+        "name": "bear",
+        "relatedmodel": "Bears",
+        "relationtype": "belongsTo",
+        "usenamespace": ""
+    }]
+}, {
+    "name": "Trees",
+    "color": "Red",
+    "position": {
+        "x": 1048,
+        "y": 329
+    },
+    "modelclass": "Tree",
+    "column": [{
+        "name": "id",
+        "type": "increments",
+        "length": "0",
+        "order": 0,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "bear_id",
+        "type": "integer",
+        "length": "0",
+        "order": 1,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "type",
+        "type": "string",
+        "length": "100",
+        "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }],
+    "relation": [{
+        "extramethods": "",
+        "foreignkeys": "",
+        "name": "bear",
+        "relatedmodel": "Bears",
+        "relationtype": "belongsTo",
+        "usenamespace": ""
+    }]
+}, {
+    "name": "Picnics",
+    "color": "Red",
+    "position": {
+        "x": 130,
+        "y": 614
+    },
+    "modelclass": "Picnic",
+    "column": [{
+        "name": "id",
+        "type": "increments",
+        "length": "0",
+        "order": 0,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "name",
+        "type": "string",
+        "length": "100",
+        "order": 1,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "taste_level",
+        "type": "integer",
+        "length": "0",
+        "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }],
+    "relation": [{
+        "extramethods": "",
+        "foreignkeys": "picnic_id, bear_id",
+        "name": "bears",
+        "relatedmodel": "Bears",
+        "relationtype": "belongsToMany",
+        "usenamespace": ""
+    }]
+}, {
+    "name": "bears_picnics",
+    "color": "Red",
+    "position": {
+        "x": 402,
+        "y": 618
+    },
+    "modelclass": "bear_to_picnic",
+    "column": [{
+        "name": "id",
+        "type": "increments",
+        "length": "0",
+        "order": 0,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "bear_id",
+        "type": "integer",
+        "length": "0",
+        "order": 1,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "picnic_id",
+        "type": "integer",
+        "length": "0",
+        "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }],
+    "relation": []
+}];
+
+var nodeCanvas = new NodeCanvas();
+
+var getNodeContainerFromNodeCid = function(modelcid) {
+    return nodeCanvas.get(modelcid);
+};
+
+var getNodeContainerFromNodeName = function(modelname) {
+    return nodeCanvas.where({
+        name: modelname
+    })[0];
+};
 
 var AddNewNode = function(param) {
     var nodeContainer = new NodeContainer(param);
@@ -77,20 +286,39 @@ var AddNewNode = function(param) {
     nodeCanvas.add(nodeContainer);
 };
 
+var AddNewRelation = function(nodeCanvasParam) {
+    nodeCanvas.each(function(node) {
+        var relations = node.get("relation");
+        relations.each(function(relation) {
+            //console.log(relation);
+            var srcName = node.get("name");
+            var dstName = relation.get("relatedmodel");
+            var conn = jsPlumb.connect({
+                source: srcName,
+                target: dstName,
+                overlays: [
+                    ["Arrow", {
+                        location: 1
+                    }],
 
-var node_data = [{"name":"Bears","color":"Blue","position":{"x":130,"y":162},"modelclass":"Bear","column":[{"name":"id","type":"increments","length":"0","order":0,"defaultvalue":"","enumvalue":""},{"name":"name","type":"string","length":"200","order":1,"defaultvalue":"","enumvalue":""},{"name":"danger_level","type":"string","length":"200","order":2,"defaultvalue":"","enumvalue":""}],"relation":[{"extramethods":"","foreignkeys":"","name":"fish","relatedmodel":"Fish","relationtype":"hasOne","usenamespace":""},{"extramethods":"","foreignkeys":"","name":"trees","relatedmodel":"Trees","relationtype":"hasMany","usenamespace":""},{"extramethods":"","foreignkeys":"bear_id, picnic_id","name":"picnics","relatedmodel":"Picnics","relationtype":"belongsToMany","usenamespace":""}]},{"name":"Fish","color":"Grey","position":{"x":1053,"y":28},"modelclass":"Fish","column":[{"name":"id","type":"increments","length":"0","order":0,"defaultvalue":"","enumvalue":""},{"name":"bear_id","type":"integer","length":"0","order":1,"defaultvalue":"","enumvalue":""},{"name":"weight","type":"integer","length":"0","order":2,"defaultvalue":"","enumvalue":""}],"relation":[{"extramethods":"","foreignkeys":"","name":"bear","relatedmodel":"Bears","relationtype":"belongsTo","usenamespace":""}]},{"name":"Trees","color":"Red","position":{"x":1048,"y":329},"modelclass":"Tree","column":[{"name":"id","type":"increments","length":"0","order":0,"defaultvalue":"","enumvalue":""},{"name":"bear_id","type":"integer","length":"0","order":1,"defaultvalue":"","enumvalue":""},{"name":"type","type":"string","length":"100","order":2,"defaultvalue":"","enumvalue":""}],"relation":[{"extramethods":"","foreignkeys":"","name":"bear","relatedmodel":"Bears","relationtype":"belongsTo","usenamespace":""}]},{"name":"Picnics","color":"Red","position":{"x":130,"y":614},"modelclass":"Picnic","column":[{"name":"id","type":"increments","length":"0","order":0,"defaultvalue":"","enumvalue":""},{"name":"name","type":"string","length":"100","order":1,"defaultvalue":"","enumvalue":""},{"name":"taste_level","type":"integer","length":"0","order":2,"defaultvalue":"","enumvalue":""}],"relation":[{"extramethods":"","foreignkeys":"picnic_id, bear_id","name":"bears","relatedmodel":"Bears","relationtype":"belongsToMany","usenamespace":""}]},{"name":"bears_picnics","color":"Red","position":{"x":402,"y":618},"modelclass":"bear_to_picnic","column":[{"name":"id","type":"increments","length":"0","order":0,"defaultvalue":"","enumvalue":""},{"name":"bear_id","type":"integer","length":"0","order":1,"defaultvalue":"","enumvalue":""},{"name":"picnic_id","type":"integer","length":"0","order":2,"defaultvalue":"","enumvalue":""}],"relation":[]}];
+                ]
+            });
+
+        });
+    });
+};
+
+var AddNodeCanvas = function(nodeCanvasParam) {
+    for (var node in nodeCanvasParam) {
+        AddNewNode(nodeCanvasParam[node]);
+    }
+    AddNewRelation();
+};
 
 
-
-
-var nodeCanvas = new NodeCanvas();
-
-
-for (var data in node_data)
-{
-  AddNewNode(node_data[data]);
-}
-
+DesignerApp.commands.setHandler("draw:relation:model", function() {
+    AddNodeCanvas(node_data);
+});
 
 //console.log("wew");
 //var testview = new DesignerApp.NodeModule.Views.NodeContainer({model : nodeContainer});
@@ -98,39 +326,26 @@ var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
     collection: nodeCanvas
 });
 
-MyLayout = Backbone.Marionette.LayoutView.extend({
-  template: "#layout-template",
-  regions:
-  {
-    content : "#content"
-  },
-});
 
 DesignerApp.mainContent.show(testview);
 
-//var laytest = new MyLayout();
-
-//DesignerApp.mainContent.show(laytest);
-//laytest.content.show(testview);
-
-
-
-
-jsPlumb.Defaults.Connector = ["Flowchart", {
-    stub: [40, 60],
-    gap: 10,
-    cornerRadius: 5,
-    alwaysRespectStubs: true
-}];
-jsPlumb.Defaults.HoverPaintStyle = {
-    strokeStyle: "#637b94",
-    lineWidth: 6
-};
-jsPlumb.Defaults.EndpointHoverStyle = {
-    fillStyle: "#637b94"
-};
 
 jsPlumb.ready(function() {
+
+    jsPlumb.Defaults.Connector = ["Flowchart", {
+        stub: [40, 60],
+        gap: 10,
+        cornerRadius: 5,
+        alwaysRespectStubs: true
+    }];
+    jsPlumb.Defaults.HoverPaintStyle = {
+        strokeStyle: "#637b94",
+        lineWidth: 6
+    };
+    jsPlumb.Defaults.EndpointHoverStyle = {
+        fillStyle: "#637b94"
+    };
+
     var instance = jsPlumb.importDefaults({
         ConnectionsDetachable: true,
         DragOptions: {
@@ -151,24 +366,26 @@ jsPlumb.ready(function() {
     instance.doWhileSuspended(function() {
         // bind to connection/connectionDetached events, and update the list of connections on screen.
         instance.bind("connection", function(info, originalEvent) {
-         
-           // console.log(info);
+
+            // console.log(info);
         });
 
         instance.bind("connectionDetached", function(info, originalEvent) {
-           // console.log(info);
+            // console.log(info);
 
         });
 
         instance.bind("beforeDrop", function(connection) {
-          console.log(connection);
-          return false ;
-            if(connection.sourceId == connection.targetid)
-            return false ;
+            console.log(connection);
+            console.log(getNodeContainerFromNodeCid(connection.sourceId));
+            console.log(getNodeContainerFromNodeCid(connection.targetId));
+
+            return false;
+            if (connection.sourceId == connection.targetid)
+                return false;
             else
-                        return true ;
+                return true;
         });
     });
-
-
+    DesignerApp.execute("draw:relation:model");
 });
