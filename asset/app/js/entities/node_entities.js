@@ -142,6 +142,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                     raiseVent("change");
                 });
 
+                relation.on("change:relationtype", function(){
+                    raiseVent("redraw");
+                });
 
                 relation.listenTo(targetNodeContainer, "destroy", function() {
                     raiseVent("destroy");

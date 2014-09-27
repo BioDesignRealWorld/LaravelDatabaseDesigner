@@ -44,11 +44,17 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
 
     DesignerApp.vent.on("noderelation:destroy", function(param) {
         var conn = param.dstRelation.get("conn");
-                if (conn.connector !== null) {
+        if (conn.connector !== null) {
             conn.unbind();
             jsPlumb.detach(conn);
-            }
+        }
     });
+
+    DesignerApp.vent.on("noderelation:redraw", function(param) {
+        var conn = param.dstRelation.get("conn");
+        $(conn.getOverlay('label').canvas).html(param.srcNodeContainer.get('name') + ' ' + param.dstRelation.get('relationtype') + ' ' + param.dstRelation.get('relatedmodel'));
+    });
+
 
 
     // Initializers
