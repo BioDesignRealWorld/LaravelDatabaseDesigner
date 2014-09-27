@@ -155,7 +155,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         template: _.template($('#relationcreate-template').html()),
         initialize: function(options, param) {
             this.container = param.container;
-            //                    this.bind("ok", this.addOne);
+            this.bind("ok", this.addOne);
         },
         addOne: function() {
             this.model.set({
@@ -197,11 +197,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.container = param.container;
         },
         deleteRelation: function() {
-            console.log("delete relation");
+            //todo refactor this
             this.model.destroy();
         },
         editRelation: function() {
-            console.log("edit relation");
+            //todo refactor this
             Modal.CreateTestModal(new Modal.EditRelationItem({
                 model: this.model
             }, {

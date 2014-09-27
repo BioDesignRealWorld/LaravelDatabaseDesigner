@@ -34,18 +34,22 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
         var conn = param.dstRelation.get("conn");
         jsPlumb.detach(conn);
 
-        DesignerApp.NodeModule.Views.CreateConnection(
+        conn = DesignerApp.NodeModule.Views.CreateConnection(
             param.srcNodeContainer,
             param.dstRelation
         );
+
+        param.dstRelation.set("conn", conn);
     });
 
     DesignerApp.vent.on("noderelation:destroy", function(param) {
         var conn = param.dstRelation.get("conn");
-        jsPlumb.detach(conn);
+                if (conn.connector !== null) {
+            jsPlumb.detach(conn);
+            }
     });
 
-    
+
     // Initializers
     // -------------------------
 

@@ -58,6 +58,16 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:deletecontainer", function(childview) {
+        //todo refactor
+        var test = childview.model.get("relation");
+                var model;
+        while (model = test.first()) {
+            model.destroy();
+        }
+        test = childview.model.get("column");
+                while (model = test.first()) {
+            model.destroy();
+        }
         childview.model.destroy();
     });
 

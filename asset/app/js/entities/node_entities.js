@@ -127,27 +127,32 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                         srcNodeContainer: srcName,
                         dstRelation: dstName
                     });
+                    //console.log(evName);
                 };
                 //on delete node also delte referenced relation
+
+                relation.on('change:relatedmodel', function() {
+                    relation.stopListening();
+
+                    var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                    relation.listenTo(targetModel, "destroy", function() {
+                        raiseVent("destroyme");
+                        relation.destroy();
+                    });
+                    raiseVent("change");
+                });
+
+
                 relation.listenTo(targetNodeContainer, "destroy", function() {
                     raiseVent("destroy");
-                    relation.stopListening();
                     relation.destroy();
                 });
 
-                relation.listenTo(relation, "destroy", function() {
+                relation.on("destroy", function() {
                     raiseVent("destroy");
                     relation.stopListening();
+                    relation.off();
                     relation.destroy();
-                });
-
-                relation.listenTo(relation, 'change:relatedmodel', function() {
-                    raiseVent("change");
-                    relation.stopListening();
-                    //update target
-                    var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-                    //listen to new target
-                    relation.listenTo(targetModel, 'destroy', relation.destroy);
                 });
 
                 raiseVent("add");
