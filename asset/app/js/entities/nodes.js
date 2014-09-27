@@ -23,7 +23,16 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 	  "enumvalue" : ""
 	}
 	*/
-    var NodeModel = Backbone.Model.extend({});
+    var NodeModel = Backbone.Model.extend({
+        defaults: {
+            name: '',
+            type: '',
+            length: 0,
+            defaultvalue: '',
+            enumvalue: ''
+        }
+    });
+
     var NodeCollection = Backbone.Collection.extend({
         model: NodeModel,
         comparator: "order"
