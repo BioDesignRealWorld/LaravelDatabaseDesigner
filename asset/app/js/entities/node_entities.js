@@ -84,6 +84,11 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         return new NodeModel();
     };
 
+    NodeEntities.getNewRelationModel = function() {
+        return new RelationModel();
+    };
+
+
     NodeEntities.getNodeCanvas = function() {
         return nodeCanvas;
     };
@@ -115,10 +120,37 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 var srcName = node;
                 var dstName = relation;
 
-                DesignerApp.vent.trigger("create:model:connection", {
-                    srcNodeContainer: srcName,
-                    dstRelation: dstName
+                var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+
+                var raiseVent = function(evName) {
+                    DesignerApp.vent.trigger("noderelation:" + evName, {
+                        srcNodeContainer: srcName,
+                        dstRelation: dstName
+                    });
+                };
+                //on delete node also delte referenced relation
+                relation.listenTo(targetNodeContainer, "destroy", function() {
+                    raiseVent("destroy");
+                    relation.stopListening();
+                    relation.destroy();
                 });
+
+                relation.listenTo(relation, "destroy", function() {
+                    raiseVent("destroy");
+                    relation.stopListening();
+                    relation.destroy();
+                });
+
+                relation.listenTo(relation, 'change:relatedmodel', function() {
+                    raiseVent("change");
+                    relation.stopListening();
+                    //update target
+                    var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                    //listen to new target
+                    relation.listenTo(targetModel, 'destroy', relation.destroy);
+                });
+
+                raiseVent("add");
             });
         });
     };

@@ -124,12 +124,12 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             //console.log(test);
         },
         render: function() {
-//
-          //  var templatevar = {
-          //      relationship: this.model.get('relation').toJSON(),
-          //      relatedmodel: this.parent.toJSON(),
-          //      title: "Create Relation in Table " + this.model.get('name')
-          //  };
+            var parent = DesignerApp.request("nodeentities:canvas");
+            var templatevar = {
+                relationship: this.model.get('relation').toJSON(),
+                relatedmodel: parent.toJSON(),
+                title: "Create Relation in Table " + this.model.get('name')
+            };
 //
 //
           //  if (this.target) {
@@ -137,15 +137,15 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
           //  }
 //
 //
-          //  this.$el.html(this.template(templatevar));
+            this.$el.html(this.template(templatevar));
 //
           //  if (this.target) {
           //      this.$('.classoption').hide(); //hide option box
           //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
           //  }
-          //  this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
+            this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
 //
-          //  return this.el;
+            return this.el;
         }
     });
 

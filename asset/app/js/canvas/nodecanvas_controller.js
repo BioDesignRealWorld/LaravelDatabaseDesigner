@@ -18,16 +18,14 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     viewNodeCanvas.on("canvas:open", function() {
         $("#fileOpenDialog").trigger("click");
-
     });
-
 
     viewNodeCanvas.on("canvas:save", function() {
         $("#fileSaveDialog").trigger("click");
     });
 
     viewNodeCanvas.on("canvas:dump", function() {
-
+        console.log(DesignerApp.request("nodeentities:canvas").toJSON());
     });
 
     //
@@ -35,7 +33,6 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     //  CHILD NODES
     //
     //
-
 
     viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
         res = DesignerApp.request("nodeentities:new:nodeitem");
@@ -45,7 +42,13 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:addrelation", function(childview) {
-    
+        var relation = DesignerApp.request("nodeentities:new:relation");
+        //need model, parent
+        //model = childview.model
+        //parent = ? nodeentities:canvas
+        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateRelation({
+            model: childview.model
+        }));    
     });
 
     viewNodeCanvas.on("childview:container:viewrelation", function(childview) {
@@ -55,7 +58,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:deletecontainer", function(childview) {
-    
+        childview.model.destroy();
     });
 
     viewNodeCanvas.on("childview:container:nodeitem:delete", function(childview, itemview) {
@@ -67,7 +70,6 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             model: itemview.model
         }));
     });
-
 
     //
     //  LAUNCH

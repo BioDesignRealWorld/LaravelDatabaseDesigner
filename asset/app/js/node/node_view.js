@@ -3,6 +3,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     // -------------------------
 
     Views.CreateConnection = function(srcNodeContainer, dstRelationModel) {
+
         var conn = jsPlumb.connect({
             source: srcNodeContainer.get("name"),
             target: dstRelationModel.get("relatedmodel"),
@@ -18,7 +19,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 }]
             ]
         });
+        return conn;
     };
+
+
 
     Views.NodeItem = Backbone.Marionette.ItemView.extend({
         tagName: "li",
