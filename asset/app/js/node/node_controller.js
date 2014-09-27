@@ -45,6 +45,7 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
     DesignerApp.vent.on("noderelation:destroy", function(param) {
         var conn = param.dstRelation.get("conn");
                 if (conn.connector !== null) {
+            conn.unbind();
             jsPlumb.detach(conn);
             }
     });
