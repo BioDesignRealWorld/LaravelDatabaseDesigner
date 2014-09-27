@@ -33,10 +33,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             //console.log(this.model);
         },
         editItem: function() {
-            DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeItem());
+            this.trigger("nodeitem:edit");
         },
         deleteItem: function() {
-            this.model.destroy();
+            this.trigger("nodeitem:delete");
         }
     });
 
@@ -65,6 +65,14 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         childView: Views.NodeItem,
         childViewContainer: ".nodecollection-container",
         nodeViewList: [],
+        childEvents: {
+            'nodeitem:edit': function(item) {
+                this.trigger('nodeitem:edit', item);
+            },
+            'nodeitem:delete': function(item) {
+                this.trigger('nodeitem:delete', item);
+            }
+        },
         events: {
             'click .add': 'addNew',
             'click .dump': 'dumpJSON',
@@ -74,7 +82,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .delete': 'deleteNode'
         },
         addNew: function() {
-            this.trigger("add");
+            this.trigger("addnewnodeitem");
+        },
+        viewRelation: function() {
+            this.trigger("viewrelation");
         },
         initialize: function() {
             this.collection = this.model.get("column");
@@ -170,18 +181,12 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         id: "container",
         template: "#nodecanvas-template",
         childView: Views.NodeContainer,
-        events: {
-            "click .addcontainer": "createContainer",
-            "click .open": "createContainer",
-            "click .save": "createContainer",
-            "click .dump": "createContainer"
+        triggers: {
+            "click .addcontainer": "canvas:createcontainer",
+            "click .open": "canvas:open",
+            "click .save": "canvas:save",
+            "click .dump": "canvas:dump"
         },
-        createContainer: function() {
-            DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeContainer());
-        },
-        initialize: function() {
-
-        }
     });
 
     Views.Test = Backbone.Marionette.ItemView.extend({

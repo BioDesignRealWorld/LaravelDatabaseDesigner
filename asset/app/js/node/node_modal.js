@@ -3,6 +3,31 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     // -------------------------
     Modal.CreateNodeItem = Backbone.View.extend({
             initialize: function() {
+
+            },
+            template: _.template($("#nodemodel-template").html()),
+            okClicked: function(modal) {
+
+             //   var newColumn = {
+             //       name: this.$('#columnName').val(),
+             //       type: this.$('#columnType').val(),
+             //       length: this.$('#columnLength').val(),
+             //       defaultvalue: this.$('#columnDef').val(),
+             //       enumvalue: this.$('#columnEnum').val(),
+             //   };
+            //
+             //   that.model.set(newColumn);
+                //modal.preventClose();
+            },
+            render: function() {
+                this.$el.html(this.template(this.model.toJSON()));
+                //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+                return this.el;
+            }
+    });
+
+    Modal.EditNodeItem = Backbone.View.extend({
+            initialize: function() {
                 //this.bind("ok", this.okClicked);
             },
             template: _.template($("#nodemodel-template").html()),
@@ -20,13 +45,12 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 //modal.preventClose();
             },
             render: function() {
-                this.$el.html(this.template());
+                this.$el.html(this.template(this.model.toJSON()));
                 //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
                 return this.el;
             }
-
-
     });
+
 
     Modal.CreateNodeContainer = Backbone.View.extend({
         template: _.template($('#createnode-template').html()),
@@ -51,7 +75,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         }
     });
 
-    Modal.RelationCreateView = Backbone.View.extend({
+    Modal.CreateRelation = Backbone.View.extend({
         initialize: function(param) {
             //this.bind("ok", this.addOne);
         },
@@ -104,12 +128,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
 
 
-    Modal.RelationEditView = Backbone.View.extend({
+    Modal.EditRelationItem = Backbone.View.extend({
         template: _.template($('#relationcreate-template').html()),
         initialize: function(options, param) {
             this.container = param.container;
             //                    this.bind("ok", this.addOne);
-
         },
         addOne: function() {
             this.model.set({
@@ -156,7 +179,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         editRelation: function() {
             console.log("edit relation");
-            Modal.CreateTestModal(new Modal.RelationEditView({
+            Modal.CreateTestModal(new Modal.EditRelationItem({
                 model: this.model
             }, {
                 container: this.container
@@ -169,7 +192,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     });
 
 
-    Modal.RelationCollectionModal = Backbone.View.extend({
+    Modal.ViewRelations = Backbone.View.extend({
         template: _.template($("#relationcollection-template").html()),
         events: {
 

@@ -197,26 +197,6 @@ var node_data = [{
     "relation": []
 }];
 
-//var nodeCanvas = new NodeCanvas();
-
-var testview = new DesignerApp.NodeModule.Views.NodeCanvas({
-    collection: DesignerApp.NodeEntities.getNodeCanvas()
-});
-
-testview.on("childview:add", function(childview) {
-    DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.RelationCollectionModal({
-        model: childview.model
-    }));
-    //console.log(view);
-    // DesignerApp.modals.show(testview);
-});
-
-DesignerApp.commands.setHandler("draw:relation:model", function() {
-    DesignerApp.NodeEntities.AddNodeCanvas(node_data);
-});
-
-
-DesignerApp.mainContent.show(testview);
 
 
 

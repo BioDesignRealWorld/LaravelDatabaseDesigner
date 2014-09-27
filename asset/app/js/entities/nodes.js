@@ -80,6 +80,10 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
     var nodeCanvas = new NodeCanvas();
 
+    NodeEntities.getNewNodeModel = function() {
+        return new NodeModel();
+    };
+
     NodeEntities.getNodeCanvas = function() {
         return nodeCanvas;
     };
@@ -111,7 +115,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 var srcName = node;
                 var dstName = relation;
 
-                DesignerApp.execute("create:model:connection", {
+                DesignerApp.vent.trigger("create:model:connection", {
                     srcNodeContainer: srcName,
                     dstRelation: dstName
                 });
