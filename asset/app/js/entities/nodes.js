@@ -109,19 +109,13 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             var relations = node.get("relation");
             relations.each(function(relation) {
                 //console.log(relation);
-                var srcName = node.get("name");
-                var dstName = relation.get("relatedmodel");
-                var conn = jsPlumb.connect({
-                    source: srcName,
-                    target: dstName,
-                    overlays: [
-                        ["Arrow", {
-                            location: 1
-                        }],
+                var srcName = node;
+                var dstName = relation;
 
-                    ]
+                DesignerApp.execute("create:model:connection", {
+                    srcNodeContainer: srcName,
+                    dstRelation: dstName
                 });
-
             });
         });
     };

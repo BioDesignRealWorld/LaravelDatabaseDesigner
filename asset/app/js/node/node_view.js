@@ -2,25 +2,22 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     // Private
     // -------------------------
 
-    Views.CreateConnection = function(srcNodeContainer, dstNodeContainer) {
-
+    Views.CreateConnection = function(srcNodeContainer, dstRelationModel) {
         var conn = jsPlumb.connect({
-            source: sourceNode.get('name'),
-            target: relationModel.get('relatedmodel'),
+            source: srcNodeContainer.get("name"),
+            target: dstRelationModel.get("relatedmodel"),
             overlays: [
                 ["Arrow", {
                     location: 1
                 }],
                 ["Label", {
                     cssClass: "label",
-                    label: sourceNode.get('name') + ' ' + relationModel.get('relationtype') + ' ' + relationModel.get('relatedmodel'),
+                    label: srcNodeContainer.get('name') + ' ' + dstRelationModel.get('relationtype') + ' ' + dstRelationModel.get('relatedmodel'),
                     location: 0.3,
                     id: "label"
                 }]
             ]
         });
-
-
     };
 
     Views.NodeItem = Backbone.Marionette.ItemView.extend({
@@ -28,13 +25,18 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         className: 'node-column',
         template: "#nodeitem-template",
         events: {
-            'click .edit': 'editColumn'
+            'click .edit': 'editItem',
+            'click .delete': 'deleteItem'
+
         },
         initialize: function() {
             //console.log(this.model);
         },
-        editColumn: function() {
-            console.log("editColumn");
+        editItem: function() {
+            DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeItem());
+        },
+        deleteItem: function() {
+            this.model.destroy();
         }
     });
 
