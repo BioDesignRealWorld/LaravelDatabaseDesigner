@@ -1,6 +1,32 @@
 DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Marionette, $, _) {
     // Private
     // -------------------------
+    Modal.CreateNodeItem = Backbone.View.extend({
+            initialize: function() {
+                //this.bind("ok", this.okClicked);
+            },
+            template: _.template($("#nodemodel-template").html()),
+            okClicked: function(modal) {
+
+             //   var newColumn = {
+             //       name: this.$('#columnName').val(),
+             //       type: this.$('#columnType').val(),
+             //       length: this.$('#columnLength').val(),
+             //       defaultvalue: this.$('#columnDef').val(),
+             //       enumvalue: this.$('#columnEnum').val(),
+             //   };
+            //
+             //   that.model.set(newColumn);
+                //modal.preventClose();
+            },
+            render: function() {
+                this.$el.html(this.template());
+                //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+                return this.el;
+            }
+
+
+    });
 
     Modal.CreateNodeContainer = Backbone.View.extend({
         template: _.template($('#createnode-template').html()),
@@ -8,22 +34,74 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             'click .addnode': 'addNode'
         },
         addNode: function() {
-          //  var newnode = coll.createNode({
-          //      name: this.$('#tableName').val(),
-          //      modelclass: this.$('#tableModelName').val(),
-          //      namespace: this.$('#tableNamespace').val(),
-          //      color: this.$('#tableColor').val(),
-          //      position: {
-          //          x: 20,
-          //          y: 20
-          //      }
-          //  });
+            //  var newnode = coll.createNode({
+            //      name: this.$('#tableName').val(),
+            //      modelclass: this.$('#tableModelName').val(),
+            //      namespace: this.$('#tableNamespace').val(),
+            //      color: this.$('#tableColor').val(),
+            //      position: {
+            //          x: 20,
+            //          y: 20
+            //      }
+            //  });
         },
         render: function() {
             this.$el.html(this.template());
             return this.el;
         }
     });
+
+    Modal.RelationCreateView = Backbone.View.extend({
+        initialize: function(param) {
+            //this.bind("ok", this.addOne);
+        },
+        model: Node,
+        template: _.template($('#relationcreate-template').html()),
+        addOne: function() {
+
+            var that = this;
+
+           // var newrelation = new RelationModel({
+           //     sourcenode: this.model.get('name'),
+           //     name: this.$("#functionName").val(),
+           //     relationtype: this.$("#tableRelation").val(),
+           //     usenamespace: this.$("#tableNamespace").val(),
+           //     relatedmodel: this.$("#tableRelatedModel").val(),
+           //     foreignkeys: this.$("#tableFK").val(),
+           //     extramethods: this.$("#tableExtraMethod").val()
+           // });
+
+           // createConnection(newrelation, this.model);
+
+           // this.model.get('relation').add(newrelation);
+            //console.log(test);
+        },
+        render: function() {
+//
+          //  var templatevar = {
+          //      relationship: this.model.get('relation').toJSON(),
+          //      relatedmodel: this.parent.toJSON(),
+          //      title: "Create Relation in Table " + this.model.get('name')
+          //  };
+//
+//
+          //  if (this.target) {
+          //      templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
+          //  }
+//
+//
+          //  this.$el.html(this.template(templatevar));
+//
+          //  if (this.target) {
+          //      this.$('.classoption').hide(); //hide option box
+          //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+          //  }
+          //  this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
+//
+          //  return this.el;
+        }
+    });
+
 
 
     Modal.RelationEditView = Backbone.View.extend({

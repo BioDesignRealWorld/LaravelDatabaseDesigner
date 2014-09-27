@@ -73,8 +73,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .relationadd': 'relationAdd',
             'click .delete': 'deleteNode'
         },
-        addNew: function()
-        {
+        addNew: function() {
             this.trigger("add");
         },
         initialize: function() {
@@ -101,11 +100,15 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 parent: this.el,
                 anchor: 'Continuous',
                 allowLoopback: false,
-            }, {view:this});
+            }, {
+                view: this
+            });
 
             jsPlumb.draggable(this.el, {
                 containment: 'parent'
-            }, {view:this});
+            }, {
+                view: this
+            });
 
         },
         onRender: function(dom) {
@@ -167,15 +170,16 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         id: "container",
         template: "#nodecanvas-template",
         childView: Views.NodeContainer,
-        events:{
-            "click .addcontainer" : "createContainer"
+        events: {
+            "click .addcontainer": "createContainer",
+            "click .open": "createContainer",
+            "click .save": "createContainer",
+            "click .dump": "createContainer"
         },
-        createContainer: function()
-        {
+        createContainer: function() {
             DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeContainer());
         },
-        initialize: function()
-        {
+        initialize: function() {
 
         }
     });
@@ -185,8 +189,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     });
 
 
-    Views.Modal = Backbone.Marionette.Modals.extend({
-    });
+    Views.Modal = Backbone.Marionette.Modals.extend({});
 
     // Public
     // -------------------------

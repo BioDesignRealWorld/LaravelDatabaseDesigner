@@ -1,7 +1,7 @@
 DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone, Marionette, $, _) {
     // Private
     // -------------------------
-
+    //todo parameter .......
 
     // Public
     // -------------------------
@@ -80,9 +80,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
     var nodeCanvas = new NodeCanvas();
 
-    NodeEntities.getNodeCanvas = function()
-    {
-    	return nodeCanvas;
+    NodeEntities.getNodeCanvas = function() {
+        return nodeCanvas;
     };
 
     NodeEntities.getNodeContainerFromNodeCid = function(modelcid) {

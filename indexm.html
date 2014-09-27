@@ -33,6 +33,157 @@
         </div>
         <!-- Template
         ================================================== -->
+        <script type="text/template" id="nodemodel-template">
+        <form class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend>Create a Column</legend>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnName">Column Name</label>
+                    <div class="col-md-4">
+                        <input id="columnName" name="columnName" type="text" placeholder="Column Name" class="form-control input-md" value="<%=name%>">
+                        
+                    </div>
+                </div>
+                <!-- Select Basic -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnType">Type</label>
+                    <div class="col-md-4">
+                        <select id="columnType" name="columnType" class="form-control">
+                            <optgroup label="LARAVEL TYPES">
+                                <option value="increments">INCREMENTS</option>
+                                <option value="bigIncrements">BIG INCREMENTS</option>
+                                <option value="timestamps">TIME STAMPS</option>
+                                <option value="softDeletes">SOFT DELETES</option>
+                                <option disabled="disabled">-</option>
+                                <option value="string">STRING (VARCHAR)</option>
+                                <option value="text">TEXT</option>
+                                <option disabled="disabled">-</option>
+                                <option value="tinyInteger">TINY INTEGER</option>
+                                <option value="smallInteger">SMALL INTEGER</option>
+                                <option value="mediumInteger">MEDIUM INTEGER</option>
+                                <option value="integer">INTEGER</option>
+                                <option value="bigInteger">BIG INTEGER</option>
+                                <option disabled="disabled">-</option>
+                                <option value="float">FLOAT</option>
+                                <option value="decimal">DECIMAL</option>
+                                <option value="boolean">BOOLEAN</option>
+                                <option disabled="disabled">-</option>
+                                <option value="enum">ENUM</option>
+                                <option disabled="disabled">-</option>
+                                <option value="date">DATE</option>
+                                <option value="datetime">DATETIME</option>
+                                <option value="time">TIME</option>
+                                <option value="timestamp">TIMESTAMP</option>
+                                <option disabled="disabled">-</option>
+                                <option value="binary">BINARY</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnLength">Length</label>
+                    <div class="col-md-4">
+                        <input id="columnLength" name="columnLength" type="text" placeholder="Length" class="form-control input-md" value="<%=length%>">
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnDef">Default Value</label>
+                    <div class="col-md-4">
+                        <input id="columnDef" name="columnDef" type="text" placeholder="Default Value" class="form-control input-md" value="<%=defaultvalue%>">
+                        
+                    </div>
+                </div>
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnEnum">Enum Value</label>
+                    <div class="col-md-4">
+                        <input id="columnEnum" name="columnEnum" type="text" placeholder="Enum Value" class="form-control input-md" value="<%=enumvalue%>">
+                        
+                    </div>
+                </div>
+                <!-- Multiple Checkboxes -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="columnOption">Option</label>
+                    <div class="col-md-4">
+                        <div class="checkbox">
+                            <label for="columnOption-0">
+                                <input type="checkbox" name="columnOption" id="columnOption-0" value="Auto Incremental">
+                                Auto Incremental
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-1">
+                                <input type="checkbox" name="columnOption" id="columnOption-1" value="Primary Key">
+                                Primary Key
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-2">
+                                <input type="checkbox" name="columnOption" id="columnOption-2" value="Nullable">
+                                Nullable
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-3">
+                                <input type="checkbox" name="columnOption" id="columnOption-3" value="Unsigned Integer">
+                                Unsigned Integer
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-4">
+                                <input type="checkbox" name="columnOption" id="columnOption-4" value="Index">
+                                Index
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-5">
+                                <input type="checkbox" name="columnOption" id="columnOption-5" value="Unique Index">
+                                Unique Index
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-6">
+                                <input type="checkbox" name="columnOption" id="columnOption-6" value="Fillable">
+                                Fillable
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-7">
+                                <input type="checkbox" name="columnOption" id="columnOption-7" value="Visible">
+                                Visible
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-8">
+                                <input type="checkbox" name="columnOption" id="columnOption-8" value="Guarded">
+                                Guarded
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label for="columnOption-9">
+                                <input type="checkbox" name="columnOption" id="columnOption-9" value="Hidden">
+                                Hidden
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="button1id"></label>
+                    <div class="col-md-8">
+                        <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
+                        <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        </script>
+        <!-- Template
+        ================================================== -->
         <script type="text/template" id="modal-template">
         <a href="#" class="wedew">wedew</a>
         <form class="form-horizontal">
@@ -197,7 +348,7 @@
         <script type="text/template" id="nodeitem-template">
         <b><%=name%></b> <i><%=type%></i> (<%=length%>)
         <a href="#" class="btn edit btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span></a>
-        <a href="#" class="btn delete-col btn-xs btn-default"><span class="glyphicon glyphicon-remove"></span></a>
+        <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove"></span></a>
         </script>
         <!-- Template
         ================================================== -->
