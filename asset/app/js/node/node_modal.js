@@ -75,6 +75,29 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         }
     });
 
+    Modal.EditNodeContainer = Backbone.View.extend({
+        template: _.template($('#createnode-template').html()),
+        events: {
+            'click .addnode': 'addNode'
+        },
+        addNode: function() {
+            //  var newnode = coll.createNode({
+            //      name: this.$('#tableName').val(),
+            //      modelclass: this.$('#tableModelName').val(),
+            //      namespace: this.$('#tableNamespace').val(),
+            //      color: this.$('#tableColor').val(),
+            //      position: {
+            //          x: 20,
+            //          y: 20
+            //      }
+            //  });
+        },
+        render: function() {
+            this.$el.html(this.template());
+            return this.el;
+        }
+    });
+
     Modal.CreateRelation = Backbone.View.extend({
         initialize: function(param) {
             //this.bind("ok", this.addOne);

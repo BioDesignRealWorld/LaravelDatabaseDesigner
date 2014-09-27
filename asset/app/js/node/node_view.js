@@ -24,19 +24,11 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         tagName: "li",
         className: 'node-column',
         template: "#nodeitem-template",
-        events: {
-            'click .edit': 'editItem',
-            'click .delete': 'deleteItem'
-
+        triggers: {
+            'click .edit': 'nodeitem:edit',
+            'click .delete': 'nodeitem:delete'
         },
         initialize: function() {
-            //console.log(this.model);
-        },
-        editItem: function() {
-            this.trigger("nodeitem:edit");
-        },
-        deleteItem: function() {
-            this.trigger("nodeitem:delete");
         }
     });
 
@@ -67,25 +59,18 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         nodeViewList: [],
         childEvents: {
             'nodeitem:edit': function(item) {
-                this.trigger('nodeitem:edit', item);
+                this.trigger('container:nodeitem:edit', item);
             },
             'nodeitem:delete': function(item) {
-                this.trigger('nodeitem:delete', item);
+                this.trigger('container:nodeitem:delete', item);
             }
         },
-        events: {
-            'click .add': 'addNew',
-            'click .dump': 'dumpJSON',
-            'click .relation': 'viewRelation',
-            'click .parent': 'testParent',
-            'click .relationadd': 'relationAdd',
-            'click .delete': 'deleteNode'
-        },
-        addNew: function() {
-            this.trigger("addnewnodeitem");
-        },
-        viewRelation: function() {
-            this.trigger("viewrelation");
+        triggers: {
+            'click .add': 'container:addnewitem',
+            'click .dump': 'container:dumpjson',
+            'click .relation': 'container:viewrelation',
+            'click .relationadd': 'container:addrelation',
+            'click .delete': 'container:deletecontainer'
         },
         initialize: function() {
             this.collection = this.model.get("column");
@@ -175,26 +160,6 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         template: "#relationview-template",
         childView: Views.RelationItem,
     });
-
-
-    Views.NodeCanvas = Backbone.Marionette.CompositeView.extend({
-        id: "container",
-        template: "#nodecanvas-template",
-        childView: Views.NodeContainer,
-        triggers: {
-            "click .addcontainer": "canvas:createcontainer",
-            "click .open": "canvas:open",
-            "click .save": "canvas:save",
-            "click .dump": "canvas:dump"
-        },
-    });
-
-    Views.Test = Backbone.Marionette.ItemView.extend({
-        template: false
-    });
-
-
-    Views.Modal = Backbone.Marionette.Modals.extend({});
 
     // Public
     // -------------------------

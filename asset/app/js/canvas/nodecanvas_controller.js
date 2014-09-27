@@ -1,32 +1,16 @@
-DesignerApp.module("NodeCanvas", function(NodeCanvas, DesignerApp, Backbone, Marionette, $, _) {
+DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Backbone, Marionette, $, _) {
 
-    var viewNodeCanvas = new DesignerApp.NodeModule.Views.NodeCanvas({
+    // INIT CANVAS
+
+    var viewNodeCanvas = new DesignerApp.NodeCanvas.Views.NodeCanvas({
         collection: DesignerApp.NodeEntities.getNodeCanvas()
     });
 
-    viewNodeCanvas.on("childview:addnewnodeitem", function(childview) {
-        res = DesignerApp.request("nodeentities:new:nodeitem");
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeItem({
-            model: res
-        }));
-    });
-
-    viewNodeCanvas.on("childview:viewrelation", function(childview) {
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.ViewRelations({
-            model: childview.model
-        }));
-    });
-
-    viewNodeCanvas.on("childview:nodeitem:edit", function(childview, itemview) {
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.EditNodeItem({
-            model: itemview.model
-        }));
-    });
-
-    viewNodeCanvas.on("childview:nodeitem:delete", function(childview, itemview) {
-        //todo refresh jsplumb
-        itemview.model.destroy();
-    });
+    //
+    //
+    //  MAIN CANVAS
+    //
+    //
 
     viewNodeCanvas.on("canvas:createcontainer", function() {
         DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeContainer());
@@ -45,6 +29,49 @@ DesignerApp.module("NodeCanvas", function(NodeCanvas, DesignerApp, Backbone, Mar
     viewNodeCanvas.on("canvas:dump", function() {
 
     });
+
+    //
+    //
+    //  CHILD NODES
+    //
+    //
+
+
+    viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
+        res = DesignerApp.request("nodeentities:new:nodeitem");
+        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeItem({
+            model: res
+        }));
+    });
+
+    viewNodeCanvas.on("childview:container:addrelation", function(childview) {
+    
+    });
+
+    viewNodeCanvas.on("childview:container:viewrelation", function(childview) {
+        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.ViewRelations({
+            model: childview.model
+        }));
+    });
+
+    viewNodeCanvas.on("childview:container:deletecontainer", function(childview) {
+    
+    });
+
+    viewNodeCanvas.on("childview:container:nodeitem:delete", function(childview, itemview) {
+        itemview.model.destroy();
+    });
+
+    viewNodeCanvas.on("childview:container:nodeitem:edit", function(childview, itemview) {
+        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.EditNodeItem({
+            model: itemview.model
+        }));
+    });
+
+
+    //
+    //  LAUNCH
+    //
 
     DesignerApp.mainContent.show(viewNodeCanvas);
 
