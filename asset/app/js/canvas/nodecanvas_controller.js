@@ -19,8 +19,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         view.on("okClicked", function(data) {
             var container = DesignerApp.NodeEntities.getNewNodeContainer();
-            if (container.set(data, {validate: true})) {
-                DesignerApp.NodeEntities.AddNewNode(data);
+            if (container.set(data)) {
+                DesignerApp.NodeEntities.AddNewRelation(data);
             } else {
                 view.trigger("formDataInvalid", container.validationError);
                 modal.preventClose();
@@ -62,13 +62,31 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:addrelation", function(childview) {
-        var relation = DesignerApp.request("nodeentities:new:relation");
+        //var relation = DesignerApp.request("nodeentities:new:relation");
         //need model, parent
         //model = childview.model
         //parent = ? nodeentities:canvas
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateRelation({
+
+        var view = new DesignerApp.NodeModule.Modal.CreateRelation({
             model: childview.model
-        }));
+        });
+
+
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data) {
+
+            var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
+            new_rel.set(data);
+
+            var relation = childview.model.get("relation");
+            relation.add(new_rel);
+
+            DesignerApp.NodeEntities.AddRelationTest(childview.model, new_rel);
+        });
+
+
+
     });
 
     viewNodeCanvas.on("childview:container:viewrelation", function(childview) {

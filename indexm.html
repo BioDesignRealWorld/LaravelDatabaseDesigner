@@ -449,9 +449,9 @@
                 <legend><%=title%></legend>
                 <!-- Select Basic -->
                 <div class="form-group classoption">
-                    <label class="col-md-4 control-label" for="tableRelatedModel">Related Model</label>
+                    <label class="col-md-4 control-label" for="relation-relatedmodel">Related Model</label>
                     <div class="col-md-4">
-                        <select id="tableRelatedModel" name="tableRelatedModel" class="form-control">
+                        <select id="relation-relatedmodel" name="relatedmodel" class="form-control">
                             <% _.each(relatedmodel, function(related) { %>
                             <option value="<%=related.name%>" > <%=related.name%></option>
                             <% }); %>
@@ -460,47 +460,47 @@
                 </div>
                 <!-- Select Basic -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="tableRelation">Relation Type</label>
+                    <label class="col-md-4 control-label" for="relation-relationtype">Relation Type</label>
                     <div class="col-md-4">
-                        <select id="tableRelation" name="tableRelation" class="form-control">
+                        <select id="relation-relationtype" name="relationtype" class="form-control">
                             <option value="hasOne">hasOne</option><option value="belongsTo">belongsTo</option><option value="hasMany">hasMany</option><option value="belongsToMany">belongsToMany</option><option value="hasManyThrough">hasManyThrough</option><option value="morphOne">morphOne</option><option value="morphTo">morphTo</option><option value="morphMany">morphMany</option><option value="morphedByMany">morphedByMany</option><option value="morphToMany">morphToMany</option>                        </select>
                         </div>
                     </div>
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="functionName">Function Name</label>
+                        <label class="col-md-4 control-label" for="relation-name">Function Name</label>
                         <div class="col-md-4">
-                            <input id="functionName" name="functionName" type="text" placeholder="Function Name" value="<%=relationship.name%>" class="form-control input-md">
+                            <input id="relation-name" name="name" type="text" placeholder="Function Name" value="<%=relationship.name%>" class="form-control input-md">
                             
                         </div>
                     </div>
                     
                     <!-- Prepended checkbox -->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="tableNamespace">Use Namespace</label>
+                        <label class="col-md-4 control-label" for="relation-usenamespace">Use Namespace</label>
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-addon">
                                 <input type="checkbox">
                                 </span>
-                                <input id="tableNamespace" name="tableNamespace" class="form-control" type="text" placeholder="Enable">
+                                <input id="relation-usenamespace" name="usenamespace" class="form-control" type="text" placeholder="Enable">
                             </div>
                             
                         </div>
                     </div>
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="tableFK">Foreign Key</label>
+                        <label class="col-md-4 control-label" for="relation-foreignkeys">Foreign Key</label>
                         <div class="col-md-4">
-                            <input id="tableFK" name="tableFK" type="text" value="<%=relationship.foreignkeys%>" placeholder="Use Comma if multiple" class="form-control input-md">
+                            <input id="relation-foreignkeys" name="foreignkeys" type="text" value="<%=relationship.foreignkeys%>" placeholder="Use Comma if multiple" class="form-control input-md">
                             
                         </div>
                     </div>
                     <!-- Text input-->
                     <div class="form-group">
-                        <label class="col-md-4 control-label" for="tableExtraMethod">Extra Method</label>
+                        <label class="col-md-4 control-label" for="relation-extramethods">Extra Method</label>
                         <div class="col-md-4">
-                            <input id="tableExtraMethod" name="tableExtraMethod" value="<%=relationship.extramethods%>"  type="text" placeholder="ex.. ->withPivot('foo')" class="form-control input-md">
+                            <input id="relation-extramethods" name="extramethods" value="<%=relationship.extramethods%>"  type="text" placeholder="ex.. ->withPivot('foo')" class="form-control input-md">
                             
                         </div>
                     </div>

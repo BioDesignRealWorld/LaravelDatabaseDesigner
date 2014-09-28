@@ -1,6 +1,30 @@
 DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Marionette, $, _) {
     // Private
     // -------------------------
+    Modal.BaseModal = Backbone.View.extend({
+        formDataInvalid: function(error) {
+            var self = this;
+            this.$el.find(".has-error").each(function() {
+                $(this).removeClass("has-error");
+            });
+            var markError = function(value, key) {
+                var $control_group = self.$el.find("#" + self.idPrefix + "-" + key).parent();
+                $control_group.parent().addClass("has-error");
+                var $error_el = $("<span>", {
+                    class: "help-block",
+                    text: value
+                });
+                //$control_group.append($error_el);
+            };
+            _.each(error, markError);
+        },
+        render: function() {
+            this.$el.html(this.template());
+            return this.el;
+        }
+
+    });
+
     Modal.CreateNodeItem = Backbone.View.extend({
         initialize: function() {
 
@@ -56,32 +80,15 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     });
 
 
-    Modal.CreateNodeContainer = Backbone.View.extend({
+
+    Modal.CreateNodeContainer = Modal.BaseModal.extend({
         template: _.template($('#createnode-template').html()),
         events: {
             'click .addnode': 'okClicked'
         },
+        idPrefix: "container",
         initialize: function() {
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
-        },
-        formDataInvalid: function(error) {
-
-            var self = this;
-
-            this.$el.find(".has-error").each(function(){
-                $(this).removeClass("has-error");
-            });
-
-            var markError = function(value, key) {
-                var $control_group = self.$el.find("#container-" + key).parent();
-                $control_group.parent().addClass("has-error");
-                var $error_el = $("<span>", {
-                    class: "help-block",
-                    text: value
-                });
-                //$control_group.append($error_el);
-            };
-            _.each(error, markError);
         },
         okClicked: function() {
             var data = {
@@ -89,19 +96,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 classname: this.$('#container-classname').val(),
                 namespace: this.$('#container-namespace').val(),
                 color: this.$('#container-color').val(),
-                increment:this.$('#container-increment').val(),
-                timestamp:this.$('#container-timestamp').val(),
-                softdelete:this.$('#container-softdelete').val(),
-                position: {
-                    x: 100,
-                    y: 100
-                }
+                increment: this.$('#container-increment').val(),
+                timestamp: this.$('#container-timestamp').val(),
+                softdelete: this.$('#container-softdelete').val(),
             };
             this.trigger("okClicked", data);
-        },
-        render: function() {
-            this.$el.html(this.template());
-            return this.el;
         }
     });
 
@@ -128,30 +127,19 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         }
     });
 
-    Modal.CreateRelation = Backbone.View.extend({
+    Modal.CreateRelation = Modal.BaseModal.extend({
         initialize: function(param) {
             //this.bind("ok", this.addOne);
         },
         model: Node,
+        idPrefix: "relation",
         template: _.template($('#relationcreate-template').html()),
-        addOne: function() {
-
-            var that = this;
-
-            // var newrelation = new RelationModel({
-            //     sourcenode: this.model.get('name'),
-            //     name: this.$("#functionName").val(),
-            //     relationtype: this.$("#tableRelation").val(),
-            //     usenamespace: this.$("#tableNamespace").val(),
-            //     relatedmodel: this.$("#tableRelatedModel").val(),
-            //     foreignkeys: this.$("#tableFK").val(),
-            //     extramethods: this.$("#tableExtraMethod").val()
-            // });
-
-            // createConnection(newrelation, this.model);
-
-            // this.model.get('relation').add(newrelation);
-            //console.log(test);
+        events: {
+            "click .ok" : "okClicked"
+        },
+        okClicked: function() {
+            var data = Backbone.Syphon.serialize(this);
+            this.trigger("okClicked", data);
         },
         render: function() {
             var parent = DesignerApp.request("nodeentities:canvas");
@@ -173,7 +161,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             //      this.$('.classoption').hide(); //hide option box
             //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
             //  }
-            this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
+            this.$('#relation-relatedmodel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
             //
             return this.el;
         }
@@ -181,21 +169,17 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
 
 
-    Modal.EditRelationItem = Backbone.View.extend({
+    Modal.EditRelationItem = Modal.BaseModal.extend({
         template: _.template($('#relationcreate-template').html()),
         initialize: function(options, param) {
             this.container = param.container;
             this.bind("ok", this.addOne);
         },
         addOne: function() {
-            this.model.set({
-                name: this.$("#functionName").val(),
-                relationtype: this.$("#tableRelation").val(),
-                usenamespace: this.$("#tableNamespace").val(),
-                relatedmodel: this.$("#tableRelatedModel").val(),
-                foreignkeys: this.$("#tableFK").val(),
-                extramethods: this.$("#tableExtraMethod").val()
-            });
+            //todo
+                        var data = Backbone.Syphon.serialize(this);
+
+            this.model.set(data);
         },
         render: function() {
             var templatevar = {
@@ -206,9 +190,9 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             };
             this.$el.html(this.template(templatevar));
             // console.log(this.parent);
-            this.$('#tableRelatedModel').find('option[value=' + this.model.get('relatedmodel') + ']').attr('selected', 'selected'); //make destination selected by default
-            this.$('#tableRelation').find('option[value=' + this.model.get('relationtype') + ']').attr('selected', 'selected'); //make destination selected by default
-            this.$('#tableRelatedModel').find('option[value=' + this.container.get('name') + ']').remove(); //remove self (model) from option list
+            this.$('#relation-relatedmodel').find('option[value=' + this.model.get('relatedmodel') + ']').attr('selected', 'selected'); //make destination selected by default
+            this.$('#relation-relationtype').find('option[value=' + this.model.get('relationtype') + ']').attr('selected', 'selected'); //make destination selected by default
+            this.$('#relation-relatedmodel').find('option[value=' + this.container.get('name') + ']').remove(); //remove self (model) from option list
 
             return this.el;
 

@@ -88,32 +88,31 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             timestamp: "",
             softdelete: ""
         },
-        validate: function(attrs, options)
-        {
+        validate: function(attrs, options) {
             var errors = {};
-            if (!attrs.name){
+            if (!attrs.name) {
                 errors.name = "cant be blank";
             }
-            if (!attrs.classname){
+            if (!attrs.classname) {
                 errors.classname = "cant be blank";
             }
-            if (!attrs.namespace){
+            if (!attrs.namespace) {
                 errors.namespace = "cant be blank";
             }
-            if (!attrs.color){
+            if (!attrs.color) {
                 errors.color = "cant be blank";
             }
-            if (!attrs.increment){
+            if (!attrs.increment) {
                 errors.increment = "cant be blank";
-            }                      
-            if (!attrs.timestamp){
+            }
+            if (!attrs.timestamp) {
                 errors.timestamp = "cant be blank";
             }
-            if (!attrs.softdelete){
+            if (!attrs.softdelete) {
                 errors.softdelete = "cant be blank";
             }
 
-            if (! _.isEmpty(errors)){
+            if (!_.isEmpty(errors)) {
                 console.log(errors);
                 return errors;
             }
@@ -219,6 +218,52 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             NodeEntities.AddNewNode(nodeCanvasParam[node]);
         }
         NodeEntities.AddNewRelation();
+    };
+
+    NodeEntities.AddRelationTest = function(node, relation) {
+        //console.log(relation);
+        var srcName = node;
+        var dstName = relation;
+
+        var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+
+        var raiseVent = function(evName) {
+            DesignerApp.vent.trigger("noderelation:" + evName, {
+                srcNodeContainer: srcName,
+                dstRelation: dstName
+            });
+            //console.log(evName);
+        };
+        //on delete node also delte referenced relation
+
+        relation.on('change:relatedmodel', function() {
+            relation.stopListening();
+
+            var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+            relation.listenTo(targetModel, "destroy", function() {
+                raiseVent("destroyme");
+                relation.destroy();
+            });
+            raiseVent("change");
+        });
+
+        relation.on("change:relationtype", function() {
+            raiseVent("redraw");
+        });
+
+        relation.listenTo(targetNodeContainer, "destroy", function() {
+            raiseVent("destroy");
+            relation.destroy();
+        });
+
+        relation.on("destroy", function() {
+            raiseVent("destroy");
+            relation.stopListening();
+            relation.off();
+            relation.destroy();
+        });
+
+        raiseVent("add");
     };
 
     // Initializers
