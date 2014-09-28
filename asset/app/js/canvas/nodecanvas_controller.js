@@ -13,7 +13,20 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     //
 
     viewNodeCanvas.on("canvas:createcontainer", function() {
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeContainer());
+
+        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer();
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data) {
+            var container = DesignerApp.NodeEntities.getNewNodeContainer();
+            if (container.set(data, {validate: true})) {
+                DesignerApp.NodeEntities.AddNewNode(data);
+            } else {
+                view.trigger("formDataInvalid", container.validationError);
+                modal.preventClose();
+            }
+        });
+
     });
 
     viewNodeCanvas.on("canvas:open", function() {
@@ -35,10 +48,17 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     //
 
     viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
-        res = DesignerApp.request("nodeentities:new:nodeitem");
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateNodeItem({
-            model: res
-        }));
+
+        var view = new DesignerApp.NodeModule.Modal.CreateNodeItem({
+            model: DesignerApp.request("nodeentities:new:nodeitem")
+        });
+
+        view.on("form:submit", function(data) {
+
+        });
+
+        DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
     });
 
     viewNodeCanvas.on("childview:container:addrelation", function(childview) {
@@ -48,7 +68,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         //parent = ? nodeentities:canvas
         DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.CreateRelation({
             model: childview.model
-        }));    
+        }));
     });
 
     viewNodeCanvas.on("childview:container:viewrelation", function(childview) {
@@ -60,12 +80,12 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     viewNodeCanvas.on("childview:container:deletecontainer", function(childview) {
         //todo refactor
         var test = childview.model.get("relation");
-                var model;
+        var model;
         while (model = test.first()) {
             model.destroy();
         }
         test = childview.model.get("column");
-                while (model = test.first()) {
+        while (model = test.first()) {
             model.destroy();
         }
         childview.model.destroy();

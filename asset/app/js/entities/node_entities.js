@@ -30,6 +30,12 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             length: 0,
             defaultvalue: '',
             enumvalue: ''
+        },
+        validate: function(attrs, options) {
+            return {
+                error: "Wew"
+            };
+            //console.log("wew");
         }
     });
 
@@ -72,13 +78,58 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     //  RelationCollection*
     //
 
-    var NodeContainer = Backbone.Model.extend({});
+    var NodeContainer = Backbone.Model.extend({
+        defaults: {
+            name: "",
+            classname: "",
+            namespace: "",
+            color: "",
+            increment: "",
+            timestamp: "",
+            softdelete: ""
+        },
+        validate: function(attrs, options)
+        {
+            var errors = {};
+            if (!attrs.name){
+                errors.name = "cant be blank";
+            }
+            if (!attrs.classname){
+                errors.classname = "cant be blank";
+            }
+            if (!attrs.namespace){
+                errors.namespace = "cant be blank";
+            }
+            if (!attrs.color){
+                errors.color = "cant be blank";
+            }
+            if (!attrs.increment){
+                errors.increment = "cant be blank";
+            }                      
+            if (!attrs.timestamp){
+                errors.timestamp = "cant be blank";
+            }
+            if (!attrs.softdelete){
+                errors.softdelete = "cant be blank";
+            }
+
+            if (! _.isEmpty(errors)){
+                console.log(errors);
+                return errors;
+            }
+
+        }
+    });
 
     var NodeCanvas = Backbone.Collection.extend({
         model: NodeContainer
     });
 
     var nodeCanvas = new NodeCanvas();
+
+    NodeEntities.getNewNodeContainer = function() {
+        return new NodeContainer();
+    };
 
     NodeEntities.getNewNodeModel = function() {
         return new NodeModel();
@@ -142,7 +193,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                     raiseVent("change");
                 });
 
-                relation.on("change:relationtype", function(){
+                relation.on("change:relationtype", function() {
                     raiseVent("redraw");
                 });
 

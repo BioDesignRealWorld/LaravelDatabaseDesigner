@@ -2,72 +2,102 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     // Private
     // -------------------------
     Modal.CreateNodeItem = Backbone.View.extend({
-            initialize: function() {
+        initialize: function() {
 
-            },
-            template: _.template($("#nodemodel-template").html()),
-            okClicked: function(modal) {
+        },
+        template: _.template($("#nodemodel-template").html()),
+        events: {
+            "click .ok": "okClicked"
+        },
+        okClicked: function() {
 
-             //   var newColumn = {
-             //       name: this.$('#columnName').val(),
-             //       type: this.$('#columnType').val(),
-             //       length: this.$('#columnLength').val(),
-             //       defaultvalue: this.$('#columnDef').val(),
-             //       enumvalue: this.$('#columnEnum').val(),
-             //   };
+            //   var newColumn = {
+            //       name: this.$('#columnName').val(),
+            //       type: this.$('#columnType').val(),
+            //       length: this.$('#columnLength').val(),
+            //       defaultvalue: this.$('#columnDef').val(),
+            //       enumvalue: this.$('#columnEnum').val(),
+            //   };
             //
-             //   that.model.set(newColumn);
-                //modal.preventClose();
-            },
-            render: function() {
-                this.$el.html(this.template(this.model.toJSON()));
-                //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
-                return this.el;
-            }
+            //   that.model.set(newColumn);
+            //modal.preventClose();
+            console.log("wewdew");
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+            return this.el;
+        }
     });
 
     Modal.EditNodeItem = Backbone.View.extend({
-            initialize: function() {
-                //this.bind("ok", this.okClicked);
-            },
-            template: _.template($("#nodemodel-template").html()),
-            okClicked: function(modal) {
+        initialize: function() {
+            //this.bind("ok", this.okClicked);
+        },
+        template: _.template($("#nodemodel-template").html()),
+        okClicked: function(modal) {
 
-             //   var newColumn = {
-             //       name: this.$('#columnName').val(),
-             //       type: this.$('#columnType').val(),
-             //       length: this.$('#columnLength').val(),
-             //       defaultvalue: this.$('#columnDef').val(),
-             //       enumvalue: this.$('#columnEnum').val(),
-             //   };
+            //   var newColumn = {
+            //       name: this.$('#columnName').val(),
+            //       type: this.$('#columnType').val(),
+            //       length: this.$('#columnLength').val(),
+            //       defaultvalue: this.$('#columnDef').val(),
+            //       enumvalue: this.$('#columnEnum').val(),
+            //   };
             //
-             //   that.model.set(newColumn);
-                //modal.preventClose();
-            },
-            render: function() {
-                this.$el.html(this.template(this.model.toJSON()));
-                //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
-                return this.el;
-            }
+            //   that.model.set(newColumn);
+            //modal.preventClose();
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+            return this.el;
+        }
     });
 
 
     Modal.CreateNodeContainer = Backbone.View.extend({
         template: _.template($('#createnode-template').html()),
         events: {
-            'click .addnode': 'addNode'
+            'click .addnode': 'okClicked'
         },
-        addNode: function() {
-            //  var newnode = coll.createNode({
-            //      name: this.$('#tableName').val(),
-            //      modelclass: this.$('#tableModelName').val(),
-            //      namespace: this.$('#tableNamespace').val(),
-            //      color: this.$('#tableColor').val(),
-            //      position: {
-            //          x: 20,
-            //          y: 20
-            //      }
-            //  });
+        initialize: function() {
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
+        },
+        formDataInvalid: function(error) {
+
+            var self = this;
+
+            this.$el.find(".has-error").each(function(){
+                $(this).removeClass("has-error");
+            });
+
+            var markError = function(value, key) {
+                var $control_group = self.$el.find("#container-" + key).parent();
+                $control_group.parent().addClass("has-error");
+                var $error_el = $("<span>", {
+                    class: "help-block",
+                    text: value
+                });
+                //$control_group.append($error_el);
+            };
+            _.each(error, markError);
+        },
+        okClicked: function() {
+            var data = {
+                name: this.$('#container-name').val(),
+                classname: this.$('#container-classname').val(),
+                namespace: this.$('#container-namespace').val(),
+                color: this.$('#container-color').val(),
+                increment:this.$('#container-increment').val(),
+                timestamp:this.$('#container-timestamp').val(),
+                softdelete:this.$('#container-softdelete').val(),
+                position: {
+                    x: 100,
+                    y: 100
+                }
+            };
+            this.trigger("okClicked", data);
         },
         render: function() {
             this.$el.html(this.template());
@@ -108,19 +138,19 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
             var that = this;
 
-           // var newrelation = new RelationModel({
-           //     sourcenode: this.model.get('name'),
-           //     name: this.$("#functionName").val(),
-           //     relationtype: this.$("#tableRelation").val(),
-           //     usenamespace: this.$("#tableNamespace").val(),
-           //     relatedmodel: this.$("#tableRelatedModel").val(),
-           //     foreignkeys: this.$("#tableFK").val(),
-           //     extramethods: this.$("#tableExtraMethod").val()
-           // });
+            // var newrelation = new RelationModel({
+            //     sourcenode: this.model.get('name'),
+            //     name: this.$("#functionName").val(),
+            //     relationtype: this.$("#tableRelation").val(),
+            //     usenamespace: this.$("#tableNamespace").val(),
+            //     relatedmodel: this.$("#tableRelatedModel").val(),
+            //     foreignkeys: this.$("#tableFK").val(),
+            //     extramethods: this.$("#tableExtraMethod").val()
+            // });
 
-           // createConnection(newrelation, this.model);
+            // createConnection(newrelation, this.model);
 
-           // this.model.get('relation').add(newrelation);
+            // this.model.get('relation').add(newrelation);
             //console.log(test);
         },
         render: function() {
@@ -130,21 +160,21 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 relatedmodel: parent.toJSON(),
                 title: "Create Relation in Table " + this.model.get('name')
             };
-//
-//
-          //  if (this.target) {
-          //      templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
-          //  }
-//
-//
+            //
+            //
+            //  if (this.target) {
+            //      templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
+            //  }
+            //
+            //
             this.$el.html(this.template(templatevar));
-//
-          //  if (this.target) {
-          //      this.$('.classoption').hide(); //hide option box
-          //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
-          //  }
+            //
+            //  if (this.target) {
+            //      this.$('.classoption').hide(); //hide option box
+            //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+            //  }
             this.$('#tableRelatedModel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
-//
+            //
             return this.el;
         }
     });
@@ -250,6 +280,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         });
         modal.options.content = view;
         modal.open();
+        return modal;
     };
 
     // Initializers
