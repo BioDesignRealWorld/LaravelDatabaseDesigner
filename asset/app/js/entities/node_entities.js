@@ -158,7 +158,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         var col = nodeContainer.get("column"); //NodeCollection
         var rel = nodeContainer.get("relation"); //RelationCollection
         nodeContainer.set("column", new NodeCollection(col));
-        nodeContainer.set("relation", new NodeCollection(rel));
+        nodeContainer.set("relation", new RelationCollection(rel));
         nodeCanvas.add(nodeContainer);
     };
 
