@@ -62,7 +62,26 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             relatedmodel: '',
             foreignkeys: '',
             extramethods: ''
+        },
+                validate: function(attrs, options) {
+            var errors = {};
+            if (!attrs.name) {
+                errors.name = "cant be blank";
+            }
+            if (!attrs.relationtype) {
+                errors.relationtype = "cant be blank";
+            }
+
+            if (!attrs.relatedmodel) {
+                errors.relatedmodel = "cant be blank";
+            }
+
+            if (!_.isEmpty(errors)) {
+                return errors;
+            }
+
         }
+
     });
 
     var RelationCollection = Backbone.Collection.extend({

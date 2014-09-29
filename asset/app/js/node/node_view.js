@@ -22,11 +22,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
         //todo refactor this
         conn.bind("click", function() {
-            DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.EditRelationItem({
-                model: dstRelationModel
-            }, {
-                container: srcNodeContainer
-            }));
+            DesignerApp.execute("nodecanvas:edit:relation", srcNodeContainer, dstRelationModel);
         });
 
         return conn;

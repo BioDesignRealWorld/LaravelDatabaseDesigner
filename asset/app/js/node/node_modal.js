@@ -129,7 +129,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
     Modal.CreateRelation = Modal.BaseModal.extend({
         initialize: function(param) {
-            //this.bind("ok", this.addOne);
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
         model: Node,
         idPrefix: "relation",
@@ -171,15 +171,23 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
     Modal.EditRelationItem = Modal.BaseModal.extend({
         template: _.template($('#relationcreate-template').html()),
+        idPrefix: "relation",
         initialize: function(options, param) {
             this.container = param.container;
-            this.bind("ok", this.addOne);
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
-        addOne: function() {
+        events: {
+            "click #btnsave.ok" : "okClicked",
+            "click #btndelete.delete" : "delClicked"
+        },
+        delClicked: function(e)
+        {
+            this.trigger("delClicked", this.model);
+        },
+        okClicked: function() {
             //todo
-                        var data = Backbone.Syphon.serialize(this);
-
-            this.model.set(data);
+            var data = Backbone.Syphon.serialize(this);
+            this.trigger("okClicked", data);
         },
         render: function() {
             var templatevar = {
@@ -209,18 +217,14 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         initialize: function(options, param) {
             this.container = param.container;
+            this.listenTo(this.model, "change", this.render);
         },
         deleteRelation: function() {
             //todo refactor this
             this.model.destroy();
         },
         editRelation: function() {
-            //todo refactor this
-            Modal.CreateTestModal(new Modal.EditRelationItem({
-                model: this.model
-            }, {
-                container: this.container
-            }));
+            DesignerApp.execute("nodecanvas:edit:relation",this.container,this.model);
         },
         render: function() { // console.log('destroy render');
             this.$el.html(this.template(this.model.toJSON()));
@@ -232,11 +236,15 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     Modal.ViewRelations = Backbone.View.extend({
         template: _.template($("#relationcollection-template").html()),
         events: {
-
+            "click .ok" : "addNewRelationClicked"
         },
         initialize: function() {
             this.listenTo(this.model.get("relation"), 'destroy', this.render);
             this.listenTo(this.model.get("relation"), 'add', this.addOne);
+        },
+        addNewRelationClicked: function()
+        {
+            this.trigger("addNewRelationClicked");
         },
         addOne: function(relation) {
             var view = new Modal.RelationItem({

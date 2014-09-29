@@ -19,8 +19,11 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         view.on("okClicked", function(data) {
             var container = DesignerApp.NodeEntities.getNewNodeContainer();
-            if (container.set(data)) {
-                DesignerApp.NodeEntities.AddNewRelation(data);
+            if (container.set(data, {
+                validate: true
+            })) {
+                data.position = {x: 100, y:100};
+                DesignerApp.NodeEntities.AddNewNode(data);
             } else {
                 view.trigger("formDataInvalid", container.validationError);
                 modal.preventClose();
@@ -70,29 +73,37 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         var view = new DesignerApp.NodeModule.Modal.CreateRelation({
             model: childview.model
         });
-
-
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.on("okClicked", function(data) {
-
             var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
-            new_rel.set(data);
-
-            var relation = childview.model.get("relation");
-            relation.add(new_rel);
-
-            DesignerApp.NodeEntities.AddRelationTest(childview.model, new_rel);
+            if (new_rel.set(data, {
+                validate: true
+            })) {
+                var relation = childview.model.get("relation");
+                relation.add(new_rel);
+                DesignerApp.NodeEntities.AddRelationTest(childview.model, new_rel);
+                console.log(new_rel);
+            } else {
+                view.trigger("formDataInvalid", new_rel.validationError);
+                modal.preventClose();
+                console.log("error");
+            }
         });
-
-
-
     });
 
     viewNodeCanvas.on("childview:container:viewrelation", function(childview) {
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.ViewRelations({
+
+        var view = new DesignerApp.NodeModule.Modal.ViewRelations({
             model: childview.model
-        }));
+        });
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("addNewRelationClicked", function() {
+            viewNodeCanvas.trigger("childview:container:addrelation", childview);
+            modal.preventClose();
+        });
+
     });
 
     viewNodeCanvas.on("childview:container:deletecontainer", function(childview) {
@@ -117,6 +128,35 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.EditNodeItem({
             model: itemview.model
         }));
+    });
+
+    //todo refactor
+    DesignerApp.commands.setHandler("nodecanvas:edit:relation", function(a, b) {
+
+        var view = new DesignerApp.NodeModule.Modal.EditRelationItem({
+            model: b
+        }, {
+            container: a
+        });
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data) {
+            if (b.set(data, {
+                validate: true
+            })) {
+
+            } else {
+                view.trigger("formDataInvalid", b.validationError);
+                modal.preventClose();
+            }
+        });
+
+        view.on("delClicked", function(model) {
+            model.destroy();
+        });
+
+        //console.log("Wew");
+
     });
 
     //
