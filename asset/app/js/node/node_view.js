@@ -148,8 +148,14 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             });
         },
         onBeforeDestroy: function() {
+            var self = this;
             jsPlumb.detachAllConnections(this.$el);
             jsPlumb.removeAllEndpoints(this.$el);
+
+            setTimeout(function(){  //jquery draggable memory leak fix
+                self.remove();
+            }, 500);
+            
         },
         updateIndex: function() {
             for (var i in this.nodeViewList)
