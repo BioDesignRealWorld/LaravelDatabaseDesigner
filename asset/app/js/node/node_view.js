@@ -38,6 +38,9 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .edit': 'nodeitem:edit',
             'click .delete': 'nodeitem:delete'
         },
+        modelEvents: {
+    "change": "render"
+  },
         initialize: function() {
         }
     });

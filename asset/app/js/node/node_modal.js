@@ -32,7 +32,31 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         template: _.template($("#nodemodel-template").html()),
         events: {
             "click .ok": "okClicked",
-            "change #columnType": "changeColumnTypeEvent"
+            "change #type": "changeColumnTypeEvent",
+            "change #visible": "changeVisible",
+            "change #hidden": "changeHidden",
+            "change #guarded": "changeGuarded",
+            "change #fillable": "changeFillable",
+            "change #in": "changeIndex",
+            "change #un": "changeUnique",
+        },
+        changeIndex: function(e) {
+            if (this.$("#in").prop("checked") === true) this.$("#un").prop("checked", false);
+        },
+        changeUnique: function(e) {
+            if (this.$("#un").prop("checked") === true) this.$("#in").prop("checked", false);
+        },
+        changeGuarded: function(e) {
+            if (this.$("#guarded").prop("checked") === true) this.$("#fillable").prop("checked", false);
+        },
+        changeFillable: function(e) {
+            if (this.$("#fillable").prop("checked") === true) this.$("#guarded").prop("checked", false);
+        },
+        changeVisible: function(e) {
+            if (this.$("#visible").prop("checked") === true) this.$("#hidden").prop("checked", false);
+        },
+        changeHidden: function(e) {
+            if (this.$("#hidden").prop("checked") === true) this.$("#visible").prop("checked", false);
         },
         changeColumnTypeEvent: function() {
             this.changeColumnType();
@@ -49,18 +73,21 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 ctx.$(elem).attr("disabled", state);
             };
 
-            var column_type = ctx.$("#columnType").val();
+            var column_type = ctx.$("#type").val();
 
             var disable_all_elem = function() {
                 $d("#pk, #nu, #un, #ui, #in, #ai");
-                $d("#columnLength, #columnDef, #columnEnum");
+                $d("#length, #defaultvalue, #enumvalue");
+                ctx.$("#pk, #nu, #un, #ui, #in, #ai").prop("checked", false);
+
+                ctx.$("#length").attr("placeholder", "Length");
             };
 
             var $p = function(elem, txt) {
                 ctx.$(elem).attr("placeholder", txt);
+                ctx.$(elem).val("");
             };
 
-            ctx.$("#pk, #nu, #un, #ui, #in, #ai").prop("checked", false);
 
             disable_all_elem();
 
@@ -71,42 +98,42 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 case "softDeletes":
                     break;
                 case "string":
-                    $e("#columnLength, #columnDef, #in, #un, #nu");
-                    $p("#columnLength", "Length");
+                    $e("#length, #defaultvalue, #in, #un, #nu");
+                    $p("#length", "Length");
                     break;
                 case "text":
-                    $e("#columnDef, #in, #un, #nu");
+                    $e("#defaultvalue, #in, #un, #nu");
                     break;
                 case "tinyInteger":
-                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
-                    $p("#columnLength", "1");
+                    $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
+                    $p("#length", "1");
                     break;
                 case "smallInteger":
-                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
-                    $p("#columnLength", "6");
+                    $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
+                    $p("#length", "6");
                     break;
                 case "integer": //todo enable foreign key
-                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
-                    $p("#columnLength", "10");
+                    $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
+                    $p("#length", "10");
                     break;
                 case "mediumInteger":
-                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
-                    $p("#columnLength", "9");
+                    $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
+                    $p("#length", "9");
                     break;
                 case "bigInteger": //todo enable foreign key
-                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
-                    $p("#columnLength", "20");
+                    $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
+                    $p("#length", "20");
                     break;
                 case "float":
-                    $e("#columnDef, #in, #un, #nu");
+                    $e("#defaultvalue, #in, #un, #nu");
                     break;
                 case "decimal":
-                    $e("#columnDef, #columnLength, #in, #un, #nu");
-                    $p("#columnLength", "8,2");
+                    $e("#defaultvalue, #length, #in, #un, #nu");
+                    $p("#length", "8,2");
                     break;
                 case "boolean":
-                    $e("#columnDef, #nu, #in, #un");
-                    $p("#columnLength", "Length");
+                    $e("#defaultvalue, #nu, #in, #un");
+                    $p("#length", "Length");
                     break;
                 case "date":
                 case "datetime":
@@ -116,63 +143,27 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                     break;
                 case "enum":
                     $e("#nu, #in, #un");
-                    $e("#columnEnum");
+                    $e("#enumvalue");
                     break;
                 default:
                     break;
             }
-
-            //
-     //     $("#ai, #pk").attr("disabled", true);
-     // $("#ai").parent().attr("title", 'Already an auto increment in the table');
-     // $("#pk").parent().attr("title", 'Already a primary key in the table');
-
-
-
         },
         okClicked: function() {
-
-            //   var newColumn = {
-            //       name: this.$('#columnName').val(),
-            //       type: this.$('#columnType').val(),
-            //       length: this.$('#columnLength').val(),
-            //       defaultvalue: this.$('#columnDef').val(),
-            //       enumvalue: this.$('#columnEnum').val(),
-            //   };
-            //
-            //   that.model.set(newColumn);
-            //modal.preventClose();
-            console.log(Backbone.Syphon.serialize(this));
+            this.trigger("okClicked", Backbone.Syphon.serialize(this));
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            this.$('#type').find('option[value=' + this.model.get('type') + ']').attr('selected', 'selected');
             this.changeColumnType(this);
             return this.el;
         }
     });
 
-    Modal.EditNodeItem = Backbone.View.extend({
-        initialize: function() {
-            //this.bind("ok", this.okClicked);
-        },
-        template: _.template($("#nodemodel-template").html()),
+    Modal.EditNodeItem = Modal.CreateNodeItem.extend({
         okClicked: function(modal) {
 
-            //   var newColumn = {
-            //       name: this.$('#columnName').val(),
-            //       type: this.$('#columnType').val(),
-            //       length: this.$('#columnLength').val(),
-            //       defaultvalue: this.$('#columnDef').val(),
-            //       enumvalue: this.$('#columnEnum').val(),
-            //   };
-            //
-            //   that.model.set(newColumn);
-            //modal.preventClose();
-        },
-        render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
-            this.$('#columnType').find('option[value=' + this.model.get('type') + ']').attr('selected', 'selected');
-            return this.el;
+            this.trigger("okClicked", Backbone.Syphon.serialize(this));
         }
     });
 

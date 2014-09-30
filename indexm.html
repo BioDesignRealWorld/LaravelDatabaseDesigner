@@ -40,17 +40,17 @@
                 <legend>Create a Column</legend>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnName">Column Name</label>
+                    <label class="col-md-4 control-label" for="name">Column Name</label>
                     <div class="col-md-4">
-                        <input id="columnName" name="columnName" type="text" placeholder="Column Name" class="form-control input-md" value="<%=name%>">
+                        <input id="name" name="name" type="text" placeholder="Column Name" class="form-control input-md" value="<%=name%>">
                         
                     </div>
                 </div>
                 <!-- Select Basic -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnType">Type</label>
+                    <label class="col-md-4 control-label" for="type">Type</label>
                     <div class="col-md-4">
-                        <select id="columnType" name="columnType" class="form-control">
+                        <select id="type" name="type" class="form-control">
                             <optgroup label="LARAVEL TYPES">
                                 <option value="increments">INCREMENTS</option>
                                 <option value="bigIncrements">BIG INCREMENTS</option>
@@ -84,24 +84,24 @@
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnLength">Length</label>
+                    <label class="col-md-4 control-label" for="length">Length</label>
                     <div class="col-md-4">
-                        <input id="columnLength" name="columnLength" type="text" placeholder="Length" class="form-control input-md" value="<%=length%>">
+                        <input id="length" name="length" type="text" placeholder="Length" class="form-control input-md" value="<%=length%>">
                     </div>
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnDef">Default Value</label>
+                    <label class="col-md-4 control-label" for="defaultvalue">Default Value</label>
                     <div class="col-md-4">
-                        <input id="columnDef" name="columnDef" type="text" placeholder="Default Value" class="form-control input-md" value="<%=defaultvalue%>">
+                        <input id="defaultvalue" name="defaultvalue" type="text" placeholder="Default Value" class="form-control input-md" value="<%=defaultvalue%>">
                         
                     </div>
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnEnum">Enum Value</label>
+                    <label class="col-md-4 control-label" for="enumvalue">Enum Value</label>
                     <div class="col-md-4">
-                        <input id="columnEnum" name="columnEnum" type="text" placeholder="Enum Value" class="form-control input-md" value="<%=enumvalue%>">
+                        <input id="enumvalue" name="enumvalue" type="text" placeholder="Enum Value" class="form-control input-md" value="<%=enumvalue%>">
                         
                     </div>
                 </div>
@@ -151,16 +151,17 @@
                                 Fillable
                             </label>
                         </div>
-                        <div class="checkbox">
-                            <label for="visible">
-                                <input type="checkbox" name="visible" id="visible" value="Visible">
-                                Visible
-                            </label>
-                        </div>
+
                         <div class="checkbox">
                             <label for="guarded">
                                 <input type="checkbox" name="guarded" id="guarded" value="Guarded">
                                 Guarded
+                            </label>
+                        </div>
+                                                <div class="checkbox">
+                            <label for="visible">
+                                <input type="checkbox" name="visible" id="visible" value="Visible">
+                                Visible
                             </label>
                         </div>
                         <div class="checkbox">

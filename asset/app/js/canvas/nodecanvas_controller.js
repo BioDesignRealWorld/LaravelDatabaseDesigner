@@ -73,19 +73,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
 
-    viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
 
-        var view = new DesignerApp.NodeModule.Modal.CreateNodeItem({
-            model: DesignerApp.request("nodeentities:new:nodeitem")
-        });
-
-        view.on("form:submit", function(data) {
-
-        });
-
-        DesignerApp.NodeModule.Modal.CreateTestModal(view);
-
-    });
 
     viewNodeCanvas.on("childview:container:addrelation", function(childview) {
         //var relation = DesignerApp.request("nodeentities:new:relation");
@@ -143,14 +131,33 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         childview.model.destroy();
     });
 
+
+    viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
+
+        var view = new DesignerApp.NodeModule.Modal.CreateNodeItem({
+            model: DesignerApp.request("nodeentities:new:nodeitem")
+        });
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+        view.on("okClicked", function(data) {
+            childview.collection.add(data);
+        });
+
+    });
+
     viewNodeCanvas.on("childview:container:nodeitem:delete", function(childview, itemview) {
         itemview.model.destroy();
     });
 
     viewNodeCanvas.on("childview:container:nodeitem:edit", function(childview, itemview) {
-        DesignerApp.NodeModule.Modal.CreateTestModal(new DesignerApp.NodeModule.Modal.EditNodeItem({
+        var view = new DesignerApp.NodeModule.Modal.EditNodeItem({
             model: itemview.model
-        }));
+        });
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data){
+            itemview.model.set(data);
+        });
+
     });
 
     //todo refactor
