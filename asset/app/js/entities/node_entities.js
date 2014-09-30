@@ -121,6 +121,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             if (!attrs.color) {
                 errors.color = "cant be blank";
             }
+            /*
             if (!attrs.increment) {
                 errors.increment = "cant be blank";
             }
@@ -130,7 +131,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             if (!attrs.softdelete) {
                 errors.softdelete = "cant be blank";
             }
-
+            */
             if (!_.isEmpty(errors)) {
                 console.log(errors);
                 return errors;

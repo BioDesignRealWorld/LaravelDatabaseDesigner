@@ -376,7 +376,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-name">Table Name</label>
                     <div class="col-md-4">
-                        <input id="container-name" value="<%=name%>" name="container-name" type="text" placeholder="Table1" class="form-control input-md">
+                        <input id="container-name" value="<%=name%>" name="name" type="text" placeholder="Table1" class="form-control input-md">
                         
                     </div>
                 </div>
@@ -384,7 +384,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-classname">Model Class Name</label>
                     <div class="col-md-4">
-                        <input id="container-classname" value="<%=classname%>" name="container-classname" type="text" placeholder="Model Class Name" class="form-control input-md">
+                        <input id="container-classname" value="<%=classname%>" name="classname" type="text" placeholder="Model Class Name" class="form-control input-md">
                         
                     </div>
                 </div>
@@ -392,7 +392,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-namespace">Namespace</label>
                     <div class="col-md-4">
-                        <input id="container-namespace" value="<%=namespace%>" name="container-namespace" type="text" placeholder="Namespace" class="form-control input-md">
+                        <input id="container-namespace" value="<%=namespace%>" name="namespace" type="text" placeholder="Namespace" class="form-control input-md">
                         
                     </div>
                 </div>
@@ -400,7 +400,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-color">Color</label>
                     <div class="col-md-4">
-                        <select id="container-color" name="container-color" class="form-control">
+                        <select id="container-color" name="color" class="form-control">
                             <option value="Red">Red</option>
                             <option value="Green">Green</option>
                             <option value="Blue">Blue</option>
@@ -415,19 +415,19 @@
                     <div class="col-md-4">
                         <div class="checkbox">
                             <label for="container-increment">
-                                <input type="checkbox" name="tableOptions" id="container-increment" value="1">
+                                <input type="checkbox" name="increment" id="container-increment" value="increment">
                                 Add Laravel ID increments column.
                             </label>
                         </div>
                         <div class="checkbox">
                             <label for="container-timestamp">
-                                <input type="checkbox" name="tableOptions" id="container-timestamp" value="2">
+                                <input type="checkbox" name="timestamp" id="container-timestamp" value="timestamp">
                                 Add Laravel timestamps.
                             </label>
                         </div>
                         <div class="checkbox">
                             <label for="container-softdelete">
-                                <input type="checkbox" name="tableOptions" id="container-softdelete" value="3">
+                                <input type="checkbox" name="softdelete" id="container-softdelete" value="softdelete">
                                 Add Laravel soft delete.
                             </label>
                         </div>

@@ -91,15 +91,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
         okClicked: function() {
-            var data = {
-                name: this.$('#container-name').val(),
-                classname: this.$('#container-classname').val(),
-                namespace: this.$('#container-namespace').val(),
-                color: this.$('#container-color').val(),
-                increment: this.$('#container-increment').val(),
-                timestamp: this.$('#container-timestamp').val(),
-                softdelete: this.$('#container-softdelete').val(),
-            };
+            var data = Backbone.Syphon.serialize(this);
             this.trigger("okClicked", data);
         },
         render: function() {
@@ -118,20 +110,15 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
         okClicked: function() {
-            var data = {
-                name: this.$('#container-name').val(),
-                classname: this.$('#container-classname').val(),
-                namespace: this.$('#container-namespace').val(),
-                color: this.$('#container-color').val(),
-                increment: this.$('#container-increment').val(),
-                timestamp: this.$('#container-timestamp').val(),
-                softdelete: this.$('#container-softdelete').val(),
-            };
-            //console.log(data);
+            var data = Backbone.Syphon.serialize(this);
             this.trigger("okClicked", data);
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            if (this.model.get("increment") === true) this.$("#container-increment").prop( "checked", true );
+            if (this.model.get("timestamp") === true) this.$("#container-timestamp").prop( "checked", true );
+            if (this.model.get("softdelete") === true) this.$("#container-softdelete").prop( "checked", true );
+            
             this.$('#container-color').find('option[value=' + this.model.get("color") + ']').attr('selected', 'selected'); //make destination selected by default
             return this.el;
         }
