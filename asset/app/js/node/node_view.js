@@ -7,6 +7,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         var conn = jsPlumb.connect({
             source: srcNodeContainer.get("name"),
             target: dstRelationModel.get("relatedmodel"),
+            parameters: {relation: dstRelationModel},
             overlays: [
                 ["Arrow", {
                     location: 1
@@ -19,7 +20,6 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 }]
             ]
         });
-
         //todo refactor this
         conn.bind("click", function() {
             DesignerApp.execute("nodecanvas:edit:relation", srcNodeContainer, dstRelationModel);

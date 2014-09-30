@@ -256,8 +256,14 @@ jsPlumb.ready(function() {
         });
 
         instance.bind("connectionDetached", function(info, originalEvent) {
-            // console.log(info);
-
+            //todo: refactor
+            //console.log(info.connection.getParameter("relation"))
+            var relation = info.connection.getParameter("relation");
+            relation.set("conn", "");
+            relation.destroy();
+            //return false;
+             //console.log(info.connection.getParameter("view").model);
+            //info.connection.getParameter("view").model.destroy();
         });
 
         instance.bind("beforeDrop", function(connection) {
