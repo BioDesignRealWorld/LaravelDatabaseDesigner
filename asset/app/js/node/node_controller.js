@@ -31,6 +31,7 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
     });
 
     DesignerApp.vent.on("noderelation:change", function(param) {
+        //todo refactor this
         var conn = param.dstRelation.get("conn");
         jsPlumb.detach(conn);
 

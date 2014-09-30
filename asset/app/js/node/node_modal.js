@@ -130,6 +130,8 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     Modal.CreateRelation = Modal.BaseModal.extend({
         initialize: function(param) {
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
+            this.target = param.target;
+            //console.log(param.target);
         },
         model: Node,
         idPrefix: "relation",
@@ -150,17 +152,19 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             };
             //
             //
-            //  if (this.target) {
-            //      templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
-            //  }
+              if (this.target) {
+                  templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
+              }
             //
             //
             this.$el.html(this.template(templatevar));
             //
-            //  if (this.target) {
-            //      this.$('.classoption').hide(); //hide option box
-            //      this.$('#tableRelatedModel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
-            //  }
+
+              if (this.target) {
+                  this.$('.classoption').hide(); //hide option box
+                  this.$('#relation-relatedmodel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+              }
+
             this.$('#relation-relatedmodel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
             //
             return this.el;

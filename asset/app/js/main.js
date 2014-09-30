@@ -1,200 +1,156 @@
 var node_data = [{
-    "name": "Bears",
-    "color": "Blue",
+    "name": "Users",
+    "color": "",
     "position": {
-        "x": 130,
-        "y": 162
+        "x": 87,
+        "y": 60
     },
-    "modelclass": "Bear",
     "column": [{
-        "name": "id",
-        "type": "increments",
-        "length": "0",
+        "name": "username",
+        "type": "string",
+        "length": 30,
         "order": 0,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "name",
-        "type": "string",
-        "length": "200",
+        "name": "id",
+        "type": "increments",
+        "length": 30,
         "order": 1,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "danger_level",
+        "name": "email",
         "type": "string",
-        "length": "200",
+        "length": 200,
         "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "password",
+        "type": "string",
+        "length": 100,
+        "order": 3,
         "defaultvalue": "",
         "enumvalue": ""
     }],
     "relation": [{
         "extramethods": "",
-        "foreignkeys": "",
-        "name": "fish",
-        "relatedmodel": "Fish",
-        "relationtype": "hasOne",
-        "usenamespace": ""
-    }, {
-        "extramethods": "",
-        "foreignkeys": "",
-        "name": "trees",
-        "relatedmodel": "Trees",
+        "foreignkeys": "user_id",
+        "name": "machines",
+        "relatedmodel": "Roles",
         "relationtype": "hasMany",
         "usenamespace": ""
     }, {
         "extramethods": "",
-        "foreignkeys": "bear_id, picnic_id",
-        "name": "picnics",
-        "relatedmodel": "Picnics",
-        "relationtype": "belongsToMany",
+        "foreignkeys": "user_id",
+        "name": "machines",
+        "relatedmodel": "Map",
+        "relationtype": "hasMany",
+        "usenamespace": ""
+    }, {
+        "extramethods": "",
+        "foreignkeys": "user_id",
+        "name": "machines",
+        "relatedmodel": "Roles",
+        "relationtype": "hasMany",
+        "usenamespace": ""
+    }, {
+        "extramethods": "",
+        "foreignkeys": "",
+        "name": "",
+        "relatedmodel": "Roles",
+        "relationtype": "hasOne",
         "usenamespace": ""
     }]
 }, {
-    "name": "Fish",
-    "color": "Grey",
+    "name": "Roles",
+    "color": "",
     "position": {
-        "x": 1053,
-        "y": 28
+        "x": 1092,
+        "y": 80
     },
-    "modelclass": "Fish",
     "column": [{
         "name": "id",
         "type": "increments",
-        "length": "0",
+        "length": 30,
         "order": 0,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "bear_id",
-        "type": "integer",
-        "length": "0",
+        "name": "username",
+        "type": "string",
+        "length": 30,
         "order": 1,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "weight",
-        "type": "integer",
-        "length": "0",
+        "name": "email",
+        "type": "string",
+        "length": 200,
         "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "password",
+        "type": "string",
+        "length": 100,
+        "order": 3,
         "defaultvalue": "",
         "enumvalue": ""
     }],
     "relation": [{
         "extramethods": "",
         "foreignkeys": "",
-        "name": "bear",
-        "relatedmodel": "Bears",
-        "relationtype": "belongsTo",
+        "name": "",
+        "relatedmodel": "Map",
+        "relationtype": "hasOne",
         "usenamespace": ""
     }]
 }, {
-    "name": "Trees",
-    "color": "Red",
+    "name": "Map",
+    "color": "",
     "position": {
-        "x": 1048,
-        "y": 329
+        "x": 143,
+        "y": 582
     },
-    "modelclass": "Tree",
     "column": [{
         "name": "id",
         "type": "increments",
-        "length": "0",
+        "length": 30,
         "order": 0,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "bear_id",
-        "type": "integer",
-        "length": "0",
+        "name": "username",
+        "type": "string",
+        "length": 30,
         "order": 1,
         "defaultvalue": "",
         "enumvalue": ""
     }, {
-        "name": "type",
+        "name": "email",
         "type": "string",
-        "length": "100",
+        "length": 200,
         "order": 2,
+        "defaultvalue": "",
+        "enumvalue": ""
+    }, {
+        "name": "password",
+        "type": "string",
+        "length": 100,
+        "order": 3,
         "defaultvalue": "",
         "enumvalue": ""
     }],
     "relation": [{
         "extramethods": "",
         "foreignkeys": "",
-        "name": "bear",
-        "relatedmodel": "Bears",
-        "relationtype": "belongsTo",
+        "name": "",
+        "relatedmodel": "Users",
+        "relationtype": "hasOne",
         "usenamespace": ""
     }]
-}, {
-    "name": "Picnics",
-    "color": "Red",
-    "position": {
-        "x": 130,
-        "y": 614
-    },
-    "modelclass": "Picnic",
-    "column": [{
-        "name": "id",
-        "type": "increments",
-        "length": "0",
-        "order": 0,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }, {
-        "name": "name",
-        "type": "string",
-        "length": "100",
-        "order": 1,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }, {
-        "name": "taste_level",
-        "type": "integer",
-        "length": "0",
-        "order": 2,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }],
-    "relation": [{
-        "extramethods": "",
-        "foreignkeys": "picnic_id, bear_id",
-        "name": "bears",
-        "relatedmodel": "Bears",
-        "relationtype": "belongsToMany",
-        "usenamespace": ""
-    }]
-}, {
-    "name": "bears_picnics",
-    "color": "Red",
-    "position": {
-        "x": 402,
-        "y": 618
-    },
-    "modelclass": "bear_to_picnic",
-    "column": [{
-        "name": "id",
-        "type": "increments",
-        "length": "0",
-        "order": 0,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }, {
-        "name": "bear_id",
-        "type": "integer",
-        "length": "0",
-        "order": 1,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }, {
-        "name": "picnic_id",
-        "type": "integer",
-        "length": "0",
-        "order": 2,
-        "defaultvalue": "",
-        "enumvalue": ""
-    }],
-    "relation": []
 }];
 
 
@@ -251,31 +207,38 @@ jsPlumb.ready(function() {
     instance.doWhileSuspended(function() {
         // bind to connection/connectionDetached events, and update the list of connections on screen.
         instance.bind("connection", function(info, originalEvent) {
-
-            // console.log(info);
+            //console.log(info.connection.getParameters());
         });
 
         instance.bind("connectionDetached", function(info, originalEvent) {
             //todo: refactor
             //console.log(info.connection.getParameter("relation"))
             var relation = info.connection.getParameter("relation");
-            relation.set("conn", "");
-            relation.destroy();
+
+
+            if (relation) {
+              //  console.log(info);
+                relation.set("conn", "");
+                relation.destroy();
+            }
+
+
             //return false;
-             //console.log(info.connection.getParameter("view").model);
+            //console.log(info.connection.getParameter("view").model);
             //info.connection.getParameter("view").model.destroy();
         });
 
         instance.bind("beforeDrop", function(connection) {
-            console.log(connection);
+
+            if (connection.sourceId !== connection.targetId) {
+                var node = connection.connection.getParameter("node");
+                DesignerApp.execute("nodecanvas:create:relation", node, connection.targetId);
+            }
+
             //console.log(getNodeContainerFromNodeCid(connection.sourceId));
             //console.log(getNodeContainerFromNodeCid(connection.targetId));
 
             return false;
-            if (connection.sourceId == connection.targetid)
-                return false;
-            else
-                return true;
         });
     });
     DesignerApp.execute("draw:relation:model");

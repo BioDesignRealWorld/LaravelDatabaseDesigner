@@ -3,10 +3,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
     // -------------------------
 
     Views.CreateConnection = function(srcNodeContainer, dstRelationModel) {
-
+        //todo refactor this
         var conn = jsPlumb.connect({
-            source: srcNodeContainer.get("name"),
-            target: dstRelationModel.get("relatedmodel"),
+            source: srcNodeContainer.cid,
+            target:  DesignerApp.NodeEntities.getNodeContainerFromNodeName(dstRelationModel.get("relatedmodel")).cid,
             parameters: {relation: dstRelationModel},
             overlays: [
                 ["Arrow", {
@@ -84,7 +84,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         },
         initialize: function() {
             this.collection = this.model.get("column");
-            this.$el.attr("id", this.model.get("name"));
+            this.$el.attr("id", this.model.cid);
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
@@ -106,6 +106,9 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 parent: this.el,
                 anchor: 'Continuous',
                 allowLoopback: false,
+                parameters: {
+                    node: this.model
+                },
             }, {
                 view: this
             });
@@ -134,7 +137,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
 
             this.$el.on("dragstop", function(event, ui) {
-                console.log(ui);
+            //    console.log(ui);
                 if (typeof ui.helper.attr('tag') == 'undefined') {
                     self.model.set("position", {
                         x: ui.position.left,

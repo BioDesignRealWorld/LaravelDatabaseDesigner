@@ -159,6 +159,35 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     });
 
+    //todo: refactor this
+    DesignerApp.commands.setHandler("nodecanvas:create:relation", function(containerModel, targetId){
+        
+        var targetName = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("name");
+
+        var view = new DesignerApp.NodeModule.Modal.CreateRelation({
+            model: containerModel,
+            target: targetName
+        });
+
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data) {
+            var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
+            if (new_rel.set(data, {
+                validate: true
+            })) {
+                var relation = containerModel.get("relation");
+                relation.add(new_rel);
+                DesignerApp.NodeEntities.AddRelationTest(containerModel, new_rel);
+               // console.log(new_rel);
+            } else {
+                view.trigger("formDataInvalid", new_rel.validationError);
+                modal.preventClose();
+               // console.log("error");
+            }
+        });
+    });
+
     //
     //  LAUNCH
     //
