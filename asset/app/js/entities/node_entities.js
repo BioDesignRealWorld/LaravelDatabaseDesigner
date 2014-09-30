@@ -63,7 +63,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             foreignkeys: '',
             extramethods: ''
         },
-                validate: function(attrs, options) {
+        validate: function(attrs, options) {
             var errors = {};
             if (!attrs.name) {
                 errors.name = "cant be blank";
@@ -185,63 +185,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         nodeCanvas.each(function(node) {
             var relations = node.get("relation");
             relations.each(function(relation) {
-                //console.log(relation);
-                var sourceNodeContainer = node;
-                var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-                var destinationRelationModel = relation;
-
-                var raiseVent = function(evName) {
-                    DesignerApp.vent.trigger("noderelation:" + evName, {
-                        srcNodeContainer: sourceNodeContainer,
-                        dstRelation: destinationRelationModel
-                    });
-                    //console.log(evName);
-                };
-                //on delete node also delte referenced relation
-
-                relation.on('change:relatedmodel', function(relationModel) {
-                    relation.stopListening();
-                    
-                    //console.log(relationModel);
-
-                    var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-                    relation.listenTo(targetModel, "destroy", function() {
-                        raiseVent("destroyme");
-                        relation.destroy();
-                    });
-                    raiseVent("change");
-                });
-
-                relation.on("change:relationtype", function() {
-                    raiseVent("redraw");
-                });
-
-                relation.on("change:relationtype", function() {
-                    raiseVent("redraw");
-                });
-
-                relation.listenTo(targetNodeContainer, "destroy", function() {
-                    raiseVent("destroy");
-                    relation.destroy();
-                });
-
-                relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
-                    relation.set("relatedmodel", targetNode.get("name"), {silent: true});
-                    raiseVent("rename");
-                });
-
-                relation.listenTo(sourceNodeContainer, "change:name", function(targetNode) {
-                    raiseVent("rename");
-                });
-
-                relation.on("destroy", function() {
-                    raiseVent("destroy");
-                    relation.stopListening();
-                    relation.off();
-                    relation.destroy();
-                });
-
-                raiseVent("add");
+              NodeEntities.AddRelation(node,relation);
             });
         });
     };
@@ -253,50 +197,68 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         NodeEntities.AddNewRelation();
     };
 
-    NodeEntities.AddRelationTest = function(node, relation) {
+    NodeEntities.AddRelation = function(node, relation) {
         //console.log(relation);
-        var srcName = node;
-        var dstName = relation;
+                var sourceNodeContainer = node;
+                var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                var destinationRelationModel = relation;
 
-        var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                var raiseVent = function(evName) {
+                    DesignerApp.vent.trigger("noderelation:" + evName, {
+                        srcNodeContainer: sourceNodeContainer,
+                        dstRelation: destinationRelationModel
+                    });
+                    //console.log(evName);
+                };
 
-        var raiseVent = function(evName) {
-            DesignerApp.vent.trigger("noderelation:" + evName, {
-                srcNodeContainer: srcName,
-                dstRelation: dstName
-            });
-            //console.log(evName);
-        };
-        //on delete node also delte referenced relation
+                //on delete node also delte referenced relation
+                relation.on('change:relatedmodel', function(relationModel) {
+                    relation.stopListening();
 
-        relation.on('change:relatedmodel', function() {
-            relation.stopListening();
+                    //console.log(relationModel);
 
-            var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-            relation.listenTo(targetModel, "destroy", function() {
-                raiseVent("destroyme");
-                relation.destroy();
-            });
-            raiseVent("change");
-        });
+                    var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                    relation.listenTo(targetModel, "destroy", function() {
+                        raiseVent("destroyme");
+                        relation.destroy();
+                    });
+                    raiseVent("change");
+                });
 
-        relation.on("change:relationtype", function() {
-            raiseVent("redraw");
-        });
+                //on relation type change update overlay
+                relation.on("change:relationtype", function() {
+                    raiseVent("redraw");
+                });
 
-        relation.listenTo(targetNodeContainer, "destroy", function() {
-            raiseVent("destroy");
-            relation.destroy();
-        });
+                //on target table destroy, destroy our relation
+                relation.listenTo(targetNodeContainer, "destroy", function() {
+                    raiseVent("destroy");
+                    relation.destroy();
+                });
 
-        relation.on("destroy", function() {
-            raiseVent("destroy");
-            relation.stopListening();
-            relation.off();
-            relation.destroy();
-        });
+                //on target table relation rename, change our reference and update overlay
+                relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
+                    relation.set("relatedmodel", targetNode.get("name"), {
+                        silent: true
+                    });
+                    raiseVent("rename");
+                });
 
-        raiseVent("add");
+                //on our table rename update overlay
+                relation.listenTo(sourceNodeContainer, "change:name", function(targetNode) {
+                    raiseVent("rename");
+                });
+
+                //on destroy clean up
+                relation.on("destroy", function() {
+                    raiseVent("destroy");
+                    relation.stopListening();
+                    relation.off();
+                    relation.destroy();
+                });
+
+                raiseVent("add");
+            
     };
 
     // Initializers

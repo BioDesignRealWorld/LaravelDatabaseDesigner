@@ -105,7 +105,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             })) {
                 var relation = childview.model.get("relation");
                 relation.add(new_rel);
-                DesignerApp.NodeEntities.AddRelationTest(childview.model, new_rel);
+                DesignerApp.NodeEntities.AddRelation(childview.model, new_rel);
                 console.log(new_rel);
             } else {
                 view.trigger("formDataInvalid", new_rel.validationError);
@@ -201,7 +201,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             })) {
                 var relation = containerModel.get("relation");
                 relation.add(new_rel);
-                DesignerApp.NodeEntities.AddRelationTest(containerModel, new_rel);
+                DesignerApp.NodeEntities.AddRelation(containerModel, new_rel);
                // console.log(new_rel);
             } else {
                 view.trigger("formDataInvalid", new_rel.validationError);
