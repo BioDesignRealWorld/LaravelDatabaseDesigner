@@ -14,11 +14,13 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     viewNodeCanvas.on("canvas:createcontainer", function() {
 
-        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer();
+        var container = DesignerApp.NodeEntities.getNewNodeContainer();
+        console.log(container);
+        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer({model:container});
+        
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.on("okClicked", function(data) {
-            var container = DesignerApp.NodeEntities.getNewNodeContainer();
             if (container.set(data, {
                 validate: true
             })) {
@@ -31,6 +33,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         });
 
     });
+
 
     viewNodeCanvas.on("canvas:open", function() {
         $("#fileOpenDialog").trigger("click");
@@ -49,6 +52,26 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     //  CHILD NODES
     //
     //
+
+    viewNodeCanvas.on("childview:container:editcontainer", function(childview) {
+        var containerModel = childview.model;
+        var view = new DesignerApp.NodeModule.Modal.EditNodeContainer({model:containerModel});
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("okClicked", function(data) {
+            //console.log(data);
+            if (containerModel.set(data, {
+                validate: true
+            })) {
+                //DesignerApp.NodeEntities.AddNewNode(data);
+            } else {
+                view.trigger("formDataInvalid", containerModel.validationError);
+                modal.preventClose();
+            }
+        });
+
+    });
+
 
     viewNodeCanvas.on("childview:container:addnewitem", function(childview) {
 

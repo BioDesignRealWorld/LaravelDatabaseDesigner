@@ -186,22 +186,23 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             var relations = node.get("relation");
             relations.each(function(relation) {
                 //console.log(relation);
-                var srcName = node;
-                var dstName = relation;
-
+                var sourceNodeContainer = node;
                 var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+                var destinationRelationModel = relation;
 
                 var raiseVent = function(evName) {
                     DesignerApp.vent.trigger("noderelation:" + evName, {
-                        srcNodeContainer: srcName,
-                        dstRelation: dstName
+                        srcNodeContainer: sourceNodeContainer,
+                        dstRelation: destinationRelationModel
                     });
                     //console.log(evName);
                 };
                 //on delete node also delte referenced relation
 
-                relation.on('change:relatedmodel', function() {
+                relation.on('change:relatedmodel', function(relationModel) {
                     relation.stopListening();
+                    
+                    //console.log(relationModel);
 
                     var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
                     relation.listenTo(targetModel, "destroy", function() {
@@ -215,9 +216,22 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                     raiseVent("redraw");
                 });
 
+                relation.on("change:relationtype", function() {
+                    raiseVent("redraw");
+                });
+
                 relation.listenTo(targetNodeContainer, "destroy", function() {
                     raiseVent("destroy");
                     relation.destroy();
+                });
+
+                relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
+                    relation.set("relatedmodel", targetNode.get("name"), {silent: true});
+                    raiseVent("rename");
+                });
+
+                relation.listenTo(sourceNodeContainer, "change:name", function(targetNode) {
+                    raiseVent("rename");
                 });
 
                 relation.on("destroy", function() {

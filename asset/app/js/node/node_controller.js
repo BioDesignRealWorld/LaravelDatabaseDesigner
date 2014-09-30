@@ -43,6 +43,17 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
         param.dstRelation.set("conn", conn);
     });
 
+    DesignerApp.vent.on("noderelation:rename", function(param) {
+        //rename label
+        var srcNodeContainer = param.srcNodeContainer;
+        var dstRelationModel = param.dstRelation;
+
+        var conn = param.dstRelation.get("conn");
+        var label = conn.getOverlay("label");
+
+        label.setLabel(srcNodeContainer.get('name') + ' ' + dstRelationModel.get('relationtype') + ' ' + dstRelationModel.get('relatedmodel'));
+    });
+
     DesignerApp.vent.on("noderelation:destroy", function(param) {
         var conn = param.dstRelation.get("conn");
         if (conn !== "") {

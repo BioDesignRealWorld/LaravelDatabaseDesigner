@@ -214,7 +214,7 @@ jsPlumb.ready(function() {
             //todo: refactor
             //console.log(info.connection.getParameter("relation"))
             var relation = info.connection.getParameter("relation");
-
+            console.log(relation);
 
             if (relation) {
               //  console.log(info);

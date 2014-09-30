@@ -74,7 +74,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+            this.$('#columnType').find('option[value=' + this.model.get('type') + ']').attr('selected', 'selected');
             return this.el;
         }
     });
@@ -101,28 +101,38 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 softdelete: this.$('#container-softdelete').val(),
             };
             this.trigger("okClicked", data);
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this.el;
         }
     });
 
-    Modal.EditNodeContainer = Backbone.View.extend({
+    Modal.EditNodeContainer = Modal.BaseModal.extend({
         template: _.template($('#createnode-template').html()),
         events: {
-            'click .addnode': 'addNode'
+            'click .addnode': 'okClicked'
         },
-        addNode: function() {
-            //  var newnode = coll.createNode({
-            //      name: this.$('#tableName').val(),
-            //      modelclass: this.$('#tableModelName').val(),
-            //      namespace: this.$('#tableNamespace').val(),
-            //      color: this.$('#tableColor').val(),
-            //      position: {
-            //          x: 20,
-            //          y: 20
-            //      }
-            //  });
+        idPrefix: "container",
+        initialize: function() {
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
+        },
+        okClicked: function() {
+            var data = {
+                name: this.$('#container-name').val(),
+                classname: this.$('#container-classname').val(),
+                namespace: this.$('#container-namespace').val(),
+                color: this.$('#container-color').val(),
+                increment: this.$('#container-increment').val(),
+                timestamp: this.$('#container-timestamp').val(),
+                softdelete: this.$('#container-softdelete').val(),
+            };
+            //console.log(data);
+            this.trigger("okClicked", data);
         },
         render: function() {
-            this.$el.html(this.template());
+            this.$el.html(this.template(this.model.toJSON()));
+            this.$('#container-color').find('option[value=' + this.model.get("color") + ']').attr('selected', 'selected'); //make destination selected by default
             return this.el;
         }
     });
@@ -137,7 +147,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         idPrefix: "relation",
         template: _.template($('#relationcreate-template').html()),
         events: {
-            "click .ok" : "okClicked"
+            "click .ok": "okClicked"
         },
         okClicked: function() {
             var data = Backbone.Syphon.serialize(this);
@@ -152,18 +162,18 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             };
             //
             //
-              if (this.target) {
-                  templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
-              }
+            if (this.target) {
+                templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
+            }
             //
             //
             this.$el.html(this.template(templatevar));
             //
 
-              if (this.target) {
-                  this.$('.classoption').hide(); //hide option box
-                  this.$('#relation-relatedmodel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
-              }
+            if (this.target) {
+                this.$('.classoption').hide(); //hide option box
+                this.$('#relation-relatedmodel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+            }
 
             this.$('#relation-relatedmodel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
             //
@@ -181,11 +191,10 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
         events: {
-            "click #btnsave.ok" : "okClicked",
-            "click #btndelete.delete" : "delClicked"
+            "click #btnsave.ok": "okClicked",
+            "click #btndelete.delete": "delClicked"
         },
-        delClicked: function(e)
-        {
+        delClicked: function(e) {
             this.trigger("delClicked", this.model);
         },
         okClicked: function() {
@@ -228,7 +237,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.model.destroy();
         },
         editRelation: function() {
-            DesignerApp.execute("nodecanvas:edit:relation",this.container,this.model);
+            DesignerApp.execute("nodecanvas:edit:relation", this.container, this.model);
         },
         render: function() { // console.log('destroy render');
             this.$el.html(this.template(this.model.toJSON()));
@@ -240,14 +249,13 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     Modal.ViewRelations = Backbone.View.extend({
         template: _.template($("#relationcollection-template").html()),
         events: {
-            "click .ok" : "addNewRelationClicked"
+            "click .ok": "addNewRelationClicked"
         },
         initialize: function() {
             this.listenTo(this.model.get("relation"), 'destroy', this.render);
             this.listenTo(this.model.get("relation"), 'add', this.addOne);
         },
-        addNewRelationClicked: function()
-        {
+        addNewRelationClicked: function() {
             this.trigger("addNewRelationClicked");
         },
         addOne: function(relation) {
