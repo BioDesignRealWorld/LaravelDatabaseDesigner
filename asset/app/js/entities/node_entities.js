@@ -27,7 +27,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         defaults: {
             name: '',
             type: '',
-            length: 0,
+            length: '',
             defaultvalue: '',
             enumvalue: ''
         },

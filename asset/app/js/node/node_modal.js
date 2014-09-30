@@ -25,13 +25,110 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
     });
 
-    Modal.CreateNodeItem = Backbone.View.extend({
+    Modal.CreateNodeItem = Modal.BaseModal.extend({
         initialize: function() {
-
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
         },
         template: _.template($("#nodemodel-template").html()),
         events: {
-            "click .ok": "okClicked"
+            "click .ok": "okClicked",
+            "change #columnType": "changeColumnTypeEvent"
+        },
+        changeColumnTypeEvent: function() {
+            this.changeColumnType();
+        },
+        changeColumnType: function(ctx) {
+
+            if (!ctx) ctx = this;
+
+            var $e = function(elem) {
+                ctx.$(elem).attr("disabled", false);
+            };
+            var $d = function(elem, state) {
+                if (!state) state = true;
+                ctx.$(elem).attr("disabled", state);
+            };
+
+            var column_type = ctx.$("#columnType").val();
+
+            var disable_all_elem = function() {
+                $d("#pk, #nu, #un, #ui, #in, #ai");
+                $d("#columnLength, #columnDef, #columnEnum");
+            };
+
+            var $p = function(elem, txt) {
+                ctx.$(elem).attr("placeholder", txt);
+            };
+
+            ctx.$("#pk, #nu, #un, #ui, #in, #ai").prop("checked", false);
+
+            disable_all_elem();
+
+            switch (column_type) {
+                case "increments":
+                case "bigIncrements":
+                case "timestamps":
+                case "softDeletes":
+                    break;
+                case "string":
+                    $e("#columnLength, #columnDef, #in, #un, #nu");
+                    $p("#columnLength", "Length");
+                    break;
+                case "text":
+                    $e("#columnDef, #in, #un, #nu");
+                    break;
+                case "tinyInteger":
+                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
+                    $p("#columnLength", "1");
+                    break;
+                case "smallInteger":
+                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
+                    $p("#columnLength", "6");
+                    break;
+                case "integer": //todo enable foreign key
+                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
+                    $p("#columnLength", "10");
+                    break;
+                case "mediumInteger":
+                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
+                    $p("#columnLength", "9");
+                    break;
+                case "bigInteger": //todo enable foreign key
+                    $e("#columnDef, #ai, #un, #ui, #nu, #in");
+                    $p("#columnLength", "20");
+                    break;
+                case "float":
+                    $e("#columnDef, #in, #un, #nu");
+                    break;
+                case "decimal":
+                    $e("#columnDef, #columnLength, #in, #un, #nu");
+                    $p("#columnLength", "8,2");
+                    break;
+                case "boolean":
+                    $e("#columnDef, #nu, #in, #un");
+                    $p("#columnLength", "Length");
+                    break;
+                case "date":
+                case "datetime":
+                case "time":
+                case "timestamp":
+                case "binary":
+                    break;
+                case "enum":
+                    $e("#nu, #in, #un");
+                    $e("#columnEnum");
+                    break;
+                default:
+                    break;
+            }
+
+            //
+     //     $("#ai, #pk").attr("disabled", true);
+     // $("#ai").parent().attr("title", 'Already an auto increment in the table');
+     // $("#pk").parent().attr("title", 'Already a primary key in the table');
+
+
+
         },
         okClicked: function() {
 
@@ -45,11 +142,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             //
             //   that.model.set(newColumn);
             //modal.preventClose();
-            console.log("wewdew");
+            console.log(Backbone.Syphon.serialize(this));
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            //this.$('#columnType').find('option[value=' + that.model.get('type') + ']').attr('selected', 'selected');
+            this.changeColumnType(this);
             return this.el;
         }
     });
@@ -115,10 +212,10 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            if (this.model.get("increment") === true) this.$("#container-increment").prop( "checked", true );
-            if (this.model.get("timestamp") === true) this.$("#container-timestamp").prop( "checked", true );
-            if (this.model.get("softdelete") === true) this.$("#container-softdelete").prop( "checked", true );
-            
+            if (this.model.get("increment") === true) this.$("#container-increment").prop("checked", true);
+            if (this.model.get("timestamp") === true) this.$("#container-timestamp").prop("checked", true);
+            if (this.model.get("softdelete") === true) this.$("#container-softdelete").prop("checked", true);
+
             this.$('#container-color').find('option[value=' + this.model.get("color") + ']').attr('selected', 'selected'); //make destination selected by default
             return this.el;
         }
