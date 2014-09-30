@@ -354,14 +354,16 @@
         ================================================== -->
         <script type="text/template" id="nodecontainer-template">
         <p> <b>Table <%=name%> </b>
-        <a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add col</a>
-        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> add rel</a>
-        <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> see rel</a>
+        <a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span>col</a>
+        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span>rel</a>
+        <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> </a>
+        <a href="#" class="btn edit btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span> </a>        
         <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
         
-        <div id="conn-<%=name%>" style="" tag="<%=name%>" class="conn">conn</div>
         <ul class="nodecollection-container">
         </ul>
+                <div id="conn-<%=name%>" style="" tag="<%=name%>" class="conn"></div>
+
         </script>
         <!-- Template
         ================================================== -->
@@ -374,7 +376,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-name">Table Name</label>
                     <div class="col-md-4">
-                        <input id="container-name" name="container-name" type="text" placeholder="Table1" class="form-control input-md">
+                        <input id="container-name" value="<%=name%>" name="container-name" type="text" placeholder="Table1" class="form-control input-md">
                         
                     </div>
                 </div>
@@ -382,7 +384,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-classname">Model Class Name</label>
                     <div class="col-md-4">
-                        <input id="container-classname" name="container-classname" type="text" placeholder="Model Class Name" class="form-control input-md">
+                        <input id="container-classname" value="<%=classname%>" name="container-classname" type="text" placeholder="Model Class Name" class="form-control input-md">
                         
                     </div>
                 </div>
@@ -390,7 +392,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="container-namespace">Namespace</label>
                     <div class="col-md-4">
-                        <input id="container-namespace" name="container-namespace" type="text" placeholder="Namespace" class="form-control input-md">
+                        <input id="container-namespace" value="<%=namespace%>" name="container-namespace" type="text" placeholder="Namespace" class="form-control input-md">
                         
                     </div>
                 </div>
