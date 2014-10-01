@@ -107,6 +107,31 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             timestamp: "",
             softdelete: ""
         },
+        getSeeding: function() {
+            
+            var newseeding = new NodeEntities.Seeding();
+
+            var nodeSeeding = this.get("seeding");
+            var nodeItem = this.get("column");
+
+            nodeSeeding.each(function(seed) {
+                            var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
+
+                nodeItem.each(function(nodecolumn) {
+                    var s = seed.get("column").findWhere({
+                        cid: nodecolumn.cid
+                    });
+                    if (s) {
+                        var newseed = {};
+                        newseed.cid = s.get("cid");
+                        newseed.content = s.get("content");
+                        seedItem.get("column").add(newseed);
+                    }
+                });
+                newseeding.add(seedItem);
+            });
+            return newseeding;
+        },
         validate: function(attrs, options) {
             var errors = {};
             if (!attrs.name) {
@@ -144,6 +169,31 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         model: NodeContainer
     });
 
+
+    NodeEntities.SeedColumn = Backbone.Model.extend({
+        defaults: {
+            cid: "",
+            content: ""
+        }
+    });
+
+    NodeEntities.SeedTable = Backbone.Collection.extend({
+        collection: NodeEntities.SeedColumn
+    });
+
+    NodeEntities.SeedTableCollection = Backbone.Model.extend({
+        initialize: function()
+        {
+          this.set("column", new NodeEntities.SeedTable());
+        }
+    });
+
+    NodeEntities.Seeding = Backbone.Collection.extend({
+        model: NodeEntities.SeedTableCollection
+    });
+
+
+
     var nodeCanvas = new NodeCanvas();
 
     NodeEntities.getNewNodeContainer = function() {
@@ -179,6 +229,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         var rel = nodeContainer.get("relation"); //RelationCollection
         nodeContainer.set("column", new NodeCollection(col));
         nodeContainer.set("relation", new RelationCollection(rel));
+        nodeContainer.set("seeding", new NodeEntities.Seeding());
         nodeCanvas.add(nodeContainer);
     };
 

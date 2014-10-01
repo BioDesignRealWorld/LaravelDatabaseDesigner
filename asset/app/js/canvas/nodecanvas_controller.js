@@ -16,15 +16,20 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         var container = DesignerApp.NodeEntities.getNewNodeContainer();
         console.log(container);
-        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer({model:container});
-        
+        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer({
+            model: container
+        });
+
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.on("okClicked", function(data) {
             if (container.set(data, {
                 validate: true
             })) {
-                data.position = {x: 100, y:100};
+                data.position = {
+                    x: 100,
+                    y: 100
+                };
                 DesignerApp.NodeEntities.AddNewNode(data);
             } else {
                 view.trigger("formDataInvalid", container.validationError);
@@ -55,7 +60,9 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     viewNodeCanvas.on("childview:container:editcontainer", function(childview) {
         var containerModel = childview.model;
-        var view = new DesignerApp.NodeModule.Modal.EditNodeContainer({model:containerModel});
+        var view = new DesignerApp.NodeModule.Modal.EditNodeContainer({
+            model: containerModel
+        });
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.on("okClicked", function(data) {
@@ -154,9 +161,70 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         });
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.on("okClicked", function(data){
+        view.on("okClicked", function(data) {
             itemview.model.set(data);
         });
+
+    });
+
+    viewNodeCanvas.on("childview:container:seeding", function(childview) {
+
+        var nodeContainer = childview.model;
+        var nodeItem = nodeContainer.get("column");
+        var nodeSeeding = nodeContainer.get("seeding");
+
+
+        // var seeding = [];
+
+        //nodeSeeding.each(function(seed){
+        //    var newseed = {};
+        //    nodeItem.each(function(nodecolumn){
+        //        var s = seed.get("column").findWhere({cid: nodecolumn.cid});
+        //        if(s)
+        //        {
+        //            newseed[nodecolumn.get("name")] = s.get("content");
+        //        }
+        //    });
+        //    seeding.push(newseed);
+        //});
+
+
+        var view = new DesignerApp.NodeModule.Modal.Seeding({
+            model: childview.model.get("column"),
+            seeding: nodeContainer.getSeeding(),
+            parentNode: nodeContainer
+        });
+
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
+        view.on("delClicked", function(data) {
+            data.destroy();
+            nodeContainer.set("seeding", view.seeding);            
+            //console.log("wedew");
+        });
+
+        view.on("okClicked", function(data) {
+
+            var seed = new DesignerApp.NodeEntities.SeedTableCollection();
+
+            _.each(data, function(value, key) {
+                var key_to_cid = nodeItem.findWhere({
+                    name: key
+                }).cid;
+                seed.get("column").add({
+                    cid: key_to_cid,
+                    content: value
+                });
+            });
+            
+            view.seeding.add(seed); 
+            //nodeSeeding.add(seed);
+            nodeContainer.set("seeding", view.seeding);
+
+            modal.preventClose();
+        });
+
+
 
     });
 
@@ -190,8 +258,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     //todo: refactor this
-    DesignerApp.commands.setHandler("nodecanvas:create:relation", function(containerModel, targetId){
-        
+    DesignerApp.commands.setHandler("nodecanvas:create:relation", function(containerModel, targetId) {
+
         var targetName = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("name");
 
         var view = new DesignerApp.NodeModule.Modal.CreateRelation({
@@ -209,11 +277,11 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 var relation = containerModel.get("relation");
                 relation.add(new_rel);
                 DesignerApp.NodeEntities.AddRelation(containerModel, new_rel);
-               // console.log(new_rel);
+                // console.log(new_rel);
             } else {
                 view.trigger("formDataInvalid", new_rel.validationError);
                 modal.preventClose();
-               // console.log("error");
+                // console.log("error");
             }
         });
     });

@@ -84,8 +84,8 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .relation': 'container:viewrelation',
             'click .relationadd': 'container:addrelation',
             'click .delete': 'container:deletecontainer',
-            'click .edit': 'container:editcontainer'
-
+            'click .edit': 'container:editcontainer',
+            'click .seeding': 'container:seeding'
         },
         initialize: function() {
             this.collection = this.model.get("column");

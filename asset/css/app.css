@@ -17,7 +17,9 @@ div#container {
 	margin: 0px;
 
 }
-
+ul.nodecollection-container.ui-sortable {
+	margin: 0px;
+}
 
 .node-view{
 	width: 320px;
@@ -35,6 +37,9 @@ div#container {
 
 .node-view li{
 		border: 1px solid #ccc;
+}
+.node-view .add-column{
+width: 100%;
 }
 
  .item {
@@ -95,4 +100,11 @@ div#container {
 .conn {
 	background-color: #999;
 	height: 10px;
+}
+
+
+.btn-default {
+  color: #333;
+  background-color: #E7E7E7;
+  border-color: #ccc;
 }

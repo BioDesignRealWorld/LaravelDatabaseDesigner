@@ -207,14 +207,15 @@
         ================================================== -->
         <script type="text/template" id="nodecontainer-template">
         <p> <b>Table <%=name%> </b>
-        <a href="#" class="btn add btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span>col</a>
-        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span>rel</a>
-        <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> </a>
+        <a href="#" class="btn relationadd btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span> r</a>
+        <a href="#" class="btn seeding btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> s</a>        
+        <a href="#" class="btn relation btn-xs btn-default"><span class="glyphicon glyphicon-eye-open"></span> r</a>
         <a href="#" class="btn edit btn-xs btn-default"><span class="glyphicon glyphicon-edit"></span> </a>        
         <a href="#" class="btn delete btn-xs btn-default"><span class="glyphicon glyphicon-remove-circle"></span> </a>
         
         <ul class="nodecollection-container">
-        </ul>
+        </ul>        <a href="#" class="btn add add-column btn-xs btn-default"><span class="glyphicon glyphicon-plus"></span>add new column</a>
+
                 <div id="conn-<%=name%>" style="" tag="<%=name%>" class="conn"></div>
 
         </script>
@@ -406,6 +407,39 @@
                 <a href="#" class="btn btn-primary cancel">Cancel</a>
             </div>
             </script>
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="seeditem-template">
+            <%=content%>
+            </script>
+
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="seeding-template">
+            <form class="form-horizontal">            
+                <fieldset>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <% _.each(column, function(col) { %>
+                            <th><%=col.name%></th>
+                            <% }); %>
+                            <th></th>
+                        </tr>
+                                          <tr>
+                            <% _.each(column, function(col) { %>
+                            <td><input id="<%=col.name%>" name="<%=col.name%>" type="text" placeholder="<%=col.name%>" class="form-control input-md"></td>
+                            <% }); %>
+                            <td><button id="btnsave" name="button1id" class="ok save btn btn-success">add</button></td>
+                        </tr>
+
+                    </thead>
+    
+                </table>
+
+                </fieldset>
+            </form>
+            </script>            
             <!-- Bootstrap core JavaScript
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->
