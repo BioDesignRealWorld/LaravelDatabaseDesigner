@@ -234,6 +234,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         modal.on("hidden", function(){
             //console.log("hidden");
+            nodeContainer.set("seeding", view.seeding);
             view.seedview.destroy();
             view.remove();
         });

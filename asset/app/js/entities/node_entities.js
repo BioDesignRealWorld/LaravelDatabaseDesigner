@@ -118,14 +118,19 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                             var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
 
                 nodeItem.each(function(nodecolumn) {
+                     var newseed = {};
                     var s = seed.get("column").findWhere({
                         cid: nodecolumn.cid
                     });
                     if (s) {
-                        var newseed = {};
                         newseed.cid = s.get("cid");
                         newseed.content = s.get("content");
                         seedItem.get("column").add(newseed);
+                    }else{
+                       
+                        newseed.cid = nodecolumn.cid;
+                        newseed.content = "";
+                        seedItem.get("column").add(newseed); 
                     }
                 });
                 newseeding.add(seedItem);

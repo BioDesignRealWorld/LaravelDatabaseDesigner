@@ -367,6 +367,15 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     Modal.SeedContent = Backbone.Marionette.ItemView.extend({
         tagName: "td",         
         template: "#seeditem-template",
+        events:{
+            "change .editvalue" : "editValue"
+        },
+        editValue: function(e)
+        {
+            var val = (this.$(".editvalue").val());
+            this.model.set("content", val);
+            console.log(this.model);
+        },
         initialize: function(param) {
             this.parentNode = param.parentNode;
             this.parentView = param.parentView;            
