@@ -327,6 +327,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             "click .ok": "addNewRelationClicked"
         },
         initialize: function() {
+            this.childViews = [];
             this.listenTo(this.model.get("relation"), 'destroy', this.render);
             this.listenTo(this.model.get("relation"), 'add', this.addOne);
         },
@@ -339,8 +340,19 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             }, {
                 container: this.model
             });
+            this.childViews.push(view);
             this.$("tbody").append(view.render());
         },
+         close: function(){
+            this.remove();
+            this.unbind();
+            // handle other unbinding needs, here
+            _.each(this.childViews, function(childView){
+              if (childView.remove){
+                childView.remove();
+              }
+            });
+          },        
         render: function() {
             var self = this;
             this.$el.html(this.template(this.model.toJSON()));
@@ -404,6 +416,13 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         initialize: function(param) {
             this.parentNode = param.parentNode;
             this.seeding = (param.seeding);
+            this.seedview = new Modal.SeedList({
+                collection: this.seeding,
+                childViewOptions: {
+                    parentNode: this.parentNode,
+                    parentView: this
+                }
+            });
             //console.log(this.model);
         },
         events: {
@@ -416,18 +435,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             this.trigger("okClicked", data);
         },
         render: function() {
-            var view = new Modal.SeedList({
-                collection: this.seeding,
-                childViewOptions: {
-                    parentNode: this.parentNode,
-                    parentView: this
-                }
-            });
             //console.log(view.render().el);
             this.$el.html(this.template({
                 column: this.model.toJSON()
             }));
-            this.$("table").append(view.render().el);
+            this.$("table").append(this.seedview.render().el);
             return this.el;
         }
     });
@@ -439,6 +451,13 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             showFooter: false
         });
         modal.options.content = view;
+        modal.on("hidden", function(){
+            modal.off();
+           if (typeof view.destroy == 'function') view.destroy(); 
+           if (typeof view.remove == 'function') view.remove(); 
+           if (typeof view.close == 'function') view.close(); 
+
+        });
         modal.open();
         return modal;
     };

@@ -93,7 +93,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         });
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.on("okClicked", function(data) {
+        view.listenTo(view, "okClicked", function(data) {
             var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
             if (new_rel.set(data, {
                 validate: true
@@ -108,6 +108,13 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 console.log("error");
             }
         });
+
+        modal.on("hidden", function()
+        {
+            modal.off();
+            view.remove();
+        });
+
     });
 
     viewNodeCanvas.on("childview:container:viewrelation", function(childview) {
@@ -165,6 +172,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             itemview.model.set(data);
         });
 
+
     });
 
     viewNodeCanvas.on("childview:container:seeding", function(childview) {
@@ -197,13 +205,13 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.on("delClicked", function(data) {
+        view.listenTo(view, "delClicked", function(data) {
             data.destroy();
             nodeContainer.set("seeding", view.seeding);            
             //console.log("wedew");
         });
 
-        view.on("okClicked", function(data) {
+        view.listenTo(view, "okClicked", function(data) {
 
             var seed = new DesignerApp.NodeEntities.SeedTableCollection();
 
@@ -222,6 +230,12 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             nodeContainer.set("seeding", view.seeding);
 
             modal.preventClose();
+        });
+
+        modal.on("hidden", function(){
+            //console.log("hidden");
+            view.seedview.destroy();
+            view.remove();
         });
 
 
@@ -269,7 +283,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.on("okClicked", function(data) {
+        view.listenTo(view, "okClicked", function(data) {
             var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
             if (new_rel.set(data, {
                 validate: true
@@ -284,6 +298,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 // console.log("error");
             }
         });
+
     });
 
     //
