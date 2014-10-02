@@ -31,6 +31,11 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             defaultvalue: '',
             enumvalue: ''
         },
+        initialize: function(param)
+        {   
+            if (!param.colid) this.set("colid", this.cid);
+            //console.log(this.get("cid"));
+        },
         validate: function(attrs, options) {
             return {
                 error: "Wew"
@@ -115,20 +120,24 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             var nodeItem = this.get("column");
 
             nodeSeeding.each(function(seed) {
-                            var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
+            
+            var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
 
                 nodeItem.each(function(nodecolumn) {
-                     var newseed = {};
-                    var s = seed.get("column").findWhere({
-                        cid: nodecolumn.cid
-                    });
-                    if (s) {
-                        newseed.cid = s.get("cid");
-                        newseed.content = s.get("content");
+                var newseed = {};
+
+                //console.log(nodecolumn.get("colid"));
+                var r = (seed.get("column").findWhere({colid: nodecolumn.get("colid")}));
+
+                //console.log(seed);
+
+                    if (r) {
+                        newseed.colid = r.get("colid");
+                        newseed.content = r.get("content");
                         seedItem.get("column").add(newseed);
                     }else{
-                       
-                        newseed.cid = nodecolumn.cid;
+                       //console.log(nodecolumn);
+                        newseed.colid = nodecolumn.get("colid");
                         newseed.content = "";
                         seedItem.get("column").add(newseed); 
                     }
@@ -177,7 +186,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
     NodeEntities.SeedColumn = Backbone.Model.extend({
         defaults: {
-            cid: "",
+            colid: "",
             content: ""
         }
     });
@@ -232,10 +241,45 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         var nodeContainer = new NodeContainer(param);
         var col = nodeContainer.get("column"); //NodeCollection
         var rel = nodeContainer.get("relation"); //RelationCollection
+        
         nodeContainer.set("column", new NodeCollection(col));
         nodeContainer.set("relation", new RelationCollection(rel));
         nodeContainer.set("seeding", new NodeEntities.Seeding());
+
+        nodeContainer.set("seeding", nodeContainer.getSeeding());
         nodeCanvas.add(nodeContainer);
+        //console.log(param);
+
+        _.each(param.seeding, function(seedItem) {
+            var seed = new NodeEntities.SeedTableCollection();
+            nodeContainer.get("column").each(function(columnItem){
+                    _.each(seedItem, function(seedEntity){
+                        if(seedEntity.colid === columnItem.get("colid")){
+                            seed.get("column").add({
+                                colid: seedEntity.colid,
+                                content: seedEntity.content
+                            });                                                 
+                        }
+
+                    });
+            }); 
+            nodeContainer.get("seeding").add(seed);             
+        });
+
+        //_.each(param.seeding, function(seedItem) {
+        //    var seed = new NodeEntities.SeedTableCollection();
+        //    _.each(seedItem, function(Item){
+        //            seed.get("column").add({
+        //                cid: Item.cid,
+        //                content: Item.content
+        //            });
+        //            console.log(Item);
+        //    }); 
+        //    nodeContainer.get("seeding").add(seed);             
+        //});
+        
+
+
     };
 
     NodeEntities.AddNewRelation = function(nodeCanvasParam) {
@@ -250,6 +294,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     NodeEntities.AddNodeCanvas = function(nodeCanvasParam) {
         for (var node in nodeCanvasParam) {
             NodeEntities.AddNewNode(nodeCanvasParam[node]);
+
         }
         NodeEntities.AddNewRelation();
     };
@@ -316,6 +361,66 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
                 raiseVent("add");
             
+    };
+
+
+    NodeEntities.ExportToJSON = function()
+    {
+        var varNodeCanvas = nodeCanvas;
+
+        var nodes = [];
+
+        varNodeCanvas.each(function(nodeContainer) {
+
+            var nodetmp = {
+                name: nodeContainer.get('name'),
+                color: nodeContainer.get('color'),
+                position: nodeContainer.get('position'),
+                modelclass: nodeContainer.get('modelclass'),
+                increment: nodeContainer.get('increment'),
+                timestamp: nodeContainer.get('timestamp'),
+                softdelete: nodeContainer.get('softdelete'),                
+                column: [],
+                relation: [],
+                seeding: [],
+            };
+          
+            nodeContainer.get('column').each(function(columnItem) {
+                var col = columnItem.toJSON();
+                var tmp = {
+                    colid: col.colid,
+                    name: col.name,
+                    type: col.type,
+                    length: col.length,
+                    order: col.order,
+                    defaultvalue: col.defaultvalue,
+                    enumvalue: col.enumvalue
+                };
+                nodetmp.column.push(tmp);
+            });
+  
+            nodeContainer.get('relation').each(function(relationItem) {
+                var rel = relationItem.toJSON();
+                var tmp = {
+                    extramethods: rel.extramethods,
+                    foreignkeys: rel.foreignkeys,
+                    name: rel.name,
+                    relatedmodel: rel.relatedmodel,
+                    relationtype: rel.relationtype,
+                    usenamespace: rel.usenamespace
+                };
+                nodetmp.relation.push(tmp);
+            });
+            
+            var seeding = nodeContainer.getSeeding();
+            seeding.each(function(seedItem){
+                nodetmp.seeding.push(seedItem.get("column").toJSON());
+            });
+
+            nodes.push(nodetmp);
+        });
+        //console.log(JSON.stringify(nodes));
+        return JSON.stringify(nodes);
     };
 
     // Initializers

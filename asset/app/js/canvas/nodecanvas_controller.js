@@ -163,6 +163,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:nodeitem:edit", function(childview, itemview) {
+        console.log(itemview.model.cid);
+        return;
         var view = new DesignerApp.NodeModule.Modal.EditNodeItem({
             model: itemview.model
         });
@@ -216,13 +218,16 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             var seed = new DesignerApp.NodeEntities.SeedTableCollection();
 
             _.each(data, function(value, key) {
-                var key_to_cid = nodeItem.findWhere({
+                var key_to_colid = nodeItem.findWhere({
                     name: key
-                }).cid;
+                }).get("colid");
+                                console.log(key_to_colid);
+
                 seed.get("column").add({
-                    cid: key_to_cid,
+                    colid: key_to_colid,
                     content: value
                 });
+
             });
             
             view.seeding.add(seed); 
