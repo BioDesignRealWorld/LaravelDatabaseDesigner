@@ -99,10 +99,11 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                     break;
                 case "string":
                     $e("#length, #defaultvalue, #in, #un, #nu");
-                    $p("#length", "Length");
+                    //$p("#length", "Length");
                     break;
                 case "text":
                     $e("#defaultvalue, #in, #un, #nu");
+                    $p("#length", "Length");
                     break;
                 case "tinyInteger":
                     $e("#defaultvalue, #ai, #un, #ui, #nu, #in");
@@ -126,6 +127,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                     break;
                 case "float":
                     $e("#defaultvalue, #in, #un, #nu");
+                    $p("#length", "Length");
                     break;
                 case "decimal":
                     $e("#defaultvalue, #length, #in, #un, #nu");
@@ -383,7 +385,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         serializeData: function() {
             var ser = {};
             //console.log(this.model);
-            ser.name = this.parentNode.get("column").get(this.model.get("cid")).get("name");
+            //ser.name = this.parentNode.get("column").get(this.model.get("colid")).get("name");
             ser.content = this.model.get("content");
             return ser;
         }
@@ -399,7 +401,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         delClicked: function(c,d)
         {
-            console.log(this);
+            //console.log(this);
             this.childViewOptions.parentView.trigger("delClicked", this.model);
         },
         onRender: function(){
