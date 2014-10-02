@@ -163,8 +163,6 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("childview:container:nodeitem:edit", function(childview, itemview) {
-        console.log(itemview.model.cid);
-        return;
         var view = new DesignerApp.NodeModule.Modal.EditNodeItem({
             model: itemview.model
         });

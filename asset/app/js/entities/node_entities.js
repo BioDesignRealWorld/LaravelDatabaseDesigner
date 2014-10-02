@@ -33,7 +33,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         },
         initialize: function(param)
         {   
-            if (!param.colid) this.set("colid", this.cid);
+            if (typeof param !== 'undefined') {
+                if (!param.colid) this.set("colid", this.cid);
+            }
             //console.log(this.get("cid"));
         },
         validate: function(attrs, options) {
