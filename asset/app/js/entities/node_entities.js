@@ -156,9 +156,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             if (!attrs.classname) {
                 errors.classname = "cant be blank";
             }
-            if (!attrs.namespace) {
-                errors.namespace = "cant be blank";
-            }
+            //if (!attrs.namespace) {
+            //    errors.namespace = "cant be blank";
+            //}
             if (!attrs.color) {
                 errors.color = "cant be blank";
             }
@@ -422,7 +422,41 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             nodes.push(nodetmp);
         });
         //console.log(JSON.stringify(nodes));
-        return JSON.stringify(nodes);
+        return (nodes);
+    };
+
+
+    NodeEntities.ClearNodeCanvas = function(nodeCanvasParam) {
+       
+        var node;
+        while (node = nodeCanvasParam.first()) {
+           //console.log("destroy " + node.get("name"));
+            var column;
+            while (column = node.get("column").first()) {
+                column.destroy();
+                //console.log("destroy col: " + column.get("name"));
+            }
+
+            var relation;
+            while (relation = node.get("relation").first()) {
+                relation.destroy();
+                //console.log("destroy rel: " + relation.get("name"));
+            }
+
+            var seeding;
+            while (seeding = node.get("seeding").first()) {
+                var seedtable;
+                while (seedtable = seeding.get("column").first()) {
+                    //console.log(seedtable);
+                    seedtable.destroy();
+                }
+                seeding.destroy();
+                //console.log("destroy seed: " + seeding.cid);
+            }
+
+           node.destroy();
+        }
+
     };
 
     // Initializers

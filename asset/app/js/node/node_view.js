@@ -6,8 +6,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         //todo refactor this
         var conn = jsPlumb.connect({
             source: srcNodeContainer.cid,
-            target:  DesignerApp.NodeEntities.getNodeContainerFromNodeName(dstRelationModel.get("relatedmodel")).cid,
-            parameters: {relation: dstRelationModel},
+            target: DesignerApp.NodeEntities.getNodeContainerFromNodeName(dstRelationModel.get("relatedmodel")).cid,
+            parameters: {
+                relation: dstRelationModel
+            },
             overlays: [
                 ["Arrow", {
                     location: 1
@@ -39,10 +41,9 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             'click .delete': 'nodeitem:delete'
         },
         modelEvents: {
-    "change": "render"
-  },
-        initialize: function() {
-        }
+            "change": "render"
+        },
+        initialize: function() {}
     });
 
     /*
@@ -78,6 +79,14 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
                 this.trigger('container:nodeitem:delete', item);
             }
         },
+        modelEvents: {
+            "change": "modelChanged",
+        },
+        modelChanged: function(m) {
+            this.$el.removeClass("node-" + m._previousAttributes.color);            
+            this.$el.addClass("node-" + this.model.get("color"));            
+            this.render();
+        },
         triggers: {
             'click .add': 'container:addnewitem',
             'click .dump': 'container:dumpjson',
@@ -90,6 +99,8 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         initialize: function() {
             this.collection = this.model.get("column");
             this.$el.attr("id", this.model.cid);
+            this.$el.addClass("node-" + this.model.get("color"));            
+           // console.log("wew");
         },
         onAddChild: function(child) {
             this.nodeViewList.push(child);
@@ -142,7 +153,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
 
 
             this.$el.on("dragstop", function(event, ui) {
-            //    console.log(ui);
+                //    console.log(ui);
                 if (typeof ui.helper.attr('tag') == 'undefined') {
                     self.model.set("position", {
                         x: ui.position.left,
@@ -156,10 +167,10 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             jsPlumb.detachAllConnections(this.$el);
             jsPlumb.removeAllEndpoints(this.$el);
 
-            setTimeout(function(){  //jquery draggable memory leak fix
+            setTimeout(function() { //jquery draggable memory leak fix
                 self.remove();
             }, 500);
-            
+
         },
         updateIndex: function() {
             for (var i in this.nodeViewList)

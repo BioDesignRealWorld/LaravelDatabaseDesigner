@@ -11,7 +11,7 @@ div#container {
     background-color: #fff;
 }
 .node-column {
-	background-color: #f0f9ff;
+	background-color: rgba(255, 255, 255, 0.72);
 	list-style-type: none;
 	padding: 5px;
 	margin: 0px;
@@ -36,17 +36,16 @@ ul.nodecollection-container.ui-sortable {
 }
 
 .node-view li{
-		border: 1px solid #ccc;
+		border: 1px solid rgba(0, 0, 0, 0.1);
 }
 .node-view .add-column{
 width: 100%;
-height: 30px;
 }
 
  .item {
       position: absolute;
        background-color: #C2C2C2;
-      border: 1px solid rgb(204, 204, 204);
+      border: 1px solid rgb(184, 184, 184);
          width: 100px;
 		 	border-radius: 4px;
 	padding: 2px 5px 5px 5px;
@@ -55,6 +54,33 @@ height: 30px;
 	z-index: 10;
 	min-width: 260px;
       }
+
+
+.node-Blue{
+background-color: #5DE7EC;
+}
+
+.node-Green {
+background-color: #C4EC5D;
+}
+
+.node-Yellow {
+background-color: #ECE15D;
+}
+
+.node-Red {
+background-color: #F7D1D6;
+}
+
+.node-Yellow-light {
+background-color: #FFF8A6;
+}
+
+.node-Grey {
+background-color: #F1F1F1;
+}
+
+
 
 .toolbox button{
 	padding: 5px;
@@ -81,7 +107,7 @@ height: 30px;
 
 
 .label {
-	background-color: #637b94;
+	background-color: #000;
 	font-size: 11px;
 	z-index: 11;
 }
@@ -98,17 +124,26 @@ height: 30px;
 #biodesign-logo img {
 }
 
+
 .conn {
-	background-color: #999;
+	background-color: rgba(0, 0, 0, 0.26);
 	height: 10px;
 }
 
 
+
 .btn-default {
   color: #333;
-  background-color: #E7E7E7;
+  background-color: #FFF;
   border-color: #ccc;
 }
+
+.btn-container {
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.34);
+  border-color: #ccc;
+}
+
 .addSeedRow{
 	  background-color: #E7E7E7;
 

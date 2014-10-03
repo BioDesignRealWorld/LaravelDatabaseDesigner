@@ -49,7 +49,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("canvas:dump", function() {
-        console.log(DesignerApp.request("nodeentities:canvas").toJSON());
+        console.log(DesignerApp.NodeEntities.ExportToJSON());
     });
 
     //
@@ -65,7 +65,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         });
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.on("okClicked", function(data) {
+        view.listenTo(view,"okClicked", function(data) {
             //console.log(data);
             if (containerModel.set(data, {
                 validate: true
@@ -76,6 +76,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 modal.preventClose();
             }
         });
+
+
 
     });
 
