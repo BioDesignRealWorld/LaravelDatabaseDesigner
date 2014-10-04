@@ -12,7 +12,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
             },
             overlays: [
                 ["Arrow", {
-                    location: 1
+                    location: 1,foldback:1, length: 10
                 }],
                 ["Label", {
                     cssClass: "label",
