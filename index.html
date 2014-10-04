@@ -482,7 +482,7 @@
             </script>            
             <!-- Template
             ================================================== -->
-            <script type="text/template" id="opengist-template">
+            <script type="text/template" id="gistload-template">
             <div class="list-group">
                 <a href="#" class="list-group-item active">
                 <h4 class="list-group-item-heading">List group item heading</h4>
@@ -490,6 +490,37 @@
                 </a>
             </div>
             </script>            
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="gistsave-template">
+            <form class="form-horizontal">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Save to Dropbox</legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="textinput">Filename</label>  
+              <div class="col-md-4">
+              <input id="filename" name="filename" type="text" placeholder="filename.skema" class="form-control input-md">
+                
+              </div>
+            </div>
+
+            <!-- Button (Double) -->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="button1id"></label>
+              <div class="col-md-8">
+                <button id="button1id" name="button1id" class="btn ok btn-success">Save</button>
+                <button id="button2id" name="button2id" class="btn cancel btn-danger">Cancel</button>
+              </div>
+            </div>
+
+            </fieldset>
+            </form>
+            </script>
+
             <!-- Bootstrap core JavaScript
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->
@@ -502,8 +533,9 @@
             <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
             <script src="bower_components/backbone.syphon/lib/backbone.syphon.js"></script>
             <script src="bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal.js"></script>
+            <script src="bower_components/hello/dist/hello.all.min.js"></script>
             <!-- region -->
-            <script src="asset/app/js/node_app.js"></script>
+            <script src="asset/app/js/app.js"></script>
             <!-- schema entity -->            
             <script src="asset/app/js/entities/node_entities.js"></script>
             <!-- node -->
@@ -514,6 +546,7 @@
             <script src="asset/app/js/node/node_modal_item.js"></script>
             <script src="asset/app/js/node/node_modal_relation.js"></script>
             <script src="asset/app/js/node/node_modal_seed.js"></script>
+            <script src="asset/app/js/node/node_modal_gist.js"></script>            
             <script src="asset/app/js/node/node_controller.js"></script>            
             <!-- canvas -->
             <script src="asset/app/js/canvas/nodecanvas_view.js"></script>        

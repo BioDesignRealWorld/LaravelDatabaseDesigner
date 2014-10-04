@@ -1,10 +1,15 @@
 DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Backbone, Marionette, $, _) {
 
     // INIT CANVAS
-
+    // refactor this
     Controller.viewNodeCanvas = new DesignerApp.NodeCanvas.Views.NodeCanvas({
         collection: DesignerApp.NodeEntities.getNodeCanvas()
     });
+    //
+    //  LAUNCH
+    //
+
+    DesignerApp.mainContent.show(Controller.viewNodeCanvas);
 
 
     //todo refactor
@@ -66,10 +71,5 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     });
 
-    //
-    //  LAUNCH
-    //
-
-    DesignerApp.mainContent.show(Controller.viewNodeCanvas);
 
 });

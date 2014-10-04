@@ -31,21 +31,55 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
 
     viewNodeCanvas.on("canvas:open", function() {
-        $("#fileOpenDialog").trigger("click");
+        if (typeof process != 'undefined') {
+            $("#fileOpenDialog").trigger("click");
+        } else {
+
+
+            var view = new DesignerApp.NodeModule.Modal.GistLoad({});
+
+            var loadGist = function(gistId) {
+                var github = hello("github");            
+                github.api('/gists/' + gistId , 'get').then(function(resp) {
+                      var jsonfile = (JSON.parse(resp.files.fileName.content));
+                      DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.getNodeCanvas());
+                      DesignerApp.NodeEntities.AddNodeCanvas(jsonfile);
+                });
+            };
+
+            view.listenTo(view, "okClicked", function(fileName) {
+                loadGist(fileName);
+            });
+
+            if (!authenticated) {
+                hello.login("github", {
+                    scope: "gist"
+                });
+            } else {
+                var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+            }
+
+
+
+        }
     });
 
     viewNodeCanvas.on("canvas:save", function() {
-        $("#fileSaveDialog").trigger("click");
+        if (typeof process != 'undefined') {
+            $("#fileSaveDialog").trigger("click");
+        } else {
+
+        }
     });
 
     viewNodeCanvas.on("canvas:saveas", function() {
         console.log("save as");
-    });    
+    });
 
     viewNodeCanvas.on("canvas:loadexample", function() {
-        DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.CurrentNodeCanvas);        
-        DesignerApp.NodeEntities.AddNodeCanvas(node_data); 
-   });
+        DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.CurrentNodeCanvas);
+        DesignerApp.NodeEntities.AddNodeCanvas(node_data);
+    });
 
     viewNodeCanvas.on("canvas:clearcanvas", function() {
         DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.CurrentNodeCanvas);
