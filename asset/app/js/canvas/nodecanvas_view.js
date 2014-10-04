@@ -8,7 +8,7 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "click .addcontainer": "canvas:createcontainer",
             "click .open": "canvas:open",
             "click .save": "canvas:save",
-            "click .dump": "canvas:dump"
+            "click .generate": "canvas:generate"
         },
     });
 

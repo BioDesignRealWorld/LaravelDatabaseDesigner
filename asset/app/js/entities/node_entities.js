@@ -31,8 +31,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             defaultvalue: '',
             enumvalue: ''
         },
-        initialize: function(param)
-        {   
+        initialize: function(param) {
             if (typeof param !== 'undefined') {
                 if (!param.colid) this.set("colid", this.cid);
             }
@@ -115,33 +114,35 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             softdelete: ""
         },
         getSeeding: function() {
-            
+
             var newseeding = new NodeEntities.Seeding();
 
             var nodeSeeding = this.get("seeding");
             var nodeItem = this.get("column");
 
             nodeSeeding.each(function(seed) {
-            
-            var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
+
+                var seedItem = new DesignerApp.NodeEntities.SeedTableCollection();
 
                 nodeItem.each(function(nodecolumn) {
-                var newseed = {};
+                    var newseed = {};
 
-                //console.log(nodecolumn.get("colid"));
-                var r = (seed.get("column").findWhere({colid: nodecolumn.get("colid")}));
+                    //console.log(nodecolumn.get("colid"));
+                    var r = (seed.get("column").findWhere({
+                        colid: nodecolumn.get("colid")
+                    }));
 
-                //console.log(seed);
+                    //console.log(seed);
 
                     if (r) {
                         newseed.colid = r.get("colid");
                         newseed.content = r.get("content");
                         seedItem.get("column").add(newseed);
-                    }else{
-                       //console.log(nodecolumn);
+                    } else {
+                        //console.log(nodecolumn);
                         newseed.colid = nodecolumn.get("colid");
                         newseed.content = "";
-                        seedItem.get("column").add(newseed); 
+                        seedItem.get("column").add(newseed);
                     }
                 });
                 newseeding.add(seedItem);
@@ -198,9 +199,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     });
 
     NodeEntities.SeedTableCollection = Backbone.Model.extend({
-        initialize: function()
-        {
-          this.set("column", new NodeEntities.SeedTable());
+        initialize: function() {
+            this.set("column", new NodeEntities.SeedTable());
         }
     });
 
@@ -243,7 +243,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         var nodeContainer = new NodeContainer(param);
         var col = nodeContainer.get("column"); //NodeCollection
         var rel = nodeContainer.get("relation"); //RelationCollection
-        
+
         nodeContainer.set("column", new NodeCollection(col));
         nodeContainer.set("relation", new RelationCollection(rel));
         nodeContainer.set("seeding", new NodeEntities.Seeding());
@@ -254,18 +254,18 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
         _.each(param.seeding, function(seedItem) {
             var seed = new NodeEntities.SeedTableCollection();
-            nodeContainer.get("column").each(function(columnItem){
-                    _.each(seedItem, function(seedEntity){
-                        if(seedEntity.colid === columnItem.get("colid")){
-                            seed.get("column").add({
-                                colid: seedEntity.colid,
-                                content: seedEntity.content
-                            });                                                 
-                        }
+            nodeContainer.get("column").each(function(columnItem) {
+                _.each(seedItem, function(seedEntity) {
+                    if (seedEntity.colid === columnItem.get("colid")) {
+                        seed.get("column").add({
+                            colid: seedEntity.colid,
+                            content: seedEntity.content
+                        });
+                    }
 
-                    });
-            }); 
-            nodeContainer.get("seeding").add(seed);             
+                });
+            });
+            nodeContainer.get("seeding").add(seed);
         });
 
         //_.each(param.seeding, function(seedItem) {
@@ -279,7 +279,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         //    }); 
         //    nodeContainer.get("seeding").add(seed);             
         //});
-        
+
 
 
     };
@@ -288,7 +288,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         nodeCanvas.each(function(node) {
             var relations = node.get("relation");
             relations.each(function(relation) {
-              NodeEntities.AddRelation(node,relation);
+                NodeEntities.AddRelation(node, relation);
             });
         });
     };
@@ -303,71 +303,70 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
     NodeEntities.AddRelation = function(node, relation) {
         //console.log(relation);
-                var sourceNodeContainer = node;
-                var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-                var destinationRelationModel = relation;
+        var sourceNodeContainer = node;
+        var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+        var destinationRelationModel = relation;
 
-                var raiseVent = function(evName) {
-                    DesignerApp.vent.trigger("noderelation:" + evName, {
-                        srcNodeContainer: sourceNodeContainer,
-                        dstRelation: destinationRelationModel
-                    });
-                    //console.log(evName);
-                };
+        var raiseVent = function(evName) {
+            DesignerApp.vent.trigger("noderelation:" + evName, {
+                srcNodeContainer: sourceNodeContainer,
+                dstRelation: destinationRelationModel
+            });
+            //console.log(evName);
+        };
 
-                //on delete node also delte referenced relation
-                relation.on('change:relatedmodel', function(relationModel) {
-                    relation.stopListening();
+        //on delete node also delte referenced relation
+        relation.on('change:relatedmodel', function(relationModel) {
+            relation.stopListening();
 
-                    //console.log(relationModel);
+            //console.log(relationModel);
 
-                    var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
-                    relation.listenTo(targetModel, "destroy", function() {
-                        raiseVent("destroyme");
-                        relation.destroy();
-                    });
-                    raiseVent("change");
-                });
+            var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+            relation.listenTo(targetModel, "destroy", function() {
+                raiseVent("destroyme");
+                relation.destroy();
+            });
+            raiseVent("change");
+        });
 
-                //on relation type change update overlay
-                relation.on("change:relationtype", function() {
-                    raiseVent("redraw");
-                });
+        //on relation type change update overlay
+        relation.on("change:relationtype", function() {
+            raiseVent("redraw");
+        });
 
-                //on target table destroy, destroy our relation
-                relation.listenTo(targetNodeContainer, "destroy", function() {
-                    raiseVent("destroy");
-                    relation.destroy();
-                });
+        //on target table destroy, destroy our relation
+        relation.listenTo(targetNodeContainer, "destroy", function() {
+            raiseVent("destroy");
+            relation.destroy();
+        });
 
-                //on target table relation rename, change our reference and update overlay
-                relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
-                    relation.set("relatedmodel", targetNode.get("name"), {
-                        silent: true
-                    });
-                    raiseVent("rename");
-                });
+        //on target table relation rename, change our reference and update overlay
+        relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
+            relation.set("relatedmodel", targetNode.get("name"), {
+                silent: true
+            });
+            raiseVent("rename");
+        });
 
-                //on our table rename update overlay
-                relation.listenTo(sourceNodeContainer, "change:name", function(targetNode) {
-                    raiseVent("rename");
-                });
+        //on our table rename update overlay
+        relation.listenTo(sourceNodeContainer, "change:name", function(targetNode) {
+            raiseVent("rename");
+        });
 
-                //on destroy clean up
-                relation.on("destroy", function() {
-                    raiseVent("destroy");
-                    relation.stopListening();
-                    relation.off();
-                    relation.destroy();
-                });
+        //on destroy clean up
+        relation.on("destroy", function() {
+            raiseVent("destroy");
+            relation.stopListening();
+            relation.off();
+            relation.destroy();
+        });
 
-                raiseVent("add");
-            
+        raiseVent("add");
+
     };
 
 
-    NodeEntities.ExportToJSON = function()
-    {
+    NodeEntities.ExportToJSON = function() {
         var varNodeCanvas = nodeCanvas;
 
         var nodes = [];
@@ -381,12 +380,12 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 modelclass: nodeContainer.get('modelclass'),
                 increment: nodeContainer.get('increment'),
                 timestamp: nodeContainer.get('timestamp'),
-                softdelete: nodeContainer.get('softdelete'),                
+                softdelete: nodeContainer.get('softdelete'),
                 column: [],
                 relation: [],
                 seeding: [],
             };
-          
+
             nodeContainer.get('column').each(function(columnItem) {
                 var col = columnItem.toJSON();
                 var tmp = {
@@ -398,9 +397,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                     defaultvalue: col.defaultvalue,
                     enumvalue: col.enumvalue
                 };
-                nodetmp.column.push(tmp);
+                nodetmp.column.push(col);
             });
-  
+
             nodeContainer.get('relation').each(function(relationItem) {
                 var rel = relationItem.toJSON();
                 var tmp = {
@@ -413,9 +412,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 };
                 nodetmp.relation.push(tmp);
             });
-            
+
             var seeding = nodeContainer.getSeeding();
-            seeding.each(function(seedItem){
+            seeding.each(function(seedItem) {
                 nodetmp.seeding.push(seedItem.get("column").toJSON());
             });
 
@@ -426,11 +425,150 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     };
 
 
+    var CreateTableCommand = function(TableParam) {
+      
+        var field_options = {
+            "ai": "autoincrements",
+            "pk": "primarykey",
+            "nu": "nullable",
+            "ui": "unsigned",
+            "in": "index",
+            "un": "unique",
+            "integer": "integer",
+            //"guarded": "guarded",
+            //"fillable": "fillable",
+            //"visible": "visible",
+            //"hidden": "hidden",
+        };
+
+        var set_default_txt = function(col)
+        {
+                if (col.defaultvalue) {
+                    return (":default('" + col.defaultvalue +  "')"); 
+                }else{
+                    return "";
+                }
+        };
+
+        //php artisan generate:migration create_posts_table --fields="title:string, body:text"
+        //console.log(TableParam.name);
+
+        var table_cmd = "";
+
+        for (var col in TableParam.column) {
+            //console.log(TableParam.column[col]);
+            var field_cmd = "";
+
+            var column = TableParam.column[col];
+
+            field_cmd += column.name;
+
+            //console.log(column);
+            //options
+            switch(column.type)
+            {
+                case "string":
+                //length
+                //defaultvalue
+                field_cmd += ":string";
+                field_cmd += set_default_txt(column);
+                if (column.length) field_cmd += (":length('" + column.length +  "')");                 
+                break;
+                case "text":
+                //defaultvalue
+                field_cmd += ":text";
+                field_cmd += set_default_txt(column);
+                break; 
+                case "tinyInteger":
+                field_cmd += ":tinyinteger";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "smallInteger":
+                field_cmd += ":smallinteger";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "mediumInteger":
+                field_cmd += ":mediuminteger";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "integer":
+                field_cmd += ":integer";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "bigInteger":
+                field_cmd += ":biginteger";
+                field_cmd += set_default_txt(column);
+                break; 
+                case "float":
+                field_cmd += ":float";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "decimal":
+                field_cmd += ":decimal";
+                field_cmd += set_default_txt(column);
+                break;                 
+                case "boolean":                
+                //default value
+                field_cmd += set_default_txt(column);
+                break;
+                case "enum":                
+                //enum value
+                field_cmd +=(column.enumvalue);                                
+                break;                           
+                case "timestamps":
+                field_cmd += ":timestamps";                                
+                break; 
+                case "increments":
+                field_cmd += ":increments";                                
+                break; 
+                case "bigIncrements":
+                field_cmd += ":bigIncrements";                                
+                break;    
+                case "softDeletes":
+                field_cmd += ":softDeletes";                                
+                break;                                                            
+            }
+
+
+            for (var options in field_options)
+            {
+                if (column[options]) field_cmd +=  ":" +(  field_options[options]  );
+            }
+
+            if (field_cmd) {
+                table_cmd += "" + (field_cmd) + ",";
+            }
+
+        }
+
+        return ('php artisan generate:migration ' + 'create_' + TableParam.name.toLowerCase() + '_table' + ' --fields="' + table_cmd + '"');
+    };
+
+
+    NodeEntities.GenerateCode = function() {
+
+        var all_table_command  = "";
+
+        var json_data = NodeEntities.ExportToJSON();
+
+        _.each(json_data, function(table) {
+
+
+            all_table_command += CreateTableCommand(table) + "\n\n";
+            // _.each(table.relation, function(rel){
+            //     console.log("  create relation function " + rel.name + "() related model: " + rel.relatedmodel + " type: "  + rel.relationtype);
+            // });
+
+        });
+
+        return all_table_command;
+    };
+
     NodeEntities.ClearNodeCanvas = function(nodeCanvasParam) {
-       
+
         var node;
         while (node = nodeCanvasParam.first()) {
-           //console.log("destroy " + node.get("name"));
+            //console.log("destroy " + node.get("name"));
             var column;
             while (column = node.get("column").first()) {
                 column.destroy();
@@ -454,7 +592,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 //console.log("destroy seed: " + seeding.cid);
             }
 
-           node.destroy();
+            node.destroy();
         }
 
     };

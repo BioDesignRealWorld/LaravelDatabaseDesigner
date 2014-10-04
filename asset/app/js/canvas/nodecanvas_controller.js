@@ -48,8 +48,13 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         $("#fileSaveDialog").trigger("click");
     });
 
-    viewNodeCanvas.on("canvas:dump", function() {
-        console.log(DesignerApp.NodeEntities.ExportToJSON());
+    viewNodeCanvas.on("canvas:generate", function() {
+
+        var view = new DesignerApp.NodeModule.Modal.Generate({
+            content: DesignerApp.NodeEntities.GenerateCode()
+        });
+        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+
     });
 
     //
@@ -65,7 +70,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         });
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
-        view.listenTo(view,"okClicked", function(data) {
+        view.listenTo(view, "okClicked", function(data) {
             //console.log(data);
             if (containerModel.set(data, {
                 validate: true
@@ -111,8 +116,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             }
         });
 
-        modal.on("hidden", function()
-        {
+        modal.on("hidden", function() {
             modal.off();
             view.remove();
         });
@@ -209,7 +213,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         view.listenTo(view, "delClicked", function(data) {
             data.destroy();
-            nodeContainer.set("seeding", view.seeding);            
+            nodeContainer.set("seeding", view.seeding);
             //console.log("wedew");
         });
 
@@ -221,7 +225,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 var key_to_colid = nodeItem.findWhere({
                     name: key
                 }).get("colid");
-                                console.log(key_to_colid);
+                console.log(key_to_colid);
 
                 seed.get("column").add({
                     colid: key_to_colid,
@@ -229,15 +233,15 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 });
 
             });
-            
-            view.seeding.add(seed); 
+
+            view.seeding.add(seed);
             //nodeSeeding.add(seed);
             nodeContainer.set("seeding", view.seeding);
 
             modal.preventClose();
         });
 
-        modal.on("hidden", function(){
+        modal.on("hidden", function() {
             //console.log("hidden");
             nodeContainer.set("seeding", view.seeding);
             view.seedview.destroy();

@@ -33,6 +33,28 @@
         </div>
         <!-- Template
         ================================================== -->
+        <script type="text/template" id="generate-template">
+
+        <form class="form-horizontal">
+        <fieldset>
+
+        <!-- Form Name -->
+        <legend>Generate Table</legend>
+
+        <!-- Textarea -->
+        <div class="form-group">
+          <div class="col-md-4">                     
+            <textarea style="width: 563px; height: 359px" class="form-control" id="txtcommand" name="txtcommand"><%=content%></textarea>
+          </div>
+        </div>
+
+
+        </fieldset>
+        </form>
+
+        </script>        
+        <!-- Template
+        ================================================== -->
         <script type="text/template" id="nodemodel-template">
         <form class="form-horizontal">
             <fieldset>
@@ -193,7 +215,7 @@
             <button type="button" class="btn btn-default btn-xs addcontainer"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
             <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
             <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
-            <button type="button" class="btn btn-default btn-xs dump"><span style="margin-right: 2px" class="glyphicon glyphicon-briefcase "></span>dump</button>
+            <button type="button" class="btn btn-default btn-xs generate"><span style="margin-right: 2px" class="glyphicon  glyphicon-cutlery "></span>generate</button>            
         </div>
         </script>
         <!-- Template
