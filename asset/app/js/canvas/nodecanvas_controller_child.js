@@ -1,67 +1,7 @@
 DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Backbone, Marionette, $, _) {
 
-    // INIT CANVAS
+    var viewNodeCanvas = Controller.viewNodeCanvas;
 
-    var viewNodeCanvas = new DesignerApp.NodeCanvas.Views.NodeCanvas({
-        collection: DesignerApp.NodeEntities.getNodeCanvas()
-    });
-
-    //
-    //
-    //  MAIN CANVAS
-    //
-    //
-
-    viewNodeCanvas.on("canvas:createcontainer", function() {
-
-        var container = DesignerApp.NodeEntities.getNewNodeContainer();
-        console.log(container);
-        var view = new DesignerApp.NodeModule.Modal.CreateNodeContainer({
-            model: container
-        });
-
-        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
-
-        view.on("okClicked", function(data) {
-            if (container.set(data, {
-                validate: true
-            })) {
-                data.position = {
-                    x: 100,
-                    y: 100
-                };
-                DesignerApp.NodeEntities.AddNewNode(data);
-            } else {
-                view.trigger("formDataInvalid", container.validationError);
-                modal.preventClose();
-            }
-        });
-
-    });
-
-
-    viewNodeCanvas.on("canvas:open", function() {
-        $("#fileOpenDialog").trigger("click");
-    });
-
-    viewNodeCanvas.on("canvas:save", function() {
-        $("#fileSaveDialog").trigger("click");
-    });
-
-    viewNodeCanvas.on("canvas:generate", function() {
-
-        var view = new DesignerApp.NodeModule.Modal.Generate({
-            content: DesignerApp.NodeEntities.GenerateCode()
-        });
-        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
-
-    });
-
-    //
-    //
-    //  CHILD NODES
-    //
-    //
 
     viewNodeCanvas.on("childview:container:editcontainer", function(childview) {
         var containerModel = childview.model;
@@ -251,70 +191,5 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
 
     });
-
-    //todo refactor
-    DesignerApp.commands.setHandler("nodecanvas:edit:relation", function(a, b) {
-
-        var view = new DesignerApp.NodeModule.Modal.EditRelationItem({
-            model: b
-        }, {
-            container: a
-        });
-        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
-
-        view.on("okClicked", function(data) {
-            if (b.set(data, {
-                validate: true
-            })) {
-
-            } else {
-                view.trigger("formDataInvalid", b.validationError);
-                modal.preventClose();
-            }
-        });
-
-        view.on("delClicked", function(model) {
-            model.destroy();
-        });
-
-        //console.log("Wew");
-
-    });
-
-    //todo: refactor this
-    DesignerApp.commands.setHandler("nodecanvas:create:relation", function(containerModel, targetId) {
-
-        var targetName = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("name");
-
-        var view = new DesignerApp.NodeModule.Modal.CreateRelation({
-            model: containerModel,
-            target: targetName
-        });
-
-        var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
-
-        view.listenTo(view, "okClicked", function(data) {
-            var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
-            if (new_rel.set(data, {
-                validate: true
-            })) {
-                var relation = containerModel.get("relation");
-                relation.add(new_rel);
-                DesignerApp.NodeEntities.AddRelation(containerModel, new_rel);
-                // console.log(new_rel);
-            } else {
-                view.trigger("formDataInvalid", new_rel.validationError);
-                modal.preventClose();
-                // console.log("error");
-            }
-        });
-
-    });
-
-    //
-    //  LAUNCH
-    //
-
-    DesignerApp.mainContent.show(viewNodeCanvas);
 
 });

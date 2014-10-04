@@ -4,7 +4,7 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
 
 
     DesignerApp.commands.setHandler("draw:relation:model", function() {
-        DesignerApp.NodeEntities.AddNodeCanvas(node_data);
+        
     });
 
     DesignerApp.reqres.setHandler("nodeentities:new:nodeitem", function(type) {

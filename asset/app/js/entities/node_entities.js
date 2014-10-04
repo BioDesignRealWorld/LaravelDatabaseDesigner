@@ -212,6 +212,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
     var nodeCanvas = new NodeCanvas();
 
+    NodeEntities.CurrentNodeCanvas = nodeCanvas;
+
     NodeEntities.getNewNodeContainer = function() {
         return new NodeContainer();
     };

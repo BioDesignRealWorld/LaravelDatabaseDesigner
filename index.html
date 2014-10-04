@@ -40,7 +40,6 @@
 
         <!-- Form Name -->
         <legend>Generate Table</legend>
-
         <!-- Textarea -->
         <div class="form-group">
           <div class="col-md-4">                     
@@ -213,9 +212,20 @@
         <script type="text/template" id="nodecanvas-template">
         <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
             <button type="button" class="btn btn-default btn-xs addcontainer"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
-            <button type="button" class="btn btn-default btn-xs open"><span style="margin-right: 2px" class="glyphicon glyphicon glyphicon-floppy-open "></span>open</button>
-            <button type="button" class="btn btn-default btn-xs save"><span style="margin-right: 2px" class="glyphicon glyphicon-floppy-save "></span>save</button>
-            <button type="button" class="btn btn-default btn-xs generate"><span style="margin-right: 2px" class="glyphicon  glyphicon-cutlery "></span>generate</button>            
+            <button type="button" class="btn btn-default btn-xs generate"><span style="margin-right: 2px" class="glyphicon  glyphicon-cutlery "></span>generate</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                File <span class="caret "></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a class="save" href="#">Save</a></li>
+                    <li><a class="saveas" href="#">Save As</a></li>
+                    <li><a class="open" href="#">Open</a></li>
+                    <li class="divider"></li>
+                    <li><a class="loadexample" href="#">Load Example</a></li>                    
+                    <li><a class="clearcanvas" href="#">Clear Canvas</a></li>
+                </ul>
+            </div>
         </div>
         </script>
         <!-- Template
@@ -470,6 +480,16 @@
                 </fieldset>
             </form>
             </script>            
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="opengist-template">
+            <div class="list-group">
+                <a href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">List group item heading</h4>
+                <p class="list-group-item-text">...</p>
+                </a>
+            </div>
+            </script>            
             <!-- Bootstrap core JavaScript
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->
@@ -482,13 +502,25 @@
             <script src="bower_components/marionette/lib/backbone.marionette.js"></script>
             <script src="bower_components/backbone.syphon/lib/backbone.syphon.js"></script>
             <script src="bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal.js"></script>
+            <!-- region -->
             <script src="asset/app/js/node_app.js"></script>
+            <!-- schema entity -->            
             <script src="asset/app/js/entities/node_entities.js"></script>
-            <script src="asset/app/js/node/node_view.js"></script>
-            <script src="asset/app/js/node/node_modal.js"></script>
-            <script src="asset/app/js/canvas/nodecanvas_view.js"></script>            
-            <script src="asset/app/js/canvas/nodecanvas_controller.js"></script>
+            <!-- node -->
+            <script src="asset/app/js/node/node_view.js"></script>            
+            <script src="asset/app/js/node/node_modal_base.js"></script>
+            <script src="asset/app/js/node/node_modal_container.js"></script>
+            <script src="asset/app/js/node/node_modal_generate.js"></script>
+            <script src="asset/app/js/node/node_modal_item.js"></script>
+            <script src="asset/app/js/node/node_modal_relation.js"></script>
+            <script src="asset/app/js/node/node_modal_seed.js"></script>
             <script src="asset/app/js/node/node_controller.js"></script>            
+            <!-- canvas -->
+            <script src="asset/app/js/canvas/nodecanvas_view.js"></script>        
+            <script src="asset/app/js/canvas/nodecanvas_controller_base.js"></script>
+            <script src="asset/app/js/canvas/nodecanvas_controller_canvas.js"></script>
+            <script src="asset/app/js/canvas/nodecanvas_controller_child.js"></script>
+            <!-- main startup -->
             <script src="asset/app/js/main.js"></script>
             <script src="asset/app/js/node-webkit/node.js"></script>
 
