@@ -159,7 +159,6 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         view.listenTo(view, "okClicked", function(data) {
             saveGist(data.filename + ".skema", data.description);
-            modal.preventClose();
         });
 
     });
