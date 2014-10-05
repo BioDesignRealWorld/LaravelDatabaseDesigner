@@ -1,5 +1,5 @@
 
-var GITHUB_CLIENT_ID = '25bbf727cf799dcb1081';
+var GITHUB_CLIENT_ID = '24a55ca0b82c7203cfd6';
 var OAUTH_PROXY_URL = 'https://auth-server.herokuapp.com/proxy';
 
 var authenticated = false;
