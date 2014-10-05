@@ -220,7 +220,11 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a class="save" href="#">Save</a></li>
                     <li><a class="saveas" href="#">Save As</a></li>
-                    <li><a class="open" href="#">Open</a></li>
+                    <li class="divider"></li>                    
+                    <li><a class="opengist" href="#">Open from Gist</a></li>
+                    <li><a class="opengistid" href="#">Open Gist ID</a></li>
+                    <li><a class="savecurrentgis" href="#">Save current Gist</a></li>
+                    <li><a class="saveasgist" href="#">Save as Gist</a></li>
                     <li class="divider"></li>
                     <li><a class="loadexample" href="#">Load Example</a></li>                    
                     <li><a class="clearcanvas" href="#">Clear Canvas</a></li>
@@ -479,17 +483,19 @@
 
                 </fieldset>
             </form>
-            </script>            
+            </script>               
             <!-- Template
             ================================================== -->
-            <script type="text/template" id="gistload-template">
+            <script type="text/template" id="gistfile-template">
             <div class="list-group">
-                <a href="#" class="list-group-item active">
-                <h4 class="list-group-item-heading">List group item heading</h4>
-                <p class="list-group-item-text">...</p>
-                </a>
-            </div>
-            </script>            
+            <% _.each(gistlist, function(item) { %>
+            <a href="#" class="list-group-item" tag="<%=item.id%>" >
+                <h4 class="list-group-item-heading"><%= item.description%></h4>
+                <p class="list-group-item-text"><%= item.filename %></p>
+            </a>
+            <% }); %>
+            </div>            
+            </script>               
             <!-- Template
             ================================================== -->
             <script type="text/template" id="gistsave-template">
@@ -497,13 +503,22 @@
             <fieldset>
 
             <!-- Form Name -->
-            <legend>Save to Dropbox</legend>
+            <legend>Save as Gist</legend>
 
             <!-- Text input-->
             <div class="form-group">
-              <label class="col-md-4 control-label" for="textinput">Filename</label>  
+              <label class="col-md-4 control-label" for="filename">Filename</label>  
               <div class="col-md-4">
-              <input id="filename" name="filename" type="text" placeholder="filename.skema" class="form-control input-md">
+              <input id="filename" name="filename" type="text" placeholder="" class="form-control input-md">
+                
+              </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+              <label class="col-md-4 control-label" for="description">Description</label>  
+              <div class="col-md-4">
+              <input id="description" name="description" type="text" placeholder="" class="form-control input-md">
                 
               </div>
             </div>
@@ -512,15 +527,46 @@
             <div class="form-group">
               <label class="col-md-4 control-label" for="button1id"></label>
               <div class="col-md-8">
-                <button id="button1id" name="button1id" class="btn ok btn-success">Save</button>
+                <button id="button1id" name="button1id" class="btn ok btn-success">Ok</button>
                 <button id="button2id" name="button2id" class="btn cancel btn-danger">Cancel</button>
               </div>
             </div>
 
             </fieldset>
             </form>
-            </script>
 
+            </script>
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="gistload-template">
+            <legend>Load file From Gist</legend>
+            </script>
+            <!-- Template
+            ================================================== -->
+            <script type="text/template" id="gistloadid-template">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <!-- Form Name -->
+                        <legend>Load file From Gist</legend>
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="textinput">Gist ID</label>
+                            <div class="col-md-4">
+                                <input id="filename" name="filename" type="text" placeholder="" class="form-control input-md">
+                                
+                            </div>
+                        </div>
+                        <!-- Button (Double) -->
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="button1id"></label>
+                            <div class="col-md-8">
+                                <button id="button1id" name="button1id" class="btn ok btn-success">Open</button>
+                                <button id="button2id" name="button2id" class="btn cancel btn-danger">Cancel</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+             </script>
             <!-- Bootstrap core JavaScript
             ================================================== -->
             <!-- Placed at the end of the document so the pages load faster -->

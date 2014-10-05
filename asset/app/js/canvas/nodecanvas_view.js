@@ -12,6 +12,10 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "click .generate": "canvas:generate",
             "click .clearcanvas": "canvas:clearcanvas",
             "click .loadexample": "canvas:loadexample",
+            "click .opengist": "canvas:opengist",
+            "click .opengistid": "canvas:opengistid",
+            "click .savecurrentgis": "canvas:savecurrentgis",
+            "click .saveasgist": "canvas:saveasgist",
             "dblclick": "canvas:createcontainer"
         },
     });
