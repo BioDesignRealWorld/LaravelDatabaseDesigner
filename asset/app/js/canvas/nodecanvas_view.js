@@ -29,11 +29,11 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "loaded" : "loaded"
         },initialize: function()
         {
-                        this.$(".savecurrentgis").hide();
-
         },
         loaded: function(){
             this.$(".savecurrentgis").show();
+        },onRender: function(){
+            this.$(".savecurrentgis").hide();
         }
 
     });
