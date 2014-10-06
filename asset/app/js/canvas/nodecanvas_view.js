@@ -29,6 +29,7 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "loaded" : "loaded"
         },initialize: function()
         {
+            this.listenTo(this,"loaded", this.loaded);
         },
         loaded: function(){
             this.$(".savecurrentgis").show();
