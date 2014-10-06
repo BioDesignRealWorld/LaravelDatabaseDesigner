@@ -20,8 +20,8 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         listGistFiles: function(data)
         {
-            var test = _.template($("#gistfile-template").html());
-            this.$el.append(test({gistlist: data}));
+            var gist_file_list = _.template($("#gistfile-template").html());
+            this.$("#gistfiles").html(gist_file_list({gistlist: data}));
         },
         okClicked: function()
         {
