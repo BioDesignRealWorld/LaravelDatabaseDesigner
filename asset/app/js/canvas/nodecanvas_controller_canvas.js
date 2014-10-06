@@ -159,13 +159,20 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("canvas:saveasgist", function() {
+
+         if (!authenticated) {
+            hello.login("github", {
+                scope: "gist"
+            });
+        } else {
+
         var view = new DesignerApp.NodeModule.Modal.GistSaveAs({});
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.listenTo(view, "okClicked", function(data) {
             saveGist(data.filename + ".skema", data.description);
         });
-
+        }
     });
 
 
