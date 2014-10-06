@@ -5,7 +5,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     var loadGist = function(gistId) {
         var github = hello("github");
-        github.api('/gists/' + gistId, 'get').then(function(resp) {
+        github.api('/gists/' + gistId, 'get', {random : Math.random()}).then(function(resp) {
 
             var first_key = resp.files[Object.keys(resp.files)[0]]; //returns 'someVal'
 
