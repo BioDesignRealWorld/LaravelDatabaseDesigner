@@ -3,6 +3,11 @@ Laravel Database Designer
 
 Laravel Database Designer is a graphical migration tools for creating database schema for Laravel 4 PHP Framework. Laravel Database Designer is heavily inspired by Laravel Schema Designer (http://laravelsd.com)
 
+![screnshot](http://biodesignrealworld.github.io/LaravelDatabaseDesigner/screenshot.png)
+
+
+Start using LaravelDB Designer here http://biodesignrealworld.github.io/LaravelDatabaseDesigner/
+
 Version
 ----
 
@@ -33,9 +38,7 @@ License
 
 MIT
 
-[Marionette]:https://github.com/marionettejs/backbone.marionette
-[Backbonejs]:https://github.com/jashkenas/backbone
-[Hellojs]:https://github.com/MrSwitch/hello.js
+
 [node.js]:http://nodejs.org
 [Twitter Bootstrap]:http://twitter.github.com/bootstrap/
 [keymaster.js]:https://github.com/madrobby/keymaster
