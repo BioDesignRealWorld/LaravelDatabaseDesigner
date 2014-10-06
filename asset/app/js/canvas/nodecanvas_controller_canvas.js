@@ -15,6 +15,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 var jsonfile = (JSON.parse(first_key.content));
                 DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.getNodeCanvas());
                 DesignerApp.NodeEntities.AddNodeCanvas(jsonfile);
+                DesignerApp.vent.trigger("gist:file:loaded");
             }
         });
     };
