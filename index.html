@@ -31,6 +31,41 @@
                 <img src="asset/img/biodesign-logo-web.png" alt="">
             </div>
         </div>
+
+        <script type="text/template" id="loadingprogress-template">
+            <div class="progress-bar-striped active progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">Loading</div>
+        </script>
+
+        <script type="text/template" id="testlayout-template">
+            <div id="menu"></div>
+            <div id="info"></div>
+            <div id="content"></div>
+        </script>
+        <!-- Template
+        ================================================== -->
+        <script type="text/template" id="menu-template">
+                <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
+                    <button type="button" class="btn btn-default btn-xs addcontainer"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
+                    <button type="button" class="btn btn-default btn-xs generate"><span style="margin-right: 2px" class="glyphicon  glyphicon-cutlery "></span>generate</button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        File <span class="caret "></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a class="save" href="#">Save</a></li>
+                            <li><a class="saveas" href="#">Save As</a></li>
+                            <li class="divider"></li>                    
+                            <li><a class="opengist" href="#">Open from Gist</a></li>
+                            <li><a class="opengistid" href="#">Open Gist ID</a></li>
+                            <li><a class="savecurrentgis" href="#">Save current Gist</a></li>
+                            <li><a class="saveasgist" href="#">Save as Gist</a></li>
+                            <li class="divider"></li>
+                            <li><a class="loadexample" href="#">Load Example</a></li>                    
+                            <li><a class="clearcanvas" href="#">Clear Canvas</a></li>
+                        </ul>
+                    </div>
+                </div>
+        </script>
         <!-- Template
         ================================================== -->
         <script type="text/template" id="generate-template">
@@ -210,24 +245,7 @@
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodecanvas-template">
-        <div class="btn-group toolbox" style="padding: 10px; position: fixed; z-index: 100;">
-            <button type="button" class="btn btn-default btn-xs addcontainer"><span style="margin-right: 2px" class="glyphicon glyphicon-plus "></span>new table</button>
-            <button type="button" class="btn btn-default btn-xs generate"><span style="margin-right: 2px" class="glyphicon  glyphicon-cutlery "></span>generate</button>
-            <div class="btn-group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                File <span class="caret "></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a class="opengist" href="#">Open from Gist</a></li>
-                    <li><a class="opengistid" href="#">Open Gist ID</a></li>
-                    <li><a class="saveasgist" href="#">Save as Gist</a></li>
-                    <li><a class="savecurrentgis" href="#">Save Gist</a></li>
-                    <li class="divider"></li>
-                    <li><a class="loadexample" href="#">Load Example</a></li>                    
-                    <li><a class="clearcanvas" href="#">Clear Canvas</a></li>
-                </ul>
-            </div>
-        </div>
+
         </script>
         <!-- Template
         ================================================== -->

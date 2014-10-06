@@ -4,11 +4,9 @@ body{margin:0}
 #container {
         width: 2440px;
         height: 2440px;
-                border: 1px solid gray;
-
     }
 div#container {
-    background-color: #fff;
+    background-color: #FFF;
 }
 .node-column {
 	background-color: rgba(255, 255, 255, 0.72);
@@ -157,4 +155,8 @@ background-color: #F1F1F1;
 
     background-color: #fff;
 
+}
+
+div#info {
+    padding: 10px; position: fixed; width: 200px; right: 0px;
 }

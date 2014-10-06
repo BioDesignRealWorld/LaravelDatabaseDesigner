@@ -1,6 +1,6 @@
 DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Backbone, Marionette, $, _) {
 
-    var viewNodeCanvas = Controller.viewNodeCanvas;
+    var viewNodeCanvas = Controller.viewCanvasMenu;
 
 
     var loadGist = function(gistId) {
@@ -36,7 +36,7 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     };
 
-    var updateGist = function(gistID) {
+    var updateGist = function(gistID, callback) {
         var json_post = {
                           "description": "the description for this gist",
                           "files": {
@@ -47,8 +47,11 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         json_post.files[gistfilename] = {content: JSON.stringify(DesignerApp.NodeEntities.ExportToJSON())};
 
         var github = hello("github");
-        github.api('/gists/' + gistID, 'patch', json_post).then(function(resp) {
-            console.log(resp);
+            DesignerApp.vent.trigger("canvas:loading:start");
+        github.api('/gists/' + gistID, 'patch', json_post).then(function(resp){
+            DesignerApp.vent.trigger("canvas:loading:stop");
+        }, function(){
+            DesignerApp.vent.trigger("canvas:loading:stop");
         });
     };
 
@@ -150,7 +153,9 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     });
 
     viewNodeCanvas.on("canvas:savecurrentgis", function() {
-        updateGist(gistloadedid);
+        updateGist(gistloadedid, function(r){
+            console.log(r);
+        });
     });
 
     viewNodeCanvas.on("canvas:saveasgist", function() {

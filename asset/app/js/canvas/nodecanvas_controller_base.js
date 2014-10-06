@@ -5,11 +5,43 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     Controller.viewNodeCanvas = new DesignerApp.NodeCanvas.Views.NodeCanvas({
         collection: DesignerApp.NodeEntities.getNodeCanvas()
     });
+
+    Controller.viewCanvasMenu = new DesignerApp.NodeCanvas.Views.MenuView();
+
     //
     //  LAUNCH
     //
 
-    DesignerApp.mainContent.show(Controller.viewNodeCanvas);
+var AppLayoutView = Backbone.Marionette.LayoutView.extend({
+  template: "#testlayout-template",
+
+  regions: {
+    menu: "#menu",
+    info: "#info",
+    content: "#content"
+  }
+});
+
+var LoadingView = Backbone.Marionette.ItemView.extend({
+    template: "#loadingprogress-template",
+    className: "progress"
+});
+
+
+var layoutView = new AppLayoutView();
+
+DesignerApp.mainContent.show(layoutView);
+layoutView.menu.show(Controller.viewCanvasMenu);
+layoutView.content.show(Controller.viewNodeCanvas);
+
+
+    DesignerApp.vent.on("canvas:loading:start", function(param) {
+        layoutView.info.show(new LoadingView());
+    });
+
+    DesignerApp.vent.on("canvas:loading:stop", function(param) {
+        layoutView.info.reset();
+    });
 
 
     //todo refactor

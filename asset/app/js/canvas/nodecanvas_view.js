@@ -5,6 +5,13 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
         template: "#nodecanvas-template",
         childView: DesignerApp.NodeModule.Views.NodeContainer,
         triggers: {
+            "dblclick": "canvas:createcontainer"
+        },
+    });
+
+    Views.MenuView = Marionette.ItemView.extend({
+    template: "#menu-template",
+            triggers: {
             "click .addcontainer": "canvas:createcontainer",
             "click .open": "canvas:open",
             "click .save": "canvas:save",
@@ -18,6 +25,8 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "click .saveasgist": "canvas:saveasgist",
             "dblclick": "canvas:createcontainer"
         },
+
     });
+
 
 });

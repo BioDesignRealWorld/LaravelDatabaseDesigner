@@ -54,7 +54,6 @@
 
                 this.trigger('hidden');
                 Modal.count--;
-                this.close();
                 //console.log(Modal.count);
             },
             'click .close': function(event) {
