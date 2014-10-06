@@ -35,6 +35,12 @@ layoutView.menu.show(Controller.viewCanvasMenu);
 layoutView.content.show(Controller.viewNodeCanvas);
 
 
+    DesignerApp.vent.on("gist:file:loaded", function(param) {
+        Controller.viewCanvasMenu.trigger("loaded");
+    });
+
+
+
     DesignerApp.vent.on("canvas:loading:start", function(param) {
         layoutView.info.show(new LoadingView());
     });

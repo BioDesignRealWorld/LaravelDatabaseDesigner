@@ -25,6 +25,16 @@ DesignerApp.module("NodeCanvas.Views", function(Views, DesignerApp, Backbone, Ma
             "click .saveasgist": "canvas:saveasgist",
             "dblclick": "canvas:createcontainer"
         },
+        events: {
+            "loaded" : "loaded"
+        },initialize: function()
+        {
+                        this.$(".savecurrentgis").hide();
+
+        },
+        loaded: function(){
+            this.$(".savecurrentgis").show();
+        }
 
     });
 
