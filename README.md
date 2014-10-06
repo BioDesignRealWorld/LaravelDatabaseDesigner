@@ -33,11 +33,17 @@ bower install
 open index.html
 ```
 
+Author
+--------------
+Budi Prakosa a.k.a [badgeek] 
+
 License
 ----
 
 MIT
 
+
+[badgeek]:https://github.com/badgeek
 [jsplumb]:http://jsplumb.org
 [Nodewebkit]:https://github.com/rogerwang/node-webkit
 [Marionette]:https://github.com/marionettejs/
