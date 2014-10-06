@@ -102,14 +102,9 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
 
     viewNodeCanvas.on("canvas:opengist", function() {
-        if (!authenticated) {
-            hello.login("github", {
-                scope: "gist"
-            });
-        } else {
 
-
-
+        var showOpenWindow = function()
+        {
             var view = new DesignerApp.NodeModule.Modal.GistLoad({});
             view.listenTo(view, "okClicked", function(fileName) {
                 loadGist(fileName);
@@ -139,6 +134,16 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
 
             var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
+        };
+
+        if (!authenticated) {
+            hello.login("github", {
+                scope: "gist"
+            }).then(function(){
+                showOpenWindow();
+            });
+        } else {    
+            showOpenWindow();
         }
 
     });
@@ -160,18 +165,28 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
     viewNodeCanvas.on("canvas:saveasgist", function() {
 
-         if (!authenticated) {
-            hello.login("github", {
-                scope: "gist"
-            });
-        } else {
-
-        var view = new DesignerApp.NodeModule.Modal.GistSaveAs({});
+        var showSaveWindow = function()
+        {
+               var view = new DesignerApp.NodeModule.Modal.GistSaveAs({});
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.listenTo(view, "okClicked", function(data) {
             saveGist(data.filename + ".skema", data.description);
         });
+    };
+
+         if (!authenticated) {
+         
+            hello.login("github", {
+                scope: "gist"
+            }).then(function(){
+                            showSaveWindow();
+
+            });
+
+        } else {
+
+            showSaveWindow();
         }
     });
 
