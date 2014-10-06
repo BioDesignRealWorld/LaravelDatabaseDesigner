@@ -138,9 +138,26 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
     });
 
     Modal.EditNodeItem = Modal.CreateNodeItem.extend({
+        initialize: function() {
+            this.listenTo(this, "formDataInvalid", this.formDataInvalid);
+        },
         okClicked: function(modal) {
 
             this.trigger("okClicked", Backbone.Syphon.serialize(this));
+        },
+         render: function() {
+
+            this.$el.html(this.template(this.model.toJSON()));
+            this.$('#type').find('option[value=' + this.model.get('type') + ']').attr('selected', 'selected');
+            this.changeColumnType(this);
+
+            var chk_box = ["pk", "nu", "un", "ui", "in", "ai", "visible", "hidden", "guarded", "fillable"];
+            for (var item in chk_box){
+                var chk_id = (chk_box[item]);
+                this.$("#" + chk_id).prop('checked', this.model.get(chk_id));
+            }         
+
+            return this.el;
         }
     });
 
