@@ -15,7 +15,7 @@ Version
 Tech
 -----------
 
-Laravel Database Designer depends on various open source projecr:
+Laravel Database Designer depends on various open source projects:
 
 * [Marionette]
 * [Backbonejs]
