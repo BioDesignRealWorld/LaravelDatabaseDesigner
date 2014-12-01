@@ -6,6 +6,11 @@ Laravel Database Designer is a graphical migration tools for creating database s
 
 ![screnshot](http://biodesignrealworld.github.io/LaravelDatabaseDesigner/screenshot.png)
 
+Roadmap
+=========
+* [reboot] Port to Django Framework
+* [0.2] No Longer in Development
+
 
 Version
 ----
