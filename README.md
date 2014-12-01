@@ -10,7 +10,6 @@ Roadmap
 =========
 * Make Django Version
 * [0.3] Import Laravel Project to ERD
-* [0.2] No longer in development
 
 
 Version
