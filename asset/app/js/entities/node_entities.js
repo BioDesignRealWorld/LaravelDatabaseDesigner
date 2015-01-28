@@ -456,7 +456,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         //console.log(TableParam.name);
 
         var table_cmd = "";
-
+	var col_length = TableParam.column.length - 1;
+	
         for (var col in TableParam.column) {
             //console.log(TableParam.column[col]);
             var field_cmd = "";
@@ -537,8 +538,13 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 if (column[options]) field_cmd +=  ":" +(  field_options[options]  );
             }
 
+
             if (field_cmd) {
-                table_cmd += "" + (field_cmd) + ", ";
+                table_cmd += "" + (field_cmd);
+                if (col !== col_length)
+                {
+                	 table_cmd +=	", ";
+                }
             }
 
         }
