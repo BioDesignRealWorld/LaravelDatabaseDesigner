@@ -474,7 +474,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 //defaultvalue
                 field_cmd += ":string";
                 field_cmd += set_default_txt(column);
-                if (column.length) field_cmd += (":length('" + column.length +  "')");                 
+                if (column.length) field_cmd += ("(" + column.length +  ")");                 
                 break;
                 case "text":
                 //defaultvalue
@@ -538,7 +538,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             }
 
             if (field_cmd) {
-                table_cmd += "" + (field_cmd) + ",";
+                table_cmd += "" + (field_cmd) + ", ";
             }
 
         }
