@@ -21,12 +21,12 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             var templatevar = {
                 relationship: this.model.get('relation').toJSON(),
                 relatedmodel: parent.toJSON(),
-                title: "Create Relation in Table " + this.model.get('name')
+                title: "Create Relation in Model " + this.model.get('classname')
             };
             //
             //
             if (this.target) {
-                templatevar.title = "Create Relation Between " + this.model.get('name') + " and " + this.target;
+                templatevar.title = "Create Relation Between " + this.model.get('classname') + " and " + this.target;
             }
             //
             //
@@ -38,7 +38,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
                 this.$('#relation-relatedmodel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
             }
 
-            this.$('#relation-relatedmodel').find('option[value=' + this.model.get('name') + ']').remove(); //remove self (model) from option list
+            this.$('#relation-relatedmodel').find('option[value=' + this.model.get('classname') + ']').remove(); //remove self (model) from option list
             //
             return this.el;
         }
@@ -67,7 +67,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         },
         render: function() {
             var templatevar = {
-                title: 'Edit Relation in Table ' + this.container.get('name'),
+                title: 'Edit Relation in Model ' + this.container.get('classname'),
                 relationship: this.model.toJSON(),
                 //todo: change to reqreq
                 relatedmodel: DesignerApp.NodeEntities.getNodeCanvas().toJSON()
@@ -76,7 +76,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             // console.log(this.parent);
             this.$('#relation-relatedmodel').find('option[value=' + this.model.get('relatedmodel') + ']').attr('selected', 'selected'); //make destination selected by default
             this.$('#relation-relationtype').find('option[value=' + this.model.get('relationtype') + ']').attr('selected', 'selected'); //make destination selected by default
-            this.$('#relation-relatedmodel').find('option[value=' + this.container.get('name') + ']').remove(); //remove self (model) from option list
+            this.$('#relation-relatedmodel').find('option[value=' + this.container.get('classname') + ']').remove(); //remove self (model) from option list
 
             return this.el;
 

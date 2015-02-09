@@ -343,8 +343,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         });
 
         //on target table relation rename, change our reference and update overlay
-        relation.listenTo(targetNodeContainer, "change:name", function(targetNode) {
-            relation.set("relatedmodel", targetNode.get("name"), {
+        relation.listenTo(targetNodeContainer, "change:classname", function(targetNode) {
+            relation.set("relatedmodel", targetNode.get("classname"), {
                 silent: true
             });
             raiseVent("rename");
@@ -379,7 +379,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 name: nodeContainer.get('name'),
                 color: nodeContainer.get('color'),
                 position: nodeContainer.get('position'),
-                modelclass: nodeContainer.get('modelclass'),
+                classname: nodeContainer.get('classname'),
                 namespace: nodeContainer.get('namespace'),
                 
                 increment: nodeContainer.get('increment'),
