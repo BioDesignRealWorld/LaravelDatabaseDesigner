@@ -380,6 +380,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                 color: nodeContainer.get('color'),
                 position: nodeContainer.get('position'),
                 modelclass: nodeContainer.get('modelclass'),
+                namespace: nodeContainer.get('namespace'),
+                
                 increment: nodeContainer.get('increment'),
                 timestamp: nodeContainer.get('timestamp'),
                 softdelete: nodeContainer.get('softdelete'),
