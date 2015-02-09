@@ -248,7 +248,7 @@
         ================================================== -->
         <script type="text/template" id="nodecontainer-template">
         <div>
-        <p> <b>Table <%=name%> </b>
+        <p> <b><%=name%>:<%=classname%></b>
         <a href="#" style="display: none;" class="btn relationadd btn-xs btn-container"><span class="glyphicon glyphicon-plus"></span> r</a>
         <a href="#" class="btn seeding btn-xs btn-container"><span class="glyphicon glyphicon-eye-open"></span> s</a>        
         <a href="#" class="btn relation btn-xs btn-container"><span class="glyphicon glyphicon-eye-open"></span> r</a>
@@ -297,10 +297,10 @@
                     <label class="col-md-4 control-label" for="container-color">Color</label>
                     <div class="col-md-4">
                         <select id="container-color" name="color" class="form-control">
+                            <option value="Grey">Grey</option>                        
                             <option value="Red">Red</option>
                             <option value="Green">Green</option>
                             <option value="Blue">Blue</option>
-                            <option value="Grey">Grey</option>
                             <option value="Yellow">Yellow</option>
                         </select>
                     </div>
@@ -429,7 +429,7 @@
             <!-- Template
             ================================================== -->
             <script type="text/template" id="relationcollection-template">
-            <legend>Relation List : <%=name%> </legend>
+            <legend>Relation List Model: <%=classname%> </legend>
             <table class="table">
                 <thead>
                     <tr>

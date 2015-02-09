@@ -4,6 +4,8 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
         initialize: function(param) {
             this.listenTo(this, "formDataInvalid", this.formDataInvalid);
             this.target = param.target;
+            this.targetClass = param.targetClass;
+
             //console.log(param.target);
         },
         model: Node,
@@ -26,7 +28,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
             //
             //
             if (this.target) {
-                templatevar.title = "Create Relation Between " + this.model.get('classname') + " and " + this.target;
+                templatevar.title = "Create Relation Between " + this.model.get('classname') + " and " + this.targetClass;
             }
             //
             //

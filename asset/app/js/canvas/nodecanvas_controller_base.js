@@ -45,10 +45,12 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
     DesignerApp.commands.setHandler("nodecanvas:create:relation", function(containerModel, targetId) {
 
         var targetName = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("name");
+        var targetClass = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("classname");
 
         var view = new DesignerApp.NodeModule.Modal.CreateRelation({
             model: containerModel,
-            target: targetName
+            target: targetName,
+            targetClass: targetClass
         });
 
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);

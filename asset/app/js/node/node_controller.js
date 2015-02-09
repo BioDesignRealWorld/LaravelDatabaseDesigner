@@ -51,7 +51,7 @@ DesignerApp.module("NodeModule", function(NodeModule, DesignerApp, Backbone, Mar
         var conn = param.dstRelation.get("conn");
         var label = conn.getOverlay("label");
 
-        label.setLabel(srcNodeContainer.get('name') + ' ' + dstRelationModel.get('relationtype') + ' ' + dstRelationModel.get('relatedmodel'));
+        label.setLabel(srcNodeContainer.get('classname') + ' ' + dstRelationModel.get('relationtype') + ' ' + dstRelationModel.get('relatedmodel'));
     });
 
     DesignerApp.vent.on("noderelation:destroy", function(param) {

@@ -355,6 +355,12 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             raiseVent("rename");
         });
 
+
+        //on our table rename update overlay
+        relation.listenTo(sourceNodeContainer, "change:classname", function(targetNode) {
+            raiseVent("rename");
+        });
+
         //on destroy clean up
         relation.on("destroy", function() {
             raiseVent("destroy");
