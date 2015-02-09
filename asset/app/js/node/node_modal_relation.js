@@ -37,7 +37,7 @@ DesignerApp.module("NodeModule.Modal", function(Modal, DesignerApp, Backbone, Ma
 
             if (this.target) {
                 this.$('.classoption').hide(); //hide option box
-                this.$('#relation-relatedmodel').find('option[value=' + this.target + ']').attr('selected', 'selected'); //make destination selected by default
+                this.$('#relation-relatedmodel').find('option[value=' + this.targetClass + ']').attr('selected', 'selected'); //make destination selected by default
             }
 
             this.$('#relation-relatedmodel').find('option[value=' + this.model.get('classname') + ']').remove(); //remove self (model) from option list
