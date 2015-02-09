@@ -235,9 +235,9 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
         return nodeCanvas.get(modelcid);
     };
 
-    NodeEntities.getNodeContainerFromNodeName = function(modelname) {
+    NodeEntities.getNodeContainerFromClassName = function(modelname) {
         return nodeCanvas.where({
-            name: modelname
+            classname: modelname
         })[0];
     };
 
@@ -306,7 +306,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     NodeEntities.AddRelation = function(node, relation) {
         //console.log(relation);
         var sourceNodeContainer = node;
-        var targetNodeContainer = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+        var targetNodeContainer = NodeEntities.getNodeContainerFromClassName(relation.get("relatedmodel"));
         var destinationRelationModel = relation;
 
         var raiseVent = function(evName) {
@@ -323,7 +323,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
 
             //console.log(relationModel);
 
-            var targetModel = NodeEntities.getNodeContainerFromNodeName(relation.get("relatedmodel"));
+            var targetModel = NodeEntities.getNodeContainerFromClassName(relation.get("relatedmodel"));
             relation.listenTo(targetModel, "destroy", function() {
                 raiseVent("destroyme");
                 relation.destroy();
