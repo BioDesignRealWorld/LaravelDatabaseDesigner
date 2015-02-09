@@ -99,7 +99,7 @@ jsPlumb.ready(function() {
         });
 
         instance.bind("beforeDrop", function(connection) {
-
+            console.log(connection);
             if (connection.sourceId !== connection.targetId) {
                 var node = connection.connection.getParameter("node");
                 DesignerApp.execute("nodecanvas:create:relation", node, connection.targetId);

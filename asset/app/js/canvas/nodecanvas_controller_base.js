@@ -46,6 +46,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
         var targetName = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("name");
         var targetClass = DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId).get("classname");
+        
+        console.log(DesignerApp.NodeEntities.getNodeContainerFromNodeCid(targetId));
 
         var view = new DesignerApp.NodeModule.Modal.CreateRelation({
             model: containerModel,
@@ -60,6 +62,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
             if (new_rel.set(data, {
                 validate: true
             })) {
+
+                new_rel.set('name', targetName);
                 var relation = containerModel.get("relation");
                 relation.add(new_rel);
                 DesignerApp.NodeEntities.AddRelation(containerModel, new_rel);
