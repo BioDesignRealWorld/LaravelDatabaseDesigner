@@ -313,7 +313,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
     NodeEntities.AddRelation = function(node, relation) {
         //console.log(relation);
         var sourceNodeContainer = node;
-        var targetNodeContainer = NodeEntities.getNodeContainerFromName(relation.get("name"));
+        var targetNodeContainer = NodeEntities.getNodeContainerFromClassName(relation.get("relatedmodel"));
         var destinationRelationModel = relation;
 
         var raiseVent = function(evName) {
@@ -323,8 +323,8 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             });
             //console.log(evName);
         };
-
         //on delete node also delte referenced relation
+
         relation.on('change:relatedmodel', function(relationModel) {
             relation.stopListening();
 

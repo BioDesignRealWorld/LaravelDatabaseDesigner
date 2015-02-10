@@ -6,7 +6,7 @@ DesignerApp.module("NodeModule.Views", function(Views, DesignerApp, Backbone, Ma
         //todo refactor this
         var conn = jsPlumb.connect({
             source: srcNodeContainer.cid,
-            target: DesignerApp.NodeEntities.getNodeContainerFromName(dstRelationModel.get("name")).cid,
+            target: DesignerApp.NodeEntities.getNodeContainerFromClassName(dstRelationModel.get("relatedmodel")).cid,
             parameters: {
                 relation: dstRelationModel
             },
