@@ -63,10 +63,25 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 validate: true
             })) {
 
+
+
                 new_rel.set('name', targetName);
                 var relation = containerModel.get("relation");
                 relation.add(new_rel);
                 DesignerApp.NodeEntities.AddRelation(containerModel, new_rel);
+
+
+                //foreign key
+                var dest_node = (DesignerApp.NodeEntities.getNodeContainerFromClassName(data.relatedmodel)).get('column');
+                var foreign_key = (containerModel.get('name').toLowerCase()) + "_id";
+                var res = dest_node.where({
+                    name: foreign_key
+                })[0];
+                if (!res) dest_node.add({name: foreign_key, type: "integer", in: true});                
+                //foreign key
+
+
+                
                 // console.log(new_rel);
             } else {
                 view.trigger("formDataInvalid", new_rel.validationError);

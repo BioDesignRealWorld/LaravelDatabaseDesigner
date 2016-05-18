@@ -66,6 +66,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
             relationtype: '',
             usenamespace: '',
             relatedmodel: '',
+            relatedcolumn: '',            
             foreignkeys: '',
             extramethods: ''
         },
@@ -424,6 +425,7 @@ DesignerApp.module("NodeEntities", function(NodeEntities, DesignerApp, Backbone,
                     foreignkeys: rel.foreignkeys,
                     name: rel.name,
                     relatedmodel: rel.relatedmodel,
+                    relatedcolumn: rel.relatedcolumn,
                     relationtype: rel.relationtype,
                     usenamespace: rel.usenamespace
                 };

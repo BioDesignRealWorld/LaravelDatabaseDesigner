@@ -41,6 +41,8 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
         var modal = DesignerApp.NodeModule.Modal.CreateTestModal(view);
 
         view.listenTo(view, "okClicked", function(data) {
+            
+
             var new_rel = DesignerApp.NodeEntities.getNewRelationModel();
             if (new_rel.set(data, {
                 validate: true
@@ -48,11 +50,23 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
                 var relation = childview.model.get("relation");
                 relation.add(new_rel);
                 DesignerApp.NodeEntities.AddRelation(childview.model, new_rel);
-                console.log(new_rel);
+                //console.log(new_rel);
+
+                //foreign key
+                var dest_node = (DesignerApp.NodeEntities.getNodeContainerFromClassName(data.relatedmodel)).get('column');
+                var foreign_key = (childview.model.get('name').toLowerCase()) + "_id";
+                var res = dest_node.where({
+                    name: foreign_key
+                })[0];
+                if (!res) dest_node.add({name: foreign_key, type: "integer", in: true});                                
+                //foreign key
+
+                //childview.collection.add(new_model)
+
             } else {
                 view.trigger("formDataInvalid", new_rel.validationError);
                 modal.preventClose();
-                console.log("error");
+                //console.log("error");
             }
         });
 

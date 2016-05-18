@@ -55,22 +55,22 @@
         <!-- Template
         ================================================== -->
         <script type="text/template" id="nodemodel-template">
-        <form class="form-horizontal">
+        <form class="form-horizontal" style="padding: 10px">
             <fieldset>
                 <!-- Form Name -->
                 <legend>Create a Column</legend>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="name">Column Name</label>
-                    <div class="col-md-4">
+                    <label class="control-label" for="name">Column Name</label>
+                    <div class="">
                         <input id="name" name="name" type="text" placeholder="Column Name" class="form-control input-md" value="<%=name%>">
                         
                     </div>
                 </div>
                 <!-- Select Basic -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="type">Type</label>
-                    <div class="col-md-4">
+                    <label class="control-label" for="type">Type</label>
+                    <div class="">
                         <select id="type" name="type" class="form-control">
                             <optgroup label="LARAVEL TYPES">
                                 <option value="increments">INCREMENTS</option>
@@ -105,31 +105,31 @@
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="length">Length</label>
-                    <div class="col-md-4">
+                    <label class="control-label" for="length">Length</label>
+                    <div class="">
                         <input id="length" name="length" type="text" placeholder="Length" class="form-control input-md" value="<%=length%>">
                     </div>
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="defaultvalue">Default Value</label>
-                    <div class="col-md-4">
+                    <label class="control-label" for="defaultvalue">Default Value</label>
+                    <div class="">
                         <input id="defaultvalue" name="defaultvalue" type="text" placeholder="Default Value" class="form-control input-md" value="<%=defaultvalue%>">
                         
                     </div>
                 </div>
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="enumvalue">Enum Value</label>
-                    <div class="col-md-4">
+                    <label class="control-label" for="enumvalue">Enum Value</label>
+                    <div class="">
                         <input id="enumvalue" name="enumvalue" type="text" placeholder="Enum Value" class="form-control input-md" value="<%=enumvalue%>">
                         
                     </div>
                 </div>
                 <!-- Multiple Checkboxes -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="columnOption">Option</label>
-                    <div class="col-md-4">
+                <div class="col-md-4 form-group">
+                    <label class="control-label" for="columnOption">Option</label>
+                    <div class="">
                         <div class="checkbox">
                             <label for="ai">
                                 <input type="checkbox" name="ai" id="ai" value="Auto Incremental">
@@ -192,10 +192,47 @@
                             </label>
                         </div>
                     </div>
+                </div>    
+
+
+                            <div class="col-md-4 form-group">
+                    <label class="control-label" for="columnOption">Generator Option</label>
+                    <div class="">
+
+                        <!-- start-chkbox -->
+                        <div class="checkbox">
+                            <label for="hidetemplate">
+                                <input type="checkbox" name="hidetemplate" id="hidetemplate" value="hidetemplate">
+                                Hide from template
+                            </label>
+                        </div>
+                        <!-- end-chkbox -->
+
+
+                        <!-- start-chkbox -->
+                        <div class="checkbox">
+                            <label for="isimage">
+                                <input type="checkbox" name="isimage" id="isimage" value="isimage">
+                                Is an Image
+                            </label>
+                        </div>
+                        <!-- end-chkbox -->
+
+                        <!-- start-chkbox -->
+                        <div class="checkbox">
+                            <label for="uploadfile">
+                                <input type="checkbox" name="uploadfile" id="uploadfile" value="uploadfile">
+                                Upload File
+                            </label>
+                        </div>
+                        <!-- end-chkbox -->
+
+                    </div>
                 </div>
+                <div class="clearfix clear-columns"></div>
                 <!-- Button (Double) -->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="button1id"></label>
+                    <label class="control-label" for="button1id"></label>
                     <div class="col-md-8">
                         <button id="button1id" name="button1id" class="ok btn btn-success">Save</button>
                         <button id="button2id" name="button2id" class="cancel btn btn-danger">Cancel</button>
@@ -356,6 +393,9 @@
                         </select>
                     </div>
                 </div>
+
+
+
                 <!-- Select Basic -->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="relation-relationtype">Relation Type</label>
@@ -364,6 +404,19 @@
                             <option value="hasOne">hasOne</option><option value="belongsTo">belongsTo</option><option value="hasMany">hasMany</option><option value="belongsToMany">belongsToMany</option><option value="hasManyThrough">hasManyThrough</option><option value="morphOne">morphOne</option><option value="morphTo">morphTo</option><option value="morphMany">morphMany</option><option value="morphedByMany">morphedByMany</option><option value="morphToMany">morphToMany</option>                        </select>
                         </div>
                     </div>
+
+
+                <!-- Select Basic -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="relation-relatedcolumn">Related Column</label>
+                    <div class="col-md-4">
+                        <select id="relation-relatedcolumn" name="relatedcolumn" class="form-control"><% _.each(relatedcolumn, function(related) { %>
+                            <option value="<%=related.name%>" > <%=related.name%></option>
+                            <% }); %>
+                        </select>
+                    </div>
+                </div>
+
                     <!-- Text input-->
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="relation-name">Function Name</label>
