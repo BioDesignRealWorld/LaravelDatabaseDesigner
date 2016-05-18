@@ -1,17 +1,29 @@
 {
-  "name": "nwbuild",
-  "version": "0.0.4",
-  "description": "Builds and packages node-webkit applications for linux, windows and osx.",
-  "main": "index.html",
-  "window": {
-    "title": "node-webkit demo",
-    "icon": "link.png",
-    "toolbar": false
-  },
+  "name": "MightyBits",
+  "version": "0.0.1",
+  "description": "MightyBits Open Data Designer",
+  "main": "main.js",
   "scripts": {
-    "start": "electron asset/app/js/electron/main.js"
+    "start": "electron main.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BioDesignRealWorld/LaravelDatabaseDesigner.git"
+  },
+  "keywords": [
+    "Laravel",
+    "MightyBits",
+    "Lifepatch",
+    "Badgeek"
+  ],
+  "author": "Budi Prakosa",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/BioDesignRealWorld/LaravelDatabaseDesigner"
+  },
+  "homepage": "https://github.com/BioDesignRealWorld/LaravelDatabaseDesigner",
   "devDependencies": {
+    "electron-prebuilt": "^1.0.1",
     "electron-prebuilt": "^1.1.0",
     "gulp": "^3.9.1"
   }
