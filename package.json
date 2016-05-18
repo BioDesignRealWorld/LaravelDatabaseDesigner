@@ -2,9 +2,16 @@
   "name": "nwbuild",
   "version": "0.0.4",
   "description": "Builds and packages node-webkit applications for linux, windows and osx.",
-    "main": "index.html",
-      "window": {
+  "main": "index.html",
+  "window": {
     "title": "node-webkit demo",
     "icon": "link.png",
-    "toolbar": false}
+    "toolbar": false
+  },
+  "scripts": {
+    "start": "electron asset/app/js/electron/main.js"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.1.0",
+  }
 }
