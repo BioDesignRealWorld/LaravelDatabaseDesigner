@@ -13,5 +13,6 @@
   },
   "devDependencies": {
     "electron-prebuilt": "^1.1.0",
+    "gulp": "^3.9.1"
   }
 }
