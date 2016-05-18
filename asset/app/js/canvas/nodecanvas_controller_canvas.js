@@ -1,5 +1,7 @@
 DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Backbone, Marionette, $, _) {
 
+    const {ipcRenderer} = require('electron');
+
     var viewNodeCanvas = Controller.viewNodeCanvas;
 
 
@@ -83,19 +85,21 @@ DesignerApp.module("NodeCanvas.Controller", function(Controller, DesignerApp, Ba
 
 
     viewNodeCanvas.on("canvas:open", function() {
-        if (typeof process != 'undefined') {
-            $("#fileOpenDialog").trigger("click");
+
+        if (typeof process.versions.electron != 'undefined') {
+
+                var schema = ipcRenderer.sendSync('open-schema-file');
+                
+                if (schema != "")
+                {
+                       DesignerApp.NodeEntities.ClearNodeCanvas(DesignerApp.NodeEntities.getNodeCanvas());
+                       DesignerApp.NodeEntities.AddNodeCanvas(schema);                    
+                }
+
         } else {
 
         }
     });
-
-
-
-
-
-
-
 
 
     viewNodeCanvas.on("canvas:opengist", function() {

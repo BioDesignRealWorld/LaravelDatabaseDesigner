@@ -4,6 +4,28 @@ const app = electron.app
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
+// In main process.
+const {ipcMain} = require('electron');
+const {dialog}  = require('electron');
+
+const fs = require('fs');
+
+ipcMain.on('open-schema-file', (event, arg) => {
+   
+   dialog.showOpenDialog({properties: ['openFile']}, function(fileName){
+      if (fileName === undefined)
+      {
+        event.returnValue = "";
+      }else{
+        fs.readFile(fileName[0], 'utf-8', function (err, data) {
+            var jsonfile = (JSON.parse(data));
+            event.returnValue = jsonfile;
+        });  
+      } 
+   });
+
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
