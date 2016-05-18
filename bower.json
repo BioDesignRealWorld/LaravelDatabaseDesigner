@@ -16,14 +16,15 @@
   ],
   "dependencies": {
     "bootstrap": "~3.2.0",
-    "backbone" : "1.1.2",
-    "underscore" : "1.6.0",
+    "backbone": "1.1.2",
+    "underscore": "1.6.0",
     "backbone.bootstrap-modal": "https://github.com/badgeek/backbone.bootstrap-modal.git#v0.9.0d",
-    "backbone.modal" : "https://github.com/awkward/backbone.modal.git#v1.0.0",
-    "backbone.syphon" : "https://github.com/marionettejs/backbone.syphon.git#v0.5.0",
+    "backbone.modal": "https://github.com/awkward/backbone.modal.git#v1.0.0",
+    "backbone.syphon": "https://github.com/marionettejs/backbone.syphon.git#v0.5.0",
     "marionette": "2.2.1",
-    "jquery" : "1.9.1",
-    "jquery-ui" : "1.11.1",
-    "jsplumb": "1.6.4"
+    "jquery": "1.9.1",
+    "jquery-ui": "1.11.1",
+    "jsplumb": "1.6.4",
+    "hello": "^1.13.1"
   }
 }
